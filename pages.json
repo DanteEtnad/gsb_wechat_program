@@ -1,0 +1,31 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"backgroundColor": "#E5E5E5"
+				
+			}
+		}
+	    ,{
+            "path" : "pages/index_normal/index_normal",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "汕头市地质灾害气象预警平台",
+                "backgroundColor": "#ff0000"
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "汕头市地质灾害气象预警平台",
+		"navigationBarBackgroundColor": "#2E9BFF",
+		"backgroundColor": "#ff0000"
+	},
+	"uniIdRouter": {}
+}
