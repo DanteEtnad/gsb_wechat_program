@@ -6,6 +6,8 @@ Vue.config.productionTip = false
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
+import dayjs from "@/utils/dayjs.min.js"
+Vue.prototype.dayjs = dayjs
 
 App.mpType = 'app'
 
