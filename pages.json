@@ -8,19 +8,72 @@
 			"style": {
 				"navigationStyle": "custom",
 				"backgroundColor": "#E5E5E5"
-				
 			}
+		}, {
+			"path": "pages/index_normal/index_normal",
+			"style": {
+				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
+				"backgroundColor": "#ff0000"
+			}
+
+		}, {
+			"path": "pages/alertManagement/DaliyAlert",
+			"style": {
+				"navigationBarTitleText": "今日预警",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/SubmitDisaster",
+			"style": {
+				"navigationBarTitleText": "险情上报",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/ProfessionDetect",
+			"style": {
+				"navigationBarTitleText": "专业检测",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/AroundPotential",
+			"style": {
+				"navigationBarTitleText": "周边隐患",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/AlertCreate",
+			"style": {
+				"navigationBarTitleText": "预警单创建",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/AlertCheck",
+			"style": {
+				"navigationBarTitleText": "预警单审批",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/AlertCreateDialog",
+			"style": {
+				"navigationBarTitleText": "预警单创建",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/alertManagement/AlertCheckDialog",
+			"style": {
+				"navigationBarTitleText": "预警单审批",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/index_normal/index_normal",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "汕头市地质灾害气象预警平台",
-                "backgroundColor": "#ff0000"
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "汕头市地质灾害气象预警平台",

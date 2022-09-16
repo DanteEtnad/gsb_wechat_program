@@ -8,7 +8,11 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
-			console.log('App Show')
+			if(uni.getStorageSync('token')){
+				uni.redirectTo({
+					url:'/pages/index_normal/index_normal'
+				})
+			}
 		},
 		onHide: function() {
 			console.log('App Hide')

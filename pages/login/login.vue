@@ -46,6 +46,7 @@
 </template>
 
 <script>
+	import {requestAuthority} from '@/utils/request.js'
 export default {
 	data() {
 		return {
@@ -74,19 +75,34 @@ export default {
 	},
 	methods: {
 		submit() {
-			console.log('name', this.model1.userInfo.name);
-				// 如果有错误，会在catch中返回报错信息数组，校验通过则在then中返回true
-				this.$refs.form1.validate().then(res => {
-					uni.$u.toast('登录成功')
-					uni.navigateTo({
-						url:'/pages/index_normal/index_normal?name=' + this.model1.userInfo.name
-					})
-				}).catch(errors => {
-					uni.$u.toast('登录失败')
+			// console.log('name', this.model1.userInfo.name);
+			// // 如果有错误，会在catch中返回报错信息数组，校验通过则在then中返回true
+			// this.$refs.form1.validate().then(res => {
+			// 	uni.$u.toast('登录成功')
+			// 	uni.navigateTo({
+			// 		url:'/pages/index_normal/index_normal?name=' + this.model1.userInfo.name
+			// 	})
+			// }).catch(errors => {
+			// 	uni.$u.toast('登录失败')
+			// })
+			requestAuthority({
+				method:'POST',
+				url:'login/login',
+				data:{
+					UserLoginReq:{
+						"memberMobile": "13512345678",
+						"memberLoginPassword": "c6f057b86584942e415435ffb1fa93d4"
+					}
+				}
+			})
+			.then(res=>{
+				uni.setStorageSync('token',res.data.UserLoginRsp.token.token)
+				uni.$u.toast('登录成功')
+				uni.navigateTo({
+					url:'/pages/index_normal/index_normal'
 				})
-			},
-		
-		
+			})
+		},
 	},
 }
 </script>
