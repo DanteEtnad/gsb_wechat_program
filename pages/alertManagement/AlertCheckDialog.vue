@@ -4,13 +4,13 @@
 			<uni-row>
 				<view class="check-status">
 					<text>当前进度：</text>
-					<text>预警技术负责人复核</text>
+					<text>{{dataCodeTransform('440523003','potentialPointBelongTowns')}}</text>
 				</view>
 			</uni-row>
 			<uni-row>
 				<view class="check-status">
 					<text>流程状态：</text>
-					<text>审批中</text>
+					<text>{{status}}</text>
 				</view>
 			</uni-row>
 			<uni-row>
@@ -59,19 +59,28 @@
 </template>
 
 <script>
+	import {dataCodeTransformMixins} from "@/utils/mixins.js"
+	import {request} from "@/utils/request.js"
 	export default {
+		mixins:[dataCodeTransformMixins],
 		data() {
 			return {
 				now:'',
 				status:'',
+				PotentialPointInfoControllerQueryData:{},
+				officeData:[]
 			}
 		},
 		onLoad: function(option) {
 			const eventChannel = this.getOpenerEventChannel();
-			eventChannel.on('openCheckDialog',item=>{
-				console.log(item)
-				this.now = item.now
-				this.status = item.now
+			eventChannel.on('openCheckDialog',data=>{
+				this.PotentialPointInfoControllerQueryData = data.item
+				console.log(data)
+				console.log(this.PotentialPointInfoControllerQueryData)
+				this.now = data.item.now
+				this.status = data.item.status
+				console.log(this.now)
+				console.log(this.status)
 			})
 		},
 		methods: {
