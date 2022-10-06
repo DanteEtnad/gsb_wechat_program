@@ -17,13 +17,13 @@
 					<uni-col :span="12">
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">最高等级</text>
-							<uni-data-select v-model="queryForm.level" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<uni-data-select v-model="queryForm.alertLevel" :localdata="alertLevels" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 					<uni-col :span="12"> 
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">当前进度</text>
-							<uni-data-select v-model="queryForm.level" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<uni-data-select v-model="queryForm.alertPhase" :localdata="alertPhases" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 				</uni-row>
@@ -31,13 +31,13 @@
 					<uni-col :span="12">
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">状态</text>
-							<uni-data-select v-model="queryForm.level" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<uni-data-select v-model="queryForm.alertState" :localdata="alertStates" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 					<uni-col :span="12">
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">创建方式</text>
-							<uni-data-select v-model="queryForm.level" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<uni-data-select v-model="queryForm.alertSourceType" :localdata="alertSourceTypes" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 				</uni-row>
@@ -48,7 +48,7 @@
 				<view style="display: flex;justify-content: space-between;border-bottom: 1px dashed black;padding: 0 5px 5px">
 					<view style="display: flex;">
 						<u--image class="logo" src="/static/document.svg" width="12px" height="18px" mode="aspectFit"></u--image>
-						<text style="margin-left: 10px;font-family: 'Microsoft YaHei';">汕头市地质灾害气象风险预警预报结果</text>
+						<text style="margin-left: 10px;font-family: 'Microsoft YaHei';">{{item.alertName}}</text>
 					</view>
 					<view>
 						<uni-icons type="forward" size="16"></uni-icons>
@@ -57,27 +57,29 @@
 				<view class="alert-item-info">
 					<uni-row>
 						<uni-col :span="10">
-							<text>最高预警等级：<text :style="{color:`${levelColor[item.level]}`}">{{item.level}}</text></text>
+							<text>最高预警等级：
+								<text :style="{color:`${levelColor[dataCodeTransform(item.alertLevel.toString(),'alertLevels')]}`}">{{dataCodeTransform(item.alertLevel.toString(),'alertLevels')}}</text>
+							</text>
 						</uni-col>
 						<uni-col :span="14">
-							<text>当前进度：{{item.now}}</text>
+							<text>当前进度：{{dataCodeTransform(item.alertPhase.toString(),'alertPhases')}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
 				<view class="alert-item-info">
 					<uni-row>
 						<uni-col :span="10">
-							<text>状态：{{item.status}}</text>
+							<text>状态：{{dataCodeTransform(item.alertState,'alertStates')}}</text>
 						</uni-col>
 						<uni-col :span="14">
-							<text>创建方式：{{item.createMethod}}</text>
+							<text>创建方式：{{dataCodeTransform(item.alertSourceType,'alertSourceTypes')}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
 				<view class="alert-item-info">
 					<uni-row>
 						<uni-col :span="24">
-							<text>创建时间：{{item.createTime}}</text>
+							<text>创建时间：{{timeTransform(item.alertCreateTime)}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -87,16 +89,29 @@
 </template>
 
 <script>
+	import {request} from "@/utils/request.js"
+	import {dataCodeTransformMixins,timeTransformMixins} from "@/utils/mixins.js"
 	export default {
+		mixins:[dataCodeTransformMixins,timeTransformMixins],
 		data() {
 			return {
 				queryForm:{
-					key:'',
-					level:'',
-					now:'',
-					status:'',
-					createMethod:'',
-					createTime:''
+					alertId:"",
+					alertName:"",
+					alertLevel:"",
+					alertState:"",
+					alertPhase:"",
+					alertSubphase:"",
+					alertSourceType:"",
+					alertSourceId:"",
+					publishDateStart:"",
+					publishDateEnd:""
+				},
+				officePageInfo: {
+					dataAmount: 0,
+					offset: 0,
+					queryCount: 5,
+					currentPage: 1,
 				},
 				levelColor:{
 					'一级':'#DC0129',
@@ -110,42 +125,36 @@
 					{value:'3',text:'三级'},
 					{value:'4',text:'四级'},
 				],
-				alertData:[
-					{
-						level:'一级',
-						now:'预警预报结果会商',
-						status:'进行中',
-						createMethod:'自动',
-						createTime:'2022-07-22 14:54:23'
-					},
-					{
-						level:'二级',
-						now:'预警预报结果会商',
-						status:'进行中',
-						createMethod:'自动',
-						createTime:'2022-07-22 14:54:23'
-					},
-					{
-						level:'三级',
-						now:'预警预报结果会商',
-						status:'进行中',
-						createMethod:'自动',
-						createTime:'2022-07-22 14:54:23'
-					},
-					{
-						level:'四级',
-						now:'预警预报结果会商',
-						status:'进行中',
-						createMethod:'自动',
-						createTime:'2022-07-22 14:54:23'
-					},{
-						level:'一级',
-						now:'预警预报结果会商',
-						status:'进行中',
-						createMethod:'自动',
-						createTime:'2022-07-22 14:54:23'
-					}
-				]
+				alertPhases:[
+					{value:'1',text:'生成'},
+					{value:'2',text:'经办'},
+					{value:'3',text:'审批'},
+					{value:'4',text:'发布'},
+				],
+				alertStates:[
+					{value:'BCK',text:'审批驳回'},
+					{value:'CKD',text:'审批通过'},
+					{value:'CKG',text:'审批中'},
+					{value:'DEL',text:'已作废'},
+					{value:'FCK',text:'待审批'},
+					{value:'FIN',text:'已发布'},
+					{value:'HDG',text:'经办中'},
+					{value:'ORG',text:'初始化'},
+				],
+				alertSourceTypes:[
+					{value:'MAN',text:'人工'},
+					{value:'SYS',text:'系统'}
+				],
+				alertData:[]
+			}
+		},
+		mounted() {
+			this.getAlertData()
+		},
+		onReachBottom() {
+			if((this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount<=this.officePageInfo.dataAmount){
+				this.officePageInfo.currentPage++
+				this.getAlertData()
 			}
 		},
 		methods: {
@@ -155,6 +164,25 @@
 				})
 				response[1].eventChannel.emit('openCheckDialog',{
 					item: item
+				})
+			},
+			getAlertData(){
+				request({
+					url:'alertManage/queryAlertList',
+					method:'post',
+					data:{
+						QueryAlertListReq:this.queryForm,
+						QueryPagingParamsReq: {
+							offset: (this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount,
+							queryCount: this.officePageInfo.queryCount
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.alertData = [...this.alertData,...res.data.QueryAlertListRsp]
+						this.officePageInfo.dataAmount = res.data.QuerySummaryRsp.dataAmount
+					}
 				})
 			}
 		}
