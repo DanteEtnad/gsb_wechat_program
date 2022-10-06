@@ -4,13 +4,13 @@
 			<uni-row>
 				<view class="check-status">
 					<text>当前进度：</text>
-					<text>{{dataCodeTransform('440523003','potentialPointBelongTowns')}}</text>
+					<text>{{dataCodeTransform(alert.alertPhase.toString(),'alertPhases')}}</text>
 				</view>
 			</uni-row>
 			<uni-row>
 				<view class="check-status">
 					<text>流程状态：</text>
-					<text>{{status}}</text>
+					<text>{{dataCodeTransform(alert.alertState,'alertStates')}}</text>
 				</view>
 			</uni-row>
 			<uni-row>
@@ -32,26 +32,17 @@
 		</view>
 		<view class="check-info-container">
 			<view class="check-info-text">
-				<text>汕头市地质灾害气象风险预警预报结果</text>
+				<text>{{alert.alertName}}</text>
 			</view>
 			<view class="check-info-text"> 
-				<text>2022-07-13 20:00-2022-07-14 20:00</text>
+				<text>{{timeTransform(alert.alertStartTime)}} - {{timeTransform(alert.alertEndTime)}}</text>
 			</view>
 			<view class="check-info-picture">
 				<u--image src="/static/test.jpg" mode="aspectFit"></u--image>
 			</view>
 			<view class="check-info-text">
-				<p style="color: rgba(0,0,0,.65);text-indent:2em">
-					地质灾害气象风险预警级别为1级(红色)的区域有：榕城区仙桥街道、梅云街道、东升街道、东阳街道、京冈街道、渔湖镇、炮台镇、地都镇、登岗镇、揭东区曲西街道、云路镇、锡场镇、玉湖镇、埔田镇、惠来县侨园镇部分区域，气象因素致地质灾害的风险较高。请启动地质灾害隐患点24小时巡查监测。
-				</p>
-				<p style="color: rgba(0,0,0,.65);text-indent:2em">
-					地质灾害气象风险预警级别为2级(橙色)的区域有：榕城区仙桥街道、梅云街道、东升街道、东阳街道、京冈街道、渔湖镇、炮台镇、地都镇、登岗镇、揭东区曲西街道、云路镇、锡场镇、玉湖镇、埔田镇、惠来县侨园镇部分区域，气象因素致地质灾害的风险较高。请启动地质灾害隐患点24小时巡查监测。
-				</p>
-				<p style="color: rgba(0,0,0,.65);text-indent:2em">
-					地质灾害气象风险预警级别为3级(黄色)的区域有：榕城区仙桥街道、梅云街道、东升街道、东阳街道、京冈街道、渔湖镇、炮台镇、地都镇、登岗镇、揭东区曲西街道、云路镇、锡场镇、玉湖镇、埔田镇、惠来县侨园镇部分区域，气象因素致地质灾害的风险较高。请启动地质灾害隐患点24小时巡查监测。
-				</p>
-				<p style="color: rgba(0,0,0,.65);text-indent:2em">
-					地质灾害气象风险预警级别为4级(蓝色)的区域有：榕城区仙桥街道、梅云街道、东升街道、东阳街道、京冈街道、渔湖镇、炮台镇、地都镇、登岗镇、揭东区曲西街道、云路镇、锡场镇、玉湖镇、埔田镇、惠来县侨园镇部分区域，气象因素致地质灾害的风险较高。请启动地质灾害隐患点24小时巡查监测。
+				<p style="color: rgba(0,0,0,.65);text-indent:2em" v-for="(description,index) in alertDescription" :key="index">
+					{{description}}
 				</p>
 			</view>
 		</view>
@@ -59,29 +50,26 @@
 </template>
 
 <script>
-	import {dataCodeTransformMixins} from "@/utils/mixins.js"
 	import {request} from "@/utils/request.js"
+	import {dataCodeTransformMixins,timeTransformMixins,getMemberOptionsMixins} from "@/utils/mixins.js"
 	export default {
-		mixins:[dataCodeTransformMixins],
+		mixins:[dataCodeTransformMixins,timeTransformMixins,getMemberOptionsMixins],
 		data() {
 			return {
-				now:'',
-				status:'',
-				PotentialPointInfoControllerQueryData:{},
-				officeData:[]
+				alert:{},
+				officeData:[],
+				alertDescription:[]
 			}
 		},
 		onLoad: function(option) {
 			const eventChannel = this.getOpenerEventChannel();
 			eventChannel.on('openCheckDialog',data=>{
-				this.PotentialPointInfoControllerQueryData = data.item
-				console.log(data)
-				console.log(this.PotentialPointInfoControllerQueryData)
-				this.now = data.item.now
-				this.status = data.item.status
-				console.log(this.now)
-				console.log(this.status)
+				this.alert = data.item
+				this.alertDescription = this.alert.alertDescription.split("；")
 			})
+		},
+		mounted() {
+			this.getMembersOptions()
 		},
 		methods: {
 			
