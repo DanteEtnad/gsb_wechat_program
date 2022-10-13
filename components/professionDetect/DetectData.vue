@@ -2,9 +2,9 @@
 	<view>
 		<view class="data-container">
 			<view class="data-header">
-				<uni-datetime-picker v-model="queryForm.dataTime" type="daterange" />
+				<uni-datetime-picker v-model="dataTime" type="daterange" />
 				<view class="data-header-select">
-					<uni-data-checkbox mode="tag" v-model="queryForm.timeType" :localdata="timeType" selectedColor="#2E9BFF"/>
+					<uni-data-checkbox mode="tag" v-model="selectTimeType" :localdata="timeType" selectedColor="#2E9BFF"/>
 					<button @click="open">要素</button>
 				</view>
 				<uni-drawer ref="drawer" mode="left" :mask-click="true" width="350">
@@ -15,7 +15,7 @@
 								<view>{{device.deviceName}}</view>
 							</view>
 							<view class="drawer-device-select">
-								<button class="drawer-device-select-button" v-for="(des,index) in device.DescriptionJson" :key="index">
+								<button class="drawer-device-select-button" v-for="(des,index) in device.DescriptionJson" :key="index" @click="getDeviceData(des.id,des.monitorIndexId,des.name)">
 									<text>{{des.name}}</text>
 								</button>
 							</view>
@@ -24,29 +24,62 @@
 				</uni-drawer>
 			</view>
 			<view class="echarts-wrap">
-				<myEcharts id="main" ref="mapChart" :echarts="echarts" :onInit="initChart" />
+				<!-- <myEcharts id="main" ref="mapChart" :echarts="echarts" :onInit="initChart" /> -->
+				<l-echart ref="chart"/>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import * as echarts from '@/common/echarts.min.js';
+	import * as echarts from '@/uni_modules/lime-echart/static/echarts.min.js';
 	import myEcharts from '@/components/mpvue-echarts/src/echarts.vue';
+	import LEchart from '@/uni_modules/lime-echart/components/l-echart/l-echart.vue';
+	import {getNowDateMixins} from "@/utils/mixins.js"
 	import {request} from "@/utils/request.js"
 	export default {
 		components: {
-			myEcharts
+			myEcharts,
+			LEchart
 		},
+		mixins:[getNowDateMixins],
 		props:['selectedPotentialPoint'],
 		data() {
 			return {
 				echarts,
 				deviceMenuList:[],
 				deviceTreeList: [],
+				selectTimeType:'',
+				dataTime: [],
+				deviceTime:[],
+				deviceData:[],
+				dataOption:{
+					dataset: {
+						source: [
+							[],
+							[]
+						]
+					},
+					legend: {},
+					xAxis: {
+						type: "category",
+						axisTick: {
+							show: false
+						}
+					},
+					yAxis: {},
+					dataZoom:[{}],
+					series: [{
+						type: "line",
+						seriesLayoutBy: "row",
+					}]
+				},
 				queryForm: {
-					timeType: '1',
-					dataTime: ''
+					monitorDataId:'',
+					monitorIndexId:'',
+					startTime:`${this.getNowDate(0)} 00:00:00`,
+					endTime:'',
+					monitorType:''
 				},
 				timeType: [
 					{
@@ -71,17 +104,49 @@
 					const id = newValue.potentialPointId
 					this.getDeviceIndexTree(id)
 				}
+			},
+			selectTimeType:{
+				deep:true,
+				handler(newValue){
+					let now = new Date()
+					let year = now.getFullYear()
+					let month = now.getMonth()+1
+					let day = now.getDate()
+					month = month < 10 ? '0' + month : month
+					day = day < 10 ? '0' + day : day
+					if(newValue==='0'){
+						this.queryForm.startTime = `${this.getNowDate(0)} 00:00:00`
+						this.dataTime = [`${this.getNowDate(-1)}`,`${this.getNowDate(0)}`]
+					}
+					if(newValue==='1'){
+						this.queryForm.startTime = `${this.getNowDate(-7)} 00:00:00`
+						this.dataTime = [`${this.getNowDate(-7)}`,`${this.getNowDate(0)}`]
+					}
+					if(newValue==='2'){
+						this.queryForm.startTime = `${year}-${month}-01 00:00:00`
+						this.dataTime = [`${year}-${month}-01`,`${this.getNowDate(0)}`]
+					}
+					console.log(this.queryForm);
+					console.log(this.dataTime);
+				}
 			}
 		},
 		onReady() {
 			uni.hideHomeButton()
 		},
 		mounted() {
+			this.init()
 			const id = this.selectedPotentialPoint.potentialPointId
 			console.log("加载了");
 			this.getDeviceIndexTree(id)
 		},
 		methods: {
+			init(){
+				this.$refs.chart.init(echarts,chart=>{
+					chart.setOption(this.dataOption);
+				})
+				this.$refs.chart.resize({width: 375, height: 300})
+			},
 			initChart(canvas, width, height) {
 				console.log('图标', canvas);
 				let chart = null
@@ -112,7 +177,7 @@
 				}; // ECharts 配置项
 
 				chart.setOption(option);
-
+				//this.$refs.mapChart.setChart(chart)
 				return chart; // 返回 chart 后可以自动绑定触摸操作
 			},
 			open(){
@@ -170,14 +235,51 @@
 						this.buildDeviceTree()
 					}
 				})
-			}
+			},
+			getDeviceData(id,monitorIndexId,name){
+				let deviceData = []
+				let deviceTime = []
+				this.close()
+				deviceData.push(name)
+				deviceTime.push('type')
+				this.queryForm.monitorIndexId = monitorIndexId
+				this.$refs.chart.showLoading()
+				request({
+					url:'monitorDevice/queryMonitorData',
+					method:'post',
+					data:{
+						MonitorDataQueryReq:this.queryForm
+					}
+				})
+				.then(res=>{
+					if(res.code === 2000){
+						res.data.MonitorDataQueryRsp.map(item=>{
+							deviceData.push(item.dataObject[id])
+							deviceTime.push(item.monitorDataTime)
+						})
+						this.deviceData = deviceData
+						this.deviceTime = deviceTime
+						console.log(this.deviceData);
+						console.log(this.deviceTime);
+						this.dataOption.dataset.source[1] = this.deviceData
+						this.dataOption.dataset.source[0] = this.deviceTime
+						//this.dataOption.legend.data[0] = name
+						setTimeout(()=>{
+							console.log(this.dataOption);
+							this.$refs.chart.hideLoading()
+							this.$refs.chart.setOption(this.dataOption,true)
+						},1000)
+						
+					}
+				})
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
 	.echarts-wrap {
-		width: 100%;
+		width: 300px;
 		height: 300px;
 	}
 

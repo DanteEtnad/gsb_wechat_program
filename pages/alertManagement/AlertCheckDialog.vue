@@ -23,9 +23,9 @@
 				<view class="check-status">
 					<text>操作：</text>
 					<view class="check-status-button">
-						<button>通过</button>
-						<button>修改</button>
-						<button>终止</button>
+						<button @click="alertCheck">通过</button>
+						<button @click="openUpdateDialog">修改</button>
+						<button @click="alertDelete">终止</button>
 					</view>
 				</view>
 			</uni-row>
@@ -58,13 +58,17 @@
 			return {
 				alert:{},
 				officeData:[],
-				alertDescription:[]
+				alertDescription:[],
+				queryForm:{
+					alertId:''
+				},
 			}
 		},
 		onLoad: function(option) {
 			const eventChannel = this.getOpenerEventChannel();
 			eventChannel.on('openCheckDialog',data=>{
 				this.alert = data.item
+				this.queryForm.alertId = data.item.alertId
 				this.alertDescription = this.alert.alertDescription.split("；")
 			})
 		},
@@ -72,7 +76,75 @@
 			this.getMembersOptions()
 		},
 		methods: {
-			
+			alertCheck(){
+				request({
+					url:'alertManage/alertCheck',
+					method:'post',
+					data:{
+						AlertCheckReq:{
+							...this.queryForm,
+							operateProcedureResult:'Y'
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						uni.showModal({
+							title:'成功',
+							content:'审批成功,点击确定返回',
+							showCancel:false
+						}).then(res=>{
+							uni.redirectTo({
+								url:'/pages/alertManagement/AlertCheck',
+							})
+						})
+					}else{
+						uni.showModal({
+							title:'失败',
+							content:res.message,
+							showCancel:false
+						})
+					}
+				})
+			},
+			async openUpdateDialog(){
+				const response = await uni.navigateTo({
+					url:'/pages/alertManagement/AlertUpdateDialog',
+				})
+				response[1].eventChannel.emit('openUpdateDialog',{
+					item: this.alert
+				})
+			},
+			alertDelete(){
+				request({
+					url:'alertManage/alertDelete',
+					method:'post',
+					data:{
+						AlertDeleteReq:{
+							...this.queryForm
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						uni.showModal({
+							title:'成功',
+							content:'终止成功,点击确定返回',
+							showCancel:false
+						}).then(res=>{
+							uni.redirectTo({
+								url:'/pages/alertManagement/AlertCheck',
+							})
+						})
+					}else{
+						uni.showModal({
+							title:'失败',
+							content:res.message,
+							showCancel:false
+						})
+					}
+				})
+			}
 		}
 	}
 </script>

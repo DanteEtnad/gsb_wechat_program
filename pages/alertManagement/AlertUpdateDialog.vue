@@ -34,7 +34,7 @@
 								<view :class="[colorLevels[item.level]]">{{item.level}}</view>
 							</template>
 							<view class="collapse-item-container">
-								<button  @click="editLocation(item)">编辑/添加</button>
+								<button @click="editLocation(item)">编辑/添加</button>
 								<view class="collapse-item-main">
 									<text>
 										{{item.location}}
@@ -50,7 +50,7 @@
 				<button>生成图片</button>
 				<button>替换图片</button>
 			</view>
-			<button class="create-form-submit" @click="openMessageDialog">提交并发送短信</button>
+			<button class="create-form-submit" @click="submit">提交并发送短信</button>
 		</uni-forms>
 		
 		<uni-popup ref="popup" type="bottom" background-color="#fff">
@@ -68,7 +68,6 @@
 				</view>
 			</view>
 		</uni-popup>
-		
 		<uni-popup ref="message" background-color="#fff">
 			<Message @closeDialog="closeMessageDialog"/>
 		</uni-popup>
@@ -76,11 +75,11 @@
 </template>
 
 <script>
-	import {getAreaOptionsMixins,dataCodeTransformMixins} from "@/utils/mixins.js"
-	import {request} from "@/utils/request.js"
+	import {dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins} from "@/utils/mixins.js"
 	import Message from "@/components/Message.vue"
+	import {request} from '@/utils/request.js'
 	export default {
-		mixins:[getAreaOptionsMixins,dataCodeTransformMixins],
+		mixins:[dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],
 		components:{
 			Message
 		},
@@ -100,12 +99,6 @@
 					alertLevelFourthAdcode:'',
 					alertSourceType:'MAN',
 					alertMapUrl:''
-				},
-				createForm:{
-					name:'',
-					startTime:'',
-					endTime:'',
-					location:''
 				},
 				popupLevel:'',
 				popupData:{},
@@ -133,6 +126,42 @@
 		mounted() {
 			this.locationDataTree = this.getAreaOptions()[0].children
 		},
+		onLoad: function(option) {
+			const eventChannel = this.getOpenerEventChannel();
+			eventChannel.on('openUpdateDialog',data=>{
+				console.log(data);
+				let location = []
+				let newLocation = []
+				this.alertForm = data.item
+				
+				this.alertForm.alertStartTime = this.timeTransform(this.alertForm.alertStartTime)
+				this.alertForm.alertEndTime = this.timeTransform(this.alertForm.alertEndTime)
+				
+				location = this.alertForm.alertLevelFirstAdcode.split(',')
+				newLocation = location.map(item=>{
+					return this.dataCodeTransform(item,'potentialPointBelongTowns')
+				})
+				this.createData[0].location = newLocation.join(',')
+				
+				location = this.alertForm.alertLevelSecondAdcode.split(',')
+				newLocation = location.map(item=>{
+					return this.dataCodeTransform(item,'potentialPointBelongTowns')
+				})
+				this.createData[1].location = newLocation.join(',')
+				
+				location = this.alertForm.alertLevelThirdAdcode.split(',')
+				newLocation = location.map(item=>{
+					return this.dataCodeTransform(item,'potentialPointBelongTowns')
+				})
+				this.createData[2].location = newLocation.join(',')
+				
+				location = this.alertForm.alertLevelFourthAdcode.split(',')
+				newLocation = location.map(item=>{
+					return this.dataCodeTransform(item,'potentialPointBelongTowns')
+				})
+				this.createData[3].location = newLocation.join(',')
+			})
+		},
 		methods: {
 			editLocation(data){
 				this.popupData = data
@@ -158,25 +187,45 @@
 			close(){
 				this.$refs.popup.close()
 			},
-			submit(){
-				let createForm = {...this.alertForm}
-				createForm.alertStartTime = createForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
-				createForm.alertEndTime = createForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
-				console.log(createForm);
-				// request({
-				// 	url:'alertManage/alertGenerate',
-				// 	method:'post',
-				// 	data:{
-						
-				// 	}
-				// })
-			},
 			openMessageDialog(){
 				this.$refs.message.open('center')
 			},
 			closeMessageDialog(){
 				this.$refs.message.close()
-			}
+			},
+			submit(){
+				let updateForm = {
+					alertId:this.alertForm.alertId,
+					alertName:this.alertForm.alertName,
+					alertDescription:this.alertForm.alertDescription,
+					alertLevel:this.alertForm.alertLevel,
+					alertMapTitle:this.alertForm.alertMapTitle,
+					alertStartTime:this.alertForm.alertStartTime,
+					alertEndTime:this.alertForm.alertEndTime,
+					alertLevelFirstAdcode:this.alertForm.alertLevelFirstAdcode,
+					alertLevelSecondAdcode:this.alertForm.alertLevelSecondAdcode,
+					alertLevelThirdAdcode:this.alertForm.alertLevelThirdAdcode,
+					alertLevelFourthAdcode:this.alertForm.alertLevelFourthAdcode,
+					alertSourceType:this.alertForm.alertSourceType
+				}
+				updateForm.alertStartTime = updateForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
+				updateForm.alertEndTime = updateForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
+				console.log(updateForm)
+				request({
+					url:'alertManage/alertModify',
+					method:'post',
+					data:{
+						AlertModifyReq:{
+							...updateForm
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.openMessageDialog()
+					}
+				})
+			},
 		}
 	}
 </script>

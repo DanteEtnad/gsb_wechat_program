@@ -64,20 +64,6 @@
 				locationClass:['location'],
 				fullClass:['full'],
 				moreClass:['more'],
-				// showComponent:[
-				// 	{
-				// 		name:'DetectData',
-				// 		status:true
-				// 	},
-				// 	{
-				// 		name:'DetectInfo',
-				// 		status:false
-				// 	},
-				// 	{
-				// 		name:'DetectPicture',
-				// 		status:false
-				// 	},
-				// ],
 				showComponent:0,
 				potentialPointData:[],
 				isDataVisible:false,
@@ -114,11 +100,10 @@
 				.then(res=>{
 					if(res.code===2000){
 						this.potentialPointData = res.data.PotentialPointInfoQueryListRsp
-						let list = []
-						this.potentialPointData.map((potentialPoint,index)=>{
+						let list = this.potentialPointData.map((potentialPoint,index)=>{
 							if(potentialPoint.potentialPointLocationLatitude <= 90 && potentialPoint.potentialPointLocationLatitude >= -90 &&
 								 potentialPoint.potentialPointLocationLongitude <= 180 && potentialPoint.potentialPointLocationLongitude >= -180){
-									 list.push({
+									 return{
 									 	id:index,
 									 	longitude:potentialPoint.potentialPointLocationLongitude,
 									 	latitude:potentialPoint.potentialPointLocationLatitude,
@@ -126,9 +111,9 @@
 									 	iconPath:potentialPoint.ifMonitorPoint==="Y"?"../../static/Potential/online.svg":"../../static/Potential/outline.svg",
 									 	width:16,
 									 	height:16
-									 })
+									 }
 								 }
-						})
+						}).filter(item=>typeof item!=='undefined')
 						this.markers = [...list]
 					}
 				})
