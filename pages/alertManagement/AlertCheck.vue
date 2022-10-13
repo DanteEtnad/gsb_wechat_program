@@ -4,10 +4,10 @@
 			<uni-forms :model="queryForm" ref="queryForm">
 				<uni-row>
 					<uni-col :span="18">
-						<uni-easyinput placeholder="请输入关键字" v-model="queryForm.key"></uni-easyinput>
+						<uni-easyinput placeholder="请输入关键字" v-model="queryForm.alertName"></uni-easyinput>
 					</uni-col>
 					<uni-col :span="6">
-						<button style="margin-left: 5px;">
+						<button style="margin-left: 5px;" @click="getAlertData(true)">
 							<text>搜索</text>
 							<uni-icons type="search" size="16" color="#fff"></uni-icons>
 						</button>
@@ -91,6 +91,7 @@
 <script>
 	import {request} from "@/utils/request.js"
 	import {dataCodeTransformMixins,timeTransformMixins} from "@/utils/mixins.js"
+	import {debounce} from "lodash"
 	export default {
 		mixins:[dataCodeTransformMixins,timeTransformMixins],
 		data() {
@@ -166,7 +167,11 @@
 					item: item
 				})
 			},
-			getAlertData(){
+			getAlertData:debounce(function(reset=false){
+				if(reset){
+					this.officePageInfo.currentPage = 1
+					this.alertData = []
+				}
 				request({
 					url:'alertManage/queryAlertList',
 					method:'post',
@@ -184,6 +189,9 @@
 						this.officePageInfo.dataAmount = res.data.QuerySummaryRsp.dataAmount
 					}
 				})
+			},300),
+			test(){
+				
 			}
 		}
 	}
