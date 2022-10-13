@@ -1,7 +1,11 @@
 <template>
 	<view class="daliy-alert-container">
-		<view style="font-size: 14px;">发布时间：2022-07-13 13:25:12</view>
-		<view style="font-size: 14px;">预警时段：2022-07-13 20:00 - 2022-07-14 20:00</view>
+		<view style="font-size: 14px;">
+			发布时间：{{timeTransform(alertData.alertPublishTime)}}
+			</view>
+		<view style="font-size: 14px;">
+			预警时段：{{timeTransform(alertData.alertStartTime)}}-{{timeTransform(alertData.alertEndTime)}}
+			</view>
 		<view style="display: flex;justify-content: space-around;">
 			<u--image src="/static/test.jpg" mode="aspectFit"></u--image>
 		</view>
@@ -26,83 +30,86 @@
 </template>
 
 <script>
+	import {request} from '@/utils/request.js'
+	import {dataCodeTransformMixins,timeTransformMixins} from '@/utils/mixins.js'
 	export default {
+		mixins:[dataCodeTransformMixins,timeTransformMixins],
 		data(){
 			return{
+				alertData:{},
 				alertLevels:[
 					{
 						name:'一级（红色预警）',
 						color:'#DC0129',
-						data:[
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							}
-						]
+						data:[]
 					},
 					{
 						name:'二级（橙色预警）',
 						color:'#EB9A03',
-						data:[
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							}
-						]
+						data:[]
 					},
 					{
 						name:'三级（黄色预警）',
 						color:'#FCF66A',
-						data:[
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							}
-						]
+						data:[]
 					},
 					{
 						name:'四级（蓝色预警）',
 						color:'#019EF5',
-						data:[
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							},
-							{
-								county:'濠江区',
-								town:'金霞街道，珠池街道、新津街道，龙祥街道'
-							}
-						]
+						data:[]
 					}
 				]
+			}
+		},
+		mounted() {
+			this.getAlertData()
+		},
+		methods:{
+			getAlertData(){
+				request({
+					url:'alertManage/queryAlertList',
+					method:'post',
+					data:{
+						QueryAlertListReq:{
+							alertState:"FIN"
+						},
+						QueryPagingParamsReq:{
+							offset:0,
+							queryCount:9999
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.alertData = res.data.QueryAlertListRsp[0]
+						this.getAlertLocation(this.alertData.alertLevelFirstAdcode,0)
+						this.getAlertLocation(this.alertData.alertLevelSecondAdcode,1)
+						this.getAlertLocation(this.alertData.alertLevelThirdAdcode,2)
+						this.getAlertLocation(this.alertData.alertLevelFourthAdcode,3)
+						console.log(this.alertLevels);
+					}
+				})
+			},
+			getAlertLocation(levelAdcode,index){
+				let alertLevelAdcode = levelAdcode.split(',').filter(item=>item.length===9)
+				let m = new Map()
+				alertLevelAdcode.forEach(item=>{
+					if(!m.get(item.slice(0,6))){
+						m.set(item.slice(0,6),this.dataCodeTransform(item.slice(0,6),'potentialPointBelongCountys'))
+					}
+				})
+				m.forEach((item,key)=>{
+					let town = []
+					alertLevelAdcode.forEach(Adcode=>{
+						if(Adcode.slice(0,6)===key){
+							town.push(this.dataCodeTransform(Adcode,'potentialPointBelongTowns'))
+						}
+					})
+					this.alertLevels[index].data.push({
+						county:item,
+						town:town.join(',')
+					})
+				})
 			}
 		}
 	}

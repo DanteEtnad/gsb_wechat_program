@@ -73,7 +73,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/alertManagement/AlertUpdateDialog",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "汕头市地质灾害气象预警平台",

@@ -1,5 +1,6 @@
 <template>
 	<view style="width:100%;height:100vh">
+		<!-- <l-echart ref="chart"/> -->
 		<map class="map" 
 			:latitude="latitude" 
 			:longitude="longitude" 
@@ -79,7 +80,7 @@
 					v-show="isUp" 
 					@click="showImage(false,'cover-info-container','location','full','more')"></cover-image>
 			</cover-view>
-			<cover-view :class="locationClass">
+			<cover-view :class="locationClass" @click="getLocation">
 				<cover-image src="../../static/Potential/定位.svg" style="width:20px;height:20px;"></cover-image>
 			</cover-view>
 			<cover-view :class="fullClass">
@@ -93,11 +94,32 @@
 </template>
 
 <script>
+	// import SHANTOU_AREA_BOUNDARY from '../../static/mapData/shantou-area-boundary.json'
+	// import SHANTOU_TOWN_BOUNDARY from '../../static/mapData/shantou-town-boundary.json'
+	import * as echarts from '@/uni_modules/lime-echart/static/echarts.min.js';
+	import myEcharts from '@/components/mpvue-echarts/src/echarts.vue';
+	import LEchart from '@/uni_modules/lime-echart/components/l-echart/l-echart.vue';
 	// import { loadModules } from "esri-loader";
 	import {request} from "@/utils/request.js"
 	export default{
+		components: {
+			myEcharts,
+			LEchart
+		},
 		data(){
 			return{
+				dataOption:{
+					series: [
+						{
+							name: '汕头市地图',
+							type: 'map',
+							map: 'ShanTou',
+							label: {
+								show: true
+							},
+						}
+					]
+				},
 				longitude: 116.713, 		//经度
 				latitude: 23.222, 			//纬度
 				scale: 9, 							//地图缩放程度
@@ -122,10 +144,52 @@
 			}
 		},
 		async mounted(){
+			//this.init()
 			console.log('地图')
 			await this.getPotentialPointData()
 		},
 		methods:{
+			initMapData(jsonData){
+				let newData = jsonData
+				for(let i=0;i<jsonData.features.length;i++){
+					let geometry = jsonData.features[i].geometry
+					if(geometry.type==="MultiPolygon"){
+						console.log(jsonData.features[i].properties.name);
+						console.log(geometry);
+					}
+					if(geometry.type==="Polygon"&&geometry.coordinates[0][0][0][0]){
+						console.log(jsonData.features[i].properties.name);
+						let newGeometry = []
+						geometry.coordinates.forEach(item=>{
+							newGeometry = [...newGeometry,...item[0]]
+						})
+						//console.log(newGeometry);
+						newData.features[i].geometry.coordinates = [newGeometry]
+					}
+				}
+				return newData
+			},
+			init(){
+				const BOUNDARY = this.initMapData(SHANTOU_AREA_BOUNDARY)
+				console.log(BOUNDARY);
+				this.$refs.chart.init(echarts,async chart => {
+					chart.showLoading()
+					const data = await this.getData()
+					chart.hideLoading()
+					echarts.registerMap('ShanTou', BOUNDARY);
+					const option = {
+						series: [
+							{
+								name: '汕头市地图',
+								type: 'map',
+								map: 'ShanTou',
+							}
+						]
+					}
+					chart.setOption(option);
+				})
+				//this.$refs.chart.resize()
+			},
 			showImage(status,activeClassName,location,full,more){
 				this.isUp = status
 				this.classObj.pop()
@@ -152,11 +216,10 @@
 				.then(res=>{
 					if(res.code===2000){
 						this.potentialPointData = res.data.PotentialPointInfoQueryListRsp
-						let list = []
-						this.potentialPointData.map((potentialPoint,index)=>{
+						let list = this.potentialPointData.map((potentialPoint,index)=>{
 							if(potentialPoint.potentialPointLocationLatitude <= 90 && potentialPoint.potentialPointLocationLatitude >= -90 &&
 								 potentialPoint.potentialPointLocationLongitude <= 180 && potentialPoint.potentialPointLocationLongitude >= -180){
-									 list.push({
+									 return {
 									 	id:index,
 									 	longitude:potentialPoint.potentialPointLocationLongitude,
 									 	latitude:potentialPoint.potentialPointLocationLatitude,
@@ -164,15 +227,41 @@
 									 	iconPath:this.iconUrl[potentialPoint.potentialPointType],
 									 	width:16,
 									 	height:16
-									 })
+									 }
 								 }
-						})
+						}).filter(item=>typeof item!=='undefined')
 						this.markers = [...list]
+						console.log(this.markers);
 					}
 				})
 			},
 			switchMap(){
 				this.enableSatellite = !this.enableSatellite
+			},
+			getData() {
+				return new Promise(resolve => {
+					uni.request({
+						url: 'https://fastly.jsdelivr.net/gh/apache/echarts-website@asf-site/examples/data/asset/geo/HK.json',
+						success(res) {
+							setTimeout(() => {
+								resolve(res.data);
+							}, 2000)
+						}
+					});
+				});
+			},
+			getLocation(){
+				uni.getLocation({
+					type: 'gcj02',
+					success: function (res) {
+						console.log('当前：' + res);
+						console.log('当前位置的经度：' + res.longitude);
+						console.log('当前位置的纬度：' + res.latitude);
+					},
+					fail:function (error) {
+						console.log(error);
+					},
+				});
 			},
 		},	
 	}
