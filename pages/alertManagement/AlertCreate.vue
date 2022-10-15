@@ -192,7 +192,7 @@
 						this.officePageInfo.dataAmount = res.data.QuerySummaryRsp.dataAmount
 					}
 				})
-			},1000)
+			},300)
 		}
 	}
 </script>

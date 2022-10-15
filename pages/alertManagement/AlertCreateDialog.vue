@@ -47,10 +47,10 @@
 			</view>
 			<view class="create-picture-input-container">
 				<text>预警分布图</text>
-				<button>生成图片</button>
-				<button>替换图片</button>
+				<button @click="imgGenerate">生成图片</button>
+				<button @click="imgChange">替换图片</button>
 			</view>
-			<button class="create-form-submit" @click="openMessageDialog">提交并发送短信</button>
+			<button class="create-form-submit" @click="submit">提交并发送短信</button>
 		</uni-forms>
 		
 		<uni-popup ref="popup" type="bottom" background-color="#fff">
@@ -89,8 +89,8 @@
 				selectedLocation:"",
 				alertForm:{
 					alertName:'',
-					alertDescription:'',
-					alertLevel:'',
+					alertDescription:'小程序测试',
+					alertLevel:1,
 					alertMapTitle:'',
 					alertStartTime:'',
 					alertEndTime:'',
@@ -163,19 +163,39 @@
 				createForm.alertStartTime = createForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
 				createForm.alertEndTime = createForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
 				console.log(createForm);
-				// request({
-				// 	url:'alertManage/alertGenerate',
-				// 	method:'post',
-				// 	data:{
-						
-				// 	}
-				// })
+				request({
+					url:'alertManage/alertGenerate',
+					method:'post',
+					data:{
+						AlertGenerateReq:createForm
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.openMessageDialog()
+					}
+				})
 			},
 			openMessageDialog(){
 				this.$refs.message.open('center')
 			},
 			closeMessageDialog(){
 				this.$refs.message.close()
+				uni.showModal({
+					title:'成功',
+					content:'发送成功,点击确定返回',
+					showCancel:false
+				}).then(res=>{
+					uni.redirectTo({
+						url:'/pages/alertManagement/AlertCreate',
+					})
+				})
+			},
+			imgGenerate(){
+				// TODO:生成图片
+			},
+			imgChange(){
+				// TODO:替换图片
 			}
 		}
 	}
