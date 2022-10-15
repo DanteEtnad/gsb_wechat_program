@@ -20,10 +20,12 @@
 				<view style="flex: 5;">
 					<uni-data-checkbox v-model="memberType" :localdata="memberTypes"/>
 					<uni-data-select v-model="telephoneNumber" :localdata="memberType===0?groups:members"/>
-					<view style="display: grid;grid-template-columns: 100px 100px;">
-						<view v-for="(member,index) in sendForm.members" :key="index" @click="deleteMember(index)" style="padding: 5px;display:flex;justify-content:space-evenly;">
+					<view class="message-member-container">
+						<view v-for="(member,index) in sendForm.members" :key="index" @click="deleteMember(index)" class="message-member-item">
 							{{memberOption[member]}}
-							<uni-icons type="closeempty" size="16" color="#f00"></uni-icons>
+							<view class="message-member-item-delete">
+								<uni-icons type="closeempty" size="16" color="#000"></uni-icons>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -195,15 +197,7 @@
 					})
 					.then(res=>{
 						if(res.code===2000){
-							uni.showModal({
-								title:'成功',
-								content:'发送成功,点击确定返回',
-								showCancel:false
-							}).then(res=>{
-								uni.redirectTo({
-									url:'/pages/alertManagement/AlertCreate',
-								})
-							})
+							this.closeDialog()
 						}
 					})
 				}
@@ -261,12 +255,27 @@
 				display: flex;
 				align-items: flex-start;
 				margin: 20px 0;
-				.row-content{
-					font-size: 14px;
-					flex:5;
-					padding: 5px;
-					border: 1px solid rgba(0,0,0,.1);
-					border-radius: 4px;
+				.message-member-container{
+					display: grid;
+					grid-template-columns: 100px 100px;
+					.message-member-item{
+						margin: 5px;
+						padding: 5px;
+						background-color: #c8c7c6;
+						border-radius: 6px;
+						display:flex;
+						justify-content:space-between;
+						align-items: center;
+						.message-member-item-delete{
+							background-color:#fff;
+							border-radius:50%;
+							width: 20px;
+							height: 20px;
+							display: flex;
+							justify-content: space-around;
+							align-items: center;
+						}
+					}
 				}
 			}
 		}

@@ -128,39 +128,45 @@
 		},
 		onLoad: function(option) {
 			const eventChannel = this.getOpenerEventChannel();
-			eventChannel.on('openUpdateDialog',data=>{
-				console.log(data);
-				let location = []
-				let newLocation = []
-				this.alertForm = data.item
-				
-				this.alertForm.alertStartTime = this.timeTransform(this.alertForm.alertStartTime)
-				this.alertForm.alertEndTime = this.timeTransform(this.alertForm.alertEndTime)
-				
-				location = this.alertForm.alertLevelFirstAdcode.split(',')
-				newLocation = location.map(item=>{
-					return this.dataCodeTransform(item,'potentialPointBelongTowns')
+			try{
+				eventChannel.on('openUpdateDialog',data=>{
+					console.log(data);
+					let location = []
+					let newLocation = []
+					this.alertForm = data.item
+					
+					this.alertForm.alertStartTime = this.timeTransform(this.alertForm.alertStartTime)
+					this.alertForm.alertEndTime = this.timeTransform(this.alertForm.alertEndTime)
+					
+					location = this.alertForm.alertLevelFirstAdcode.split(',')
+					newLocation = location.map(item=>{
+						return this.dataCodeTransform(item,'potentialPointBelongTowns')
+					})
+					this.createData[0].location = newLocation.join(',')
+					
+					location = this.alertForm.alertLevelSecondAdcode.split(',')
+					newLocation = location.map(item=>{
+						return this.dataCodeTransform(item,'potentialPointBelongTowns')
+					})
+					this.createData[1].location = newLocation.join(',')
+					
+					location = this.alertForm.alertLevelThirdAdcode.split(',')
+					newLocation = location.map(item=>{
+						return this.dataCodeTransform(item,'potentialPointBelongTowns')
+					})
+					this.createData[2].location = newLocation.join(',')
+					
+					location = this.alertForm.alertLevelFourthAdcode.split(',')
+					newLocation = location.map(item=>{
+						return this.dataCodeTransform(item,'potentialPointBelongTowns')
+					})
+					this.createData[3].location = newLocation.join(',')
 				})
-				this.createData[0].location = newLocation.join(',')
-				
-				location = this.alertForm.alertLevelSecondAdcode.split(',')
-				newLocation = location.map(item=>{
-					return this.dataCodeTransform(item,'potentialPointBelongTowns')
+			}catch(error){
+				uni.redirectTo({
+					url:'/pages/alertManagement/AlertCheck',
 				})
-				this.createData[1].location = newLocation.join(',')
-				
-				location = this.alertForm.alertLevelThirdAdcode.split(',')
-				newLocation = location.map(item=>{
-					return this.dataCodeTransform(item,'potentialPointBelongTowns')
-				})
-				this.createData[2].location = newLocation.join(',')
-				
-				location = this.alertForm.alertLevelFourthAdcode.split(',')
-				newLocation = location.map(item=>{
-					return this.dataCodeTransform(item,'potentialPointBelongTowns')
-				})
-				this.createData[3].location = newLocation.join(',')
-			})
+			}
 		},
 		methods: {
 			editLocation(data){
@@ -192,6 +198,15 @@
 			},
 			closeMessageDialog(){
 				this.$refs.message.close()
+				uni.showModal({
+					title:'成功',
+					content:'发送成功,点击确定返回',
+					showCancel:false
+				}).then(res=>{
+					uni.redirectTo({
+						url:'/pages/alertManagement/AlertCheck',
+					})
+				})
 			},
 			submit(){
 				let updateForm = {
