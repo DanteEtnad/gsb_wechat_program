@@ -69,7 +69,7 @@
 			</view>
 		</uni-popup>
 		<uni-popup ref="message" background-color="#fff">
-			<Message @closeDialog="closeMessageDialog"/>
+			<Message @closeDialog="closeMessageDialog" @afterSendMessage="afterSendMessage"/>
 		</uni-popup>
 	</view>
 </template>
@@ -198,6 +198,9 @@
 			},
 			closeMessageDialog(){
 				this.$refs.message.close()
+			},
+			afterSendMessage(){
+				this.closeMessageDialog()
 				uni.showModal({
 					title:'成功',
 					content:'发送成功,点击确定返回',
