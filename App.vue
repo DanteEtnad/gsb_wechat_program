@@ -6,14 +6,14 @@
 	import {queryAll} from "./utils/global.js"
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
-		},
-		onShow: function() {
 			if(uni.getStorageSync('token')){
 				uni.redirectTo({
 					url:'/pages/index_normal/index_normal'
 				})
 			}
+		},
+		onShow: function() {
+			console.log('App Show')
 		},
 		onHide: function() {
 			console.log('App Hide')
