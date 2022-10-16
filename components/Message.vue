@@ -197,7 +197,8 @@
 					})
 					.then(res=>{
 						if(res.code===2000){
-							this.closeDialog()
+							this.reset()
+							this.$emit('afterSendMessage')
 						}
 					})
 				}

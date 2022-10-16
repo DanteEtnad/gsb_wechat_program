@@ -50,7 +50,7 @@
 				<button @click="imgGenerate">生成图片</button>
 				<button @click="imgChange">替换图片</button>
 			</view>
-			<button class="create-form-submit" @click="submit">提交并发送短信</button>
+			<button class="create-form-submit" @click="openMessageDialog">提交并发送短信</button>
 		</uni-forms>
 		
 		<uni-popup ref="popup" type="bottom" background-color="#fff">
@@ -70,7 +70,7 @@
 		</uni-popup>
 		
 		<uni-popup ref="message" background-color="#fff">
-			<Message @closeDialog="closeMessageDialog"/>
+			<Message @closeDialog="closeMessageDialog" @afterSendMessage="afterSendMessage"/>
 		</uni-popup>
 	</view>
 </template>
@@ -181,6 +181,9 @@
 			},
 			closeMessageDialog(){
 				this.$refs.message.close()
+			},
+			afterSendMessage(){
+				this.closeMessageDialog()
 				uni.showModal({
 					title:'成功',
 					content:'发送成功,点击确定返回',
