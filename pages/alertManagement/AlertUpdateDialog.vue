@@ -45,10 +45,15 @@
 					</uni-collapse>
 				</view>
 			</view>
-			<view class="create-picture-input-container">
-				<text>预警分布图</text>
-				<button>生成图片</button>
-				<button>替换图片</button>
+			<view class="create-picture-container">
+				<view class="create-picture-input-container">
+					<text>预警分布图</text>
+					<button @click="imgGenerate">生成图片</button>
+					<button @click="imgChange">替换图片</button>
+				</view>
+				<view style="display: flex;justify-content: space-around;" v-if="alertForm.alertMapUrl!==''">
+					<u--image :src="alertForm.alertMapUrl" mode="aspectFit"></u--image>
+				</view>
 			</view>
 			<button class="create-form-submit" @click="submit">提交并发送短信</button>
 		</uni-forms>
@@ -120,6 +125,12 @@
 					'三级':'alertLevelThirdAdcode',
 					'四级':'alertLevelFourthAdcode'
 				},
+				text:[
+					'地质灾害气象风险预警级别为1级(红色)的区域有：',
+					'地质灾害气象风险预警级别为2级(橙色)的区域有：',
+					'地质灾害气象风险预警级别为3级(黄色)的区域有：',
+					'地质灾害气象风险预警级别为4级(蓝色)的区域有：'
+				],
 				locationDataTree:[],
 			}
 		},
@@ -228,6 +239,12 @@
 				}
 				updateForm.alertStartTime = updateForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
 				updateForm.alertEndTime = updateForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
+				updateForm.alertDescription = ''
+				this.createData.forEach((item,index)=>{
+					if(item.location!==''){
+						updateForm.alertDescription += `${this.text[index]}${item.location}；`
+					}
+				})
 				console.log(updateForm)
 				request({
 					url:'alertManage/alertModify',
@@ -244,6 +261,57 @@
 					}
 				})
 			},
+			imgGenerate(){
+				let areas = []
+				let mapForm = {
+					alertName:this.alertForm.alertName,
+					name:this.alertForm.alertName,
+					imgTitle:'汕头市地质灾害气象风险预警预报结果',
+					effectiveStartTime:this.alertForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join(''),
+					effectiveEndTime:this.alertForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join(''),
+					alertAreaLevel:[]
+				}
+				this.createData.forEach((item,index)=>{
+					let locations = item.location.split(',')
+					areas = [...areas,...locations.map(area=>{
+						return{
+							level:index+1,
+							areaName:area
+						}
+					})]
+				})
+				mapForm.alertAreaLevel = areas
+				console.log(mapForm);
+				if(this.alertForm.alertName===''||this.alertForm.alertStartTime===''||this.alertForm.alertEndTime===''){
+					uni.showModal({
+						title:'失败',
+						content:'请输入时间或名字',
+						showCancel:false
+					})
+				}else{
+					request({
+						url:'alertManage/generateAlertAreaMap',
+						method:'post',
+						data:{
+							AlertAreaMapReq:mapForm
+						}
+					})
+					.then(res=>{
+						if(res.code===2000){
+							this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
+						}
+					})
+				}
+			},
+			imgChange(){
+				uni.chooseImage({
+					count: 1,
+					sourceType: ['album'], //从相册选择
+				}).then(res=>{
+					console.log(res[1].tempFilePaths[0],this);
+					this.alertForm.alertMapUrl = res[1].tempFilePaths[0]
+				})
+			}
 		}
 	}
 </script>
@@ -264,11 +332,10 @@
 		padding: 15px;
 		.create-form-submit{
 			@extend .button-base;
-			position: absolute;
 			width: 343px;
 			height: 40px;
 			line-height: 40px;
-			bottom: 50px;
+			margin: 10px 0;
 		}
 		.create-input-container{
 			margin: 5px 0;
@@ -297,15 +364,20 @@
 				}
 			}
 		}
-		.create-picture-input-container{
+		.create-picture-container{
 			display: flex;
-			justify-content: space-evenly;
-			align-items: center;
-			button{
-				@extend .button-base;
-				width: 107px;
-				height: 36px;
-				line-height: 36px;
+			flex-direction: column;
+			.create-picture-input-container{
+				display: flex;
+				justify-content: space-evenly;
+				align-items: center;
+				margin: 10px 0;
+				button{
+					@extend .button-base;
+					width: 107px;
+					height: 36px;
+					line-height: 36px;
+				}
 			}
 		}
 	}
