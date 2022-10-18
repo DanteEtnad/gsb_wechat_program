@@ -2,11 +2,14 @@
 	<view style="width:100%;height:100vh">
 		<!-- <l-echart ref="chart"/> -->
 		<map class="map" 
+			id="map"
 			:latitude="latitude" 
 			:longitude="longitude" 
 			:scale="scale"
 			:enable-satellite="enableSatellite"
 			:markers="markers"
+			:show-location="true"
+			v-if="isAlert"
 		>
 			<cover-view :class="classObj">
 				<cover-view class="cover-alert-img">
@@ -90,12 +93,13 @@
 				<cover-image src="../../static/Potential/更多.svg" style="width:20px;height:20px;"></cover-image>
 			</cover-view>
 		</map>
+		<view style="text-align: center;padding: 20px 0;" v-else>
+			<h1>今日暂无预警</h1>
+		</view>
 	</view>
 </template>
 
 <script>
-	// import SHANTOU_AREA_BOUNDARY from '../../static/mapData/shantou-area-boundary.json'
-	// import SHANTOU_TOWN_BOUNDARY from '../../static/mapData/shantou-town-boundary.json'
 	import * as echarts from '@/uni_modules/lime-echart/static/echarts.min.js';
 	import myEcharts from '@/components/mpvue-echarts/src/echarts.vue';
 	import LEchart from '@/uni_modules/lime-echart/components/l-echart/l-echart.vue';
@@ -106,8 +110,10 @@
 			myEcharts,
 			LEchart
 		},
+		props:['isAlert','mapUrl'],
 		data(){
 			return{
+				mapContext:null,
 				dataOption:{
 					series: [
 						{
@@ -144,52 +150,11 @@
 			}
 		},
 		async mounted(){
-			//this.init()
 			console.log('地图')
-			await this.getPotentialPointData()
+			//await this.getPotentialPointData()
+			this.mapContext = uni.createMapContext("map",this)
 		},
 		methods:{
-			initMapData(jsonData){
-				let newData = jsonData
-				for(let i=0;i<jsonData.features.length;i++){
-					let geometry = jsonData.features[i].geometry
-					if(geometry.type==="MultiPolygon"){
-						console.log(jsonData.features[i].properties.name);
-						console.log(geometry);
-					}
-					if(geometry.type==="Polygon"&&geometry.coordinates[0][0][0][0]){
-						console.log(jsonData.features[i].properties.name);
-						let newGeometry = []
-						geometry.coordinates.forEach(item=>{
-							newGeometry = [...newGeometry,...item[0]]
-						})
-						//console.log(newGeometry);
-						newData.features[i].geometry.coordinates = [newGeometry]
-					}
-				}
-				return newData
-			},
-			init(){
-				const BOUNDARY = this.initMapData(SHANTOU_AREA_BOUNDARY)
-				console.log(BOUNDARY);
-				this.$refs.chart.init(echarts,async chart => {
-					chart.showLoading()
-					const data = await this.getData()
-					chart.hideLoading()
-					echarts.registerMap('ShanTou', BOUNDARY);
-					const option = {
-						series: [
-							{
-								name: '汕头市地图',
-								type: 'map',
-								map: 'ShanTou',
-							}
-						]
-					}
-					chart.setOption(option);
-				})
-				//this.$refs.chart.resize()
-			},
 			showImage(status,activeClassName,location,full,more){
 				this.isUp = status
 				this.classObj.pop()
@@ -232,36 +197,39 @@
 						}).filter(item=>typeof item!=='undefined')
 						this.markers = [...list]
 						console.log(this.markers);
+						this.addAlertMap()
 					}
 				})
 			},
 			switchMap(){
 				this.enableSatellite = !this.enableSatellite
 			},
-			getData() {
-				return new Promise(resolve => {
-					uni.request({
-						url: 'https://fastly.jsdelivr.net/gh/apache/echarts-website@asf-site/examples/data/asset/geo/HK.json',
-						success(res) {
-							setTimeout(() => {
-								resolve(res.data);
-							}, 2000)
-						}
-					});
-				});
-			},
 			getLocation(){
+				this.mapContext.moveToLocation()
 				uni.getLocation({
-					type: 'gcj02',
-					success: function (res) {
-						console.log('当前：' + res);
-						console.log('当前位置的经度：' + res.longitude);
-						console.log('当前位置的纬度：' + res.latitude);
-					},
-					fail:function (error) {
-						console.log(error);
-					},
-				});
+					type: 'gcj02'
+				}).then(res=>{
+					console.log(res)
+				})
+			},
+			addAlertMap(){
+				this.mapContext.addGroundOverlay({
+					id:114514,
+					src:this.mapUrl,
+					bounds:{
+						southwest:{
+							longitude:116,
+							latitude:23
+						},
+						northeast:{
+							longitude:117.2,
+							latitude:23.7
+						}
+					}
+				})
+				.then(res=>{
+					console.log(res);
+				})
 			},
 		},	
 	}
