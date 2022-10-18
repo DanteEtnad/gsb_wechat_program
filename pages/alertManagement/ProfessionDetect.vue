@@ -1,14 +1,16 @@
 <template>
 	<view style="width:100%;height:100vh">
 		<map class="map" 
+			id="map"
 			:latitude="latitude" 
 			:longitude="longitude" 
 			:scale="scale"
 			:markers="markers"
 			:enable-satellite="enableSatellite"
+			:show-location="true"
 			@markertap="bindmarkertap"
 		>
-			<cover-view class="cover-container" @click="showImage('location-active','full-active','more-active')">
+			<cover-view class="cover-container" @click="showImage('location-active','full-active','more-active')" v-if="showPoint">
 				<cover-view class="cover-detect-type">
 					<cover-image src="../../static/Potential/online.svg" class="cover-detect-type-icon"></cover-image>
 					<cover-view>
@@ -22,7 +24,7 @@
 					</cover-view>
 				</cover-view>
 			</cover-view>
-			<cover-view :class="locationClass">
+			<cover-view :class="locationClass" @click="getLocation">
 				<cover-image src="../../static/Potential/定位.svg" style="width:20px;height:20px;"></cover-image>
 			</cover-view>
 			<cover-view :class="fullClass">
@@ -56,6 +58,8 @@
 		},
 		data(){
 			return{
+				mapContext:null,
+				showPoint:true,
 				list:[{name:'监测点数据'},{name:'监测点信息'},{name:'监测点照片'}],
 				longitude: 116.713, 		//经度
 				latitude: 23.222, 			//纬度
@@ -73,6 +77,7 @@
 			}
 		},
 		async mounted(){
+			this.mapContext = uni.createMapContext("map",this)
 			console.log('地图')
 			await this.getPotentialPointData()
 		},
@@ -115,6 +120,10 @@
 								 }
 						}).filter(item=>typeof item!=='undefined')
 						this.markers = [...list]
+						uni.showToast({
+							title: `找到${this.markers.length}个监测点`,
+							duration: 2000
+						});
 					}
 				})
 			},
@@ -125,6 +134,7 @@
 				console.log(e);
 			},
 			bindmarkertap(e){
+				this.showPoint = false
 				this.showImage('location-active','full-active','more-active')
 				const id = e.detail.markerId
 				console.log(e.detail.markerId);
@@ -134,7 +144,15 @@
 			},
 			swtichComponent(item){
 				this.showComponent = item.index
-			}
+			},
+			getLocation(){
+				this.mapContext.moveToLocation()
+				uni.getLocation({
+					type: 'gcj02'
+				}).then(res=>{
+					console.log(res)
+				})
+			},
 		}
 	}
 </script>

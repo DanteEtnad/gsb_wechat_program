@@ -1,42 +1,50 @@
 <template>
-	<view class="daliy-alert-container">
-		<view style="font-size: 14px;">
-			发布时间：{{timeTransform(alertData.alertPublishTime)}}
-			</view>
-		<view style="font-size: 14px;">
-			预警时段：{{timeTransform(alertData.alertStartTime)}}-{{timeTransform(alertData.alertEndTime)}}
-			</view>
-		<view style="display: flex;justify-content: space-around;">
-			<u--image src="/static/test.jpg" mode="aspectFit"></u--image>
-		</view>
-		<view class="daliy-alert-text-container">
-			<uni-row v-for="(alertLevel,index) in alertLevels" :key="index">
-				<view class="daliy-alert-text-title">
-					<view :style="{width:'24px',height:'12px',marginRight:'5px',backgroundColor:`${alertLevel.color}`,borderRadius:'3px'}"></view>
-					<!-- <view style="height: 12px;width: 24px;"></view> -->
-					<text>{{alertLevel.name}}</text>
+	<view>
+		<view class="daliy-alert-container" v-if="isAlert">
+			<view style="font-size: 14px;">
+				发布时间：{{timeTransform(alertData.alertPublishTime)}}
 				</view>
-				<view class="daliy-alert-text-content">
-					<uni-row>
-						<uni-row v-for="item in alertLevel.data" :key="item">
-							<text>{{item.county}}：</text>
-							<text style="color:rgba(0,0,0,.65)">{{item.town}}；</text>
+			<view style="font-size: 14px;">
+				预警时段：{{timeTransform(alertData.alertStartTime)}}-{{timeTransform(alertData.alertEndTime)}}
+				</view>
+			<view style="display: flex;justify-content: space-around;">
+				<u--image :src="mapUrl" mode="aspectFit"></u--image>
+			</view>
+			<view class="daliy-alert-text-container">
+				<uni-row v-for="(alertLevel,index) in alertLevels" :key="index">
+					<view class="daliy-alert-text-title">
+						<view :style="{width:'24px',height:'12px',marginRight:'5px',backgroundColor:`${alertLevel.color}`,borderRadius:'3px'}"></view>
+						<!-- <view style="height: 12px;width: 24px;"></view> -->
+						<text>{{alertLevel.name}}</text>
+					</view>
+					<view class="daliy-alert-text-content">
+						<uni-row>
+							<uni-row v-for="item in alertLevel.data" :key="item">
+								<text>{{item.county}}：</text>
+								<text style="color:rgba(0,0,0,.65)">{{item.town}}；</text>
+							</uni-row>
 						</uni-row>
-					</uni-row>
-				</view>
-			</uni-row>
+					</view>
+				</uni-row>
+			</view>
+		</view>
+		<view style="text-align: center;padding: 20px 0;" v-else>
+			<h1>今日暂无预警</h1>
 		</view>
 	</view>
 </template>
 
 <script>
 	import {request} from '@/utils/request.js'
-	import {dataCodeTransformMixins,timeTransformMixins} from '@/utils/mixins.js'
+	import {dataCodeTransformMixins,timeTransformMixins,getNowDateMixins} from '@/utils/mixins.js'
 	export default {
-		mixins:[dataCodeTransformMixins,timeTransformMixins],
+		mixins:[dataCodeTransformMixins,timeTransformMixins,getNowDateMixins],
+		props:['isAlert'],
 		data(){
 			return{
-				alertData:{},
+				mapUrl:'',
+				alertData:'',
+				todayTime:'',
 				alertLevels:[
 					{
 						name:'一级（红色预警）',
@@ -61,34 +69,15 @@
 				]
 			}
 		},
-		mounted() {
-			this.getAlertData()
-		},
 		methods:{
-			getAlertData(){
-				request({
-					url:'alertManage/queryAlertList',
-					method:'post',
-					data:{
-						QueryAlertListReq:{
-							alertState:"FIN"
-						},
-						QueryPagingParamsReq:{
-							offset:0,
-							queryCount:9999
-						}
-					}
-				})
-				.then(res=>{
-					if(res.code===2000){
-						this.alertData = res.data.QueryAlertListRsp[0]
-						this.getAlertLocation(this.alertData.alertLevelFirstAdcode,0)
-						this.getAlertLocation(this.alertData.alertLevelSecondAdcode,1)
-						this.getAlertLocation(this.alertData.alertLevelThirdAdcode,2)
-						this.getAlertLocation(this.alertData.alertLevelFourthAdcode,3)
-						console.log(this.alertLevels);
-					}
-				})
+			init(data){
+				this.alertData = data
+				this.getAlertLocation(this.alertData.alertLevelFirstAdcode,0)
+				this.getAlertLocation(this.alertData.alertLevelSecondAdcode,1)
+				this.getAlertLocation(this.alertData.alertLevelThirdAdcode,2)
+				this.getAlertLocation(this.alertData.alertLevelFourthAdcode,3)
+				this.mapUrl = this.alertData.alertMapUrl
+				console.log(this.alertLevels);
 			},
 			getAlertLocation(levelAdcode,index){
 				let alertLevelAdcode = levelAdcode.split(',').filter(item=>item.length===9)

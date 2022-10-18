@@ -156,7 +156,7 @@
 			}
 		},
 		mounted() {
-			this.getAlertData()
+			this.getAlertData(true)
 		},
 		onReachBottom() {
 			if((this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount<=this.officePageInfo.dataAmount){
@@ -171,6 +171,9 @@
 				})
 			},
 			getAlertData:debounce(function(reset=false){
+				uni.showLoading({
+					title: '加载中'
+				});
 				if(reset){
 					this.officePageInfo.currentPage = 1
 					this.alertData = []
@@ -190,6 +193,7 @@
 					if(res.code===2000){
 						this.alertData = [...this.alertData,...res.data.QueryAlertListRsp]
 						this.officePageInfo.dataAmount = res.data.QuerySummaryRsp.dataAmount
+						uni.hideLoading();
 					}
 				})
 			},300)

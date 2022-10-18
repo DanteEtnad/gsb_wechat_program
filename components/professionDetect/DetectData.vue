@@ -10,6 +10,9 @@
 				<uni-drawer ref="drawer" mode="left" :mask-click="true" width="350">
 					<scroll-view scroll-y="true" class="drawer-device-container">
 						<button @click="close">关闭窗口</button>
+						<view style="text-align: center;padding: 20px 0;" v-if="deviceTreeList.length===0">
+							<h1>暂无数据</h1>
+						</view>
 						<view class="drawer-device-info" v-for="device in deviceTreeList" :key="device.deviceId">
 							<view class="drawer-device-title">
 								<view>{{device.deviceName}}</view>
@@ -101,6 +104,7 @@
 			selectedPotentialPoint:{
 				deep:true,
 				handler(newValue,oldValue){
+					this.init()
 					const id = newValue.potentialPointId
 					this.getDeviceIndexTree(id)
 				}
@@ -143,7 +147,27 @@
 		methods: {
 			init(){
 				this.$refs.chart.init(echarts,chart=>{
-					chart.setOption(this.dataOption);
+					chart.setOption({
+						dataset: {
+							source: [
+								[],
+								[]
+							]
+						},
+						legend: {},
+						xAxis: {
+							type: "category",
+							axisTick: {
+								show: false
+							}
+						},
+						yAxis: {},
+						dataZoom:[{}],
+						series: [{
+							type: "line",
+							seriesLayoutBy: "row",
+						}]
+					});
 				})
 				this.$refs.chart.resize({width: 375, height: 300})
 			},

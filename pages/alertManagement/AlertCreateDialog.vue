@@ -218,7 +218,8 @@
 					imgTitle:'汕头市地质灾害气象风险预警预报结果',
 					effectiveStartTime:this.alertForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join(''),
 					effectiveEndTime:this.alertForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join(''),
-					alertAreaLevel:[]
+					alertAreaLevel:[],
+					mode:0
 				}
 				this.createData.forEach((item,index)=>{
 					let locations = item.location.split(',')

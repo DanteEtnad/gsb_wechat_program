@@ -1,11 +1,13 @@
 <template>
 	<view style="width:100%;height:100vh">
 		<map class="map" 
+			id="map"
 			:latitude="latitude" 
 			:longitude="longitude" 
 			:scale="scale"
 			:enable-satellite="enableSatellite"
 			:markers="markers"
+			:show-location="true"
 			@markertap="bindmarkertap"
 			@tap="bindtap"
 		>
@@ -81,7 +83,7 @@
 					v-show="isUp" 
 					@click="showImage(false,'cover-info-container','location','full','more')"></cover-image>
 			</cover-view>
-			<cover-view :class="locationClass">
+			<cover-view :class="locationClass" @click="getLocation">
 				<cover-image src="../../static/Potential/定位.svg" style="width:20px;height:20px;"></cover-image>
 			</cover-view>
 			<cover-view :class="fullClass">
@@ -91,7 +93,14 @@
 				<cover-image src="../../static/Potential/更多.svg" style="width:20px;height:20px;"></cover-image>
 			</cover-view>
 			<cover-view>
-				<uni-search-bar cancelButton="none" placeholder="请输入隐患点信息，如编号、地点名称..." radius="20" bgColor="#EEEEEE"></uni-search-bar>
+				<uni-search-bar 
+					cancelButton="none" 
+					placeholder="请输入隐患点信息，如地点名称..." 
+					radius="20" 
+					bgColor="#EEEEEE" 
+					v-model="potentialPointName" 
+					@blur="getPotentialPointData"
+				/>
 			</cover-view>
 			<uni-popup ref="popup">
 				<scroll-view class="potential-point-info-container" scroll-y="true" v-if="isDialogVisible">
@@ -229,6 +238,8 @@
 		mixins:[dataCodeTransformMixins,getMemberOptionsMixins,timeTransformMixins],
 		data(){
 			return{
+				potentialPointName:'',
+				mapContext:null,
 				longitude: 116.713, 		//经度
 				latitude: 23.222, 			//纬度
 				scale: 9, 							//地图缩放程度
@@ -256,6 +267,7 @@
 			}
 		},
 		async mounted(){
+			this.mapContext = uni.createMapContext("map",this)
 			this.getMembersOptions()
 			console.log('地图')
 			await this.getPotentialPointData()
@@ -277,7 +289,9 @@
 					url:"potentialPointInfo/queryList",
 					method:"post",
 					data:{
-						PotentialPointInfoQueryListReq:{},
+						PotentialPointInfoQueryListReq:{
+							potentialPointName:this.potentialPointName
+						},
 						QueryPagingParamsReq:{
 							"offset": 0,
 							"queryCount": 9999
@@ -303,6 +317,10 @@
 								 }
 						})
 						this.markers = [...list]
+						uni.showToast({
+							title: `找到了${this.markers.length}个数据`,
+							duration: 2000
+						});
 					}
 				})
 			},
@@ -319,6 +337,14 @@
 			},
 			switchMap(){
 				this.enableSatellite = !this.enableSatellite
+			},
+			getLocation(){
+				this.mapContext.moveToLocation()
+				uni.getLocation({
+					type: 'gcj02'
+				}).then(res=>{
+					console.log(res)
+				})
 			},
 		},	
 	}
