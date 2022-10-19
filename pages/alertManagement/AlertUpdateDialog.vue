@@ -444,10 +444,10 @@
 	}
 	.collapse-title-third{
 		@extend .collapse-title;
-		background-color: #FCF66A;
+		background-color: #019EF5;
 	}
 	.collapse-title-forth{
 		@extend .collapse-title;
-		background-color: #019EF5;
+		background-color: #01F51E;
 	}
 </style>

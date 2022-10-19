@@ -25,11 +25,11 @@
 						<cover-view>二级</cover-view>
 					</cover-view>
 					<cover-view class="cover-alert-info">
-						<cover-view style="width: 20px;height: 10px;background-color: #FCF66A;margin-right:10px;border-radius: 2px;"></cover-view>
+						<cover-view style="width: 20px;height: 10px;background-color: #019EF5;margin-right:10px;border-radius: 2px;"></cover-view>
 						<cover-view>三级</cover-view>
 					</cover-view>
 					<cover-view class="cover-alert-info">
-						<cover-view style="width: 20px;height: 10px;background-color: #019EF5;margin-right:10px;border-radius: 2px;"></cover-view>
+						<cover-view style="width: 20px;height: 10px;background-color: #01F51E;margin-right:10px;border-radius: 2px;"></cover-view>
 						<cover-view>四级</cover-view>
 					</cover-view>
 				</cover-view>
