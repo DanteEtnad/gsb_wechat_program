@@ -57,13 +57,13 @@
 						data:[]
 					},
 					{
-						name:'三级（黄色预警）',
-						color:'#FCF66A',
+						name:'三级（蓝色预警）',
+						color:'#019EF5',
 						data:[]
 					},
 					{
-						name:'四级（蓝色预警）',
-						color:'#019EF5',
+						name:'四级（绿色预警）',
+						color:'#01F51E',
 						data:[]
 					}
 				]
