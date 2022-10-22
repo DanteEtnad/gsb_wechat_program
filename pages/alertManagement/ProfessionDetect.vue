@@ -120,6 +120,7 @@
 								 }
 						}).filter(item=>typeof item!=='undefined')
 						this.markers = [...list]
+						console.log("标记点",this.markers)
 						uni.showToast({
 							title: `找到${this.markers.length}个监测点`,
 							duration: 2000
@@ -150,7 +151,7 @@
 				uni.getLocation({
 					type: 'gcj02'
 				}).then(res=>{
-					console.log(res)
+					console.log("位置",res)
 				})
 			},
 		}

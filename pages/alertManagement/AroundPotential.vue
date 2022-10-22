@@ -185,7 +185,7 @@
 					</view>
 					<view class="potential-point-info-row">
 						<view>监测人：</view>
-						<view class="potential-point-info-main">{{memberList[selectedPotentialPoint.potentialPointEstablishMemberId]}}</view>
+						<view class="potential-point-info-main">{{memberList[selectedPotentialPoint.monitorPointMemberId]}}</view>
 					</view>
 					<view class="potential-point-info-row">
 						<view>监测人联系方式：</view>
@@ -232,10 +232,10 @@
 <script>
 	// import { loadModules } from "esri-loader";
 	import * as dayjs from "@/utils/dayjs.min.js"
-	import {dataCodeTransformMixins,getMemberOptionsMixins,timeTransformMixins} from "@/utils/mixins.js"
+	import {dataCodeTransformMixins,timeTransformMixins} from "@/utils/mixins.js"
 	import {request} from "@/utils/request.js"
 	export default{
-		mixins:[dataCodeTransformMixins,getMemberOptionsMixins,timeTransformMixins],
+		mixins:[dataCodeTransformMixins,timeTransformMixins],
 		data(){
 			return{
 				potentialPointName:'',
@@ -255,6 +255,7 @@
 				isDialogVisible:false,
 				selectedPotentialPoint:{},
 				memberList:{},
+				memberData:[],
 				iconUrl:{
 					"001":'../../static/Potential/不稳定斜坡.svg',
 					"002":'../../static/Potential/滑坡.svg',
@@ -267,12 +268,29 @@
 			}
 		},
 		async mounted(){
+			this.getMemberData()
 			this.mapContext = uni.createMapContext("map",this)
-			this.getMembersOptions()
 			console.log('地图')
 			await this.getPotentialPointData()
 		},
 		methods:{
+			getMemberData(){
+				request({
+					method:'GET',
+					url:'member/getAllMembersIdAndName',
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.memberData=res.data.MembersIdAndNameRsp
+					}else{
+						this.$message.error(res.message)
+					}
+			
+					for(var i=0; i<this.memberData.length; i++){
+						this.memberList[this.memberData[i].memberId]=this.memberData[i].memberName
+						}
+				})
+			},
 			showImage(status,activeClassName,location,full,more){
 				this.isUp = status
 				this.classObj.pop()
