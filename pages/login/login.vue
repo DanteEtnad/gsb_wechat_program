@@ -102,7 +102,7 @@ export default {
 				uni.navigateTo({
 					url:'/pages/index_normal/index_normal'
 				})
-			})
+			}) 
 		},
 	},
 }
