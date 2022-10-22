@@ -83,7 +83,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AlertCheck')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component 1.png" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/Potential/locate.svg" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>预警单审批</text>
 								</view>

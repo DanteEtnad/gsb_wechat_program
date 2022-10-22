@@ -10,29 +10,29 @@
 			:show-location="true"
 			@markertap="bindmarkertap"
 		>
-			<cover-view class="cover-container" @click="showImage('location-active','full-active','more-active')" v-if="showPoint">
-				<cover-view class="cover-detect-type">
-					<cover-image src="../../static/Potential/online.svg" class="cover-detect-type-icon"></cover-image>
-					<cover-view>
+			<view class="cover-container" @click="showImage('location-active','full-active','more-active')" v-if="showPoint">
+				<view class="cover-detect-type">
+					<image src="/static/Potential/online.svg" class="cover-detect-type-icon"></image>
+					<view>
 						在线监测点
-					</cover-view>
-				</cover-view>
-				<cover-view class="cover-detect-type">
-					<cover-image src="../../static/Potential/outline.svg" class="cover-detect-type-icon"></cover-image>
-					<cover-view>
+					</view>
+				</view>
+				<view class="cover-detect-type">
+					<image src="/static/Potential/outline.svg" class="cover-detect-type-icon"></image>
+					<view>
 						离线监测点
-					</cover-view>
-				</cover-view>
-			</cover-view>
-			<cover-view :class="locationClass" @click="getLocation">
-				<cover-image src="../../static/Potential/定位.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
-			<cover-view :class="fullClass">
-				<cover-image src="../../static/Potential/全景.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
-			<cover-view :class="moreClass" @click="switchMap">
-				<cover-image src="../../static/Potential/更多.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
+					</view>
+				</view>
+			</view>
+			<view :class="locationClass" @click="getLocation">
+				<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
+			</view>
+			<view :class="fullClass">
+				<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
+			</view>
+			<view :class="moreClass" @click="switchMap">
+				<image src="/static/Potential/more.svg" style="width:20px;height:20px;"></image>
+			</view>
 			<scroll-view class="pop-container" v-if="isDataVisible" scroll-y="true">
 				<view style="width: 100%;position: sticky;top: 0;background-color: #fff;">
 					<u-tabs :list="list" :scrollable="false" @click="swtichComponent"/>
@@ -113,7 +113,7 @@
 									 	longitude:potentialPoint.potentialPointLocationLongitude,
 									 	latitude:potentialPoint.potentialPointLocationLatitude,
 									 	title:potentialPoint.potentialPointName,
-									 	iconPath:potentialPoint.ifMonitorPoint==="Y"?"../../static/Potential/online.svg":"../../static/Potential/outline.svg",
+									 	iconPath:potentialPoint.ifMonitorPoint==="Y"?"/static/Potential/online.png":"/static/Potential/outline.png",
 									 	width:16,
 									 	height:16
 									 }
@@ -163,6 +163,7 @@
 		width:100%;
 		height:100%;
 		position: relative;
+
 	}
 	.icon-base{
 		position: absolute;
