@@ -85,6 +85,7 @@ export default {
 			// }).catch(errors => {
 			// 	uni.$u.toast('登录失败')
 			// })
+			uni.setStorageSync('token',"W92Mtj8biO0RRQOlWsQqPyjJDCvrN3pFEWgRvdh/fikuS+c8xZwLTUakS1xEsB/yVmM0AztR2rFDx9571bN6FymzL1OVUjCFo3pb+hs+lvOxspvV5Ei7EKzeGRu8GoCI2xQH3vhCOWLw9jvtQim0WMyXLrq3xUkfF2pU/KPoSryEGKJP6x/IoREqL9zuZg7w+7Asr9gC2xHIN3eGZ9GFiuNniJ72L+g4yzfBP4DVfoC8gA/tQbNQswM5Ne12JZeHmFX9jTjerSFa1Fm6EdIGEfgFIvZ6ldV6UeLMmgfzGjpGodiVGZ9X+VATeAKsYTNOFgkV8OEVncmGtGUfm8zhOw==")
 			requestAuthority({
 				method:'POST',
 				url:'login/login',
@@ -96,7 +97,7 @@ export default {
 				}
 			})
 			.then(res=>{
-				uni.setStorageSync('token',res.data.UserLoginRsp.token.token)
+
 				uni.$u.toast('登录成功')
 				uni.navigateTo({
 					url:'/pages/index_normal/index_normal'

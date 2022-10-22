@@ -183,21 +183,21 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/ConductPatrol')">
+								<view class="index-icon-font" @click="toPages('DailyPatrol/DailyPatrol')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/kaizhanxuncha.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/ConductPatrol')">
+								<view class="index-icon-font" @click="toPages('DailyPatrol/DailyPatrolCount')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchatongji1.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/PatrolRecord')">
+								<view class="index-icon-font" @click="toPages('DailyPatrol/DailyPatrolNote')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchajilu.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>

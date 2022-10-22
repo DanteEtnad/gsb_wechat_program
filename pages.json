@@ -82,7 +82,77 @@
             }
             
         }
+        ,{
+            "path" : "pages/DailyPatrol/DailyPatrolCount",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "巡查统计",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+		
+        ,{
+            "path" : "pages/DailyPatrol/DailyPatrol",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "开展巡查",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        
+        ,{
+            "path" : "pages/DailyPatrol/DailyPatrolReportAdd",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "新增巡查任务",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+		{
+		    "path" : "pages/DailyPatrol/DailyPatrolUser",
+		    "style" : {
+		        "navigationBarTitleText" : "开展巡查",
+		        "backgroundColor" : "#ff0000"
+		    }
+		},
+		{
+		    "path" : "pages/DailyPatrol/DailyPatrolPotential",
+		    "style" : {
+		        "navigationBarTitleText" : "开展巡查",
+		        "backgroundColor" : "#ff0000"
+		    }
+		},
+		{
+		    "path" : "pages/DailyPatrol/DailyPatrolReportDialog",
+		    "style" : {
+		        "navigationBarTitleText" : "uni-app",
+				"navigationStyle" : "custom"
+		    }
+		},
+		{
+		    "path" : "pages/DailyPatrol/DailyPatrolReport",
+		    "style" : {
+		        "navigationBarTitleText" : "uni-app",
+				"navigationStyle" : "custom"
+		    }
+		},
+		{
+		    "path" : "pages/DailyPatrol/DailyPatrolReportCreate",
+		    "style" : {
+		        "navigationBarTitleText" : "新增巡查任务"
+		    }
+		},
+		{
+		    "path" : "pages/DailyPatrol/DailyPatrolNote",
+		    "style" : {
+		        "navigationBarTitleText" : "巡查记录"
+		    }
+		}
     ],
+	
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "汕头市地质灾害气象预警平台",
