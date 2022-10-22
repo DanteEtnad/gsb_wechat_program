@@ -28,7 +28,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/DaliyAlert')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component 1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>今日预警</text>
 								</view>
@@ -36,7 +36,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/SubmitDisaster')">
 									<view class="index-icon">
-										<u--image src="/static/Component 1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>险情上报</text>
 								</view>
@@ -44,7 +44,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/ProfessionDetect')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component 1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>专业检测</text>
 								</view>
@@ -52,7 +52,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AroundPotential')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component 1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>周边隐患</text>
 								</view>
@@ -75,7 +75,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AlertCreate')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component 1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/Component1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>预警单创建</text>
 								</view>
@@ -83,7 +83,7 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AlertCheck')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component 1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/Component 1.png" width="35px" height="35px" mode="aspectFit"></u--image>
 									</view>
 									<text>预警单审批</text>
 								</view>
