@@ -128,7 +128,14 @@
 					url:'member/query',
 					method:'post',
 					data:{
-						MemberQueryReq:{},
+						MemberQueryReq:{
+							"memberId": "",
+							"unitId": "",
+							"memberName": "",
+							"memberStatus": "",
+							"memberGender": "",
+							"memberIdentityCard": ""
+						},
 						QueryPagingParamsReq:{
 							offset:0,
 							queryCount:9999

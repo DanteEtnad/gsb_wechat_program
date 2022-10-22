@@ -19,11 +19,20 @@
 					<text>由汕头市气象局和汕头市自然局相关部门执行</text>
 				</view>
 			</uni-row>
-			<uni-row>
+			<uni-row v-if="alert.alertState==='CKD'">
+				<view class="check-status">
+					<text style="flex: 2;">发布对象：</text>
+					<view style="flex: 5;">
+						<uni-data-select v-model="memberId" :localdata="members"/>
+					</view>
+				</view>
+			</uni-row>
+			<uni-row v-if="alert.alertState!=='FIN'">
 				<view class="check-status">
 					<text>操作：</text>
 					<view class="check-status-button">
-						<button @click="alertCheck">通过</button>
+						<button @click="alertCheck" v-if="alert.alertState!=='CKD'">通过</button>
+						<button @click="publish" v-else>发布</button>
 						<button @click="openUpdateDialog">修改</button>
 						<button @click="alertDelete">终止</button>
 					</view>
@@ -50,7 +59,7 @@
 </template>
 
 <script>
-	import {request} from "@/utils/request.js"
+	import {requestAuthority,request} from "@/utils/request.js"
 	import {dataCodeTransformMixins,timeTransformMixins,getMemberOptionsMixins} from "@/utils/mixins.js"
 	export default {
 		mixins:[dataCodeTransformMixins,timeTransformMixins,getMemberOptionsMixins],
@@ -62,6 +71,8 @@
 				queryForm:{
 					alertId:''
 				},
+				members:[],
+				memberId:'',
 			}
 		},
 		onLoad: function(option) {
@@ -74,6 +85,7 @@
 		},
 		mounted() {
 			this.getMembersOptions()
+			this.gerMembers()
 		},
 		methods: {
 			alertCheck(){
@@ -144,7 +156,76 @@
 						})
 					}
 				})
-			}
+			},
+			gerMembers(){
+				requestAuthority({
+					url:'member/query',
+					method:'post',
+					data:{
+						MemberQueryReq:{
+							"memberId": "",
+							"unitId": "",
+							"memberName": "",
+							"memberStatus": "",
+							"memberGender": "",
+							"memberIdentityCard": ""
+						},
+						QueryPagingParamsReq:{
+							offset:0,
+							queryCount:9999
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.members = res.data.MemberQueryRsp.map(item=>{
+							return {
+								value:item.memberId,
+								text:item.memberName,
+							}
+						})
+					}
+				})
+			},
+			publish(){
+				if(this.memberId===''){
+					uni.showModal({
+						title:'失败',
+						content:'请选择发布对象',
+						showCancel:false
+					})
+					return
+				}
+				request({
+					url:'alertManage/alertPublish',
+					method:'post',
+					data:{
+						AlertPublishReq:{
+							...this.queryForm,
+							memberId:this.memberId
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						uni.showModal({
+							title:'成功',
+							content:'发布成功,点击确定返回',
+							showCancel:false
+						}).then(res=>{
+							uni.redirectTo({
+								url:'/pages/alertManagement/AlertCheck',
+							})
+						})
+					}else{
+						uni.showModal({
+							title:'失败',
+							content:res.message,
+							showCancel:false
+						})
+					}
+				})
+			},
 		}
 	}
 </script>
