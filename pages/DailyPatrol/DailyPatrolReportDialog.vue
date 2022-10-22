@@ -250,6 +250,7 @@
 				<view style="flex:16">
 					<uni-easyinput
 					:value=distance
+					:placeholder=distance
 					@input="currentDistance"
 					>
 					</uni-easyinput>
@@ -475,6 +476,7 @@
 				this.fromLocation=this.fromLocation+this.DailyPatrolResult.potentialPointLocationLatitude+','+this.DailyPatrolResult.potentialPointLocationLongitude
 				console.log("标记",this.fromLocation)
 				this.distance=this.DailyPatrolResult.distance
+				this.DailyPatrolResultCreateReq.currentDistance=this.distance
 				this.mapContext.moveToLocation()
 			})
 		},
@@ -510,6 +512,7 @@
 			        hw = "距离太近或请刷新重试"
 			      }
 				  this.distance=hw
+				  this.DailyPatrolResultCreateReq.currentDistance=this.distance
 			      console.log("距离为",hw);
 			    }
 			  });
