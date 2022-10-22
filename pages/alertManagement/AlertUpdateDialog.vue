@@ -235,7 +235,8 @@
 					alertLevelSecondAdcode:this.alertForm.alertLevelSecondAdcode,
 					alertLevelThirdAdcode:this.alertForm.alertLevelThirdAdcode,
 					alertLevelFourthAdcode:this.alertForm.alertLevelFourthAdcode,
-					alertSourceType:this.alertForm.alertSourceType
+					alertSourceType:this.alertForm.alertSourceType,
+					alertMapUrl:this.alertForm.alertMapUrl
 				}
 				updateForm.alertStartTime = updateForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
 				updateForm.alertEndTime = updateForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
