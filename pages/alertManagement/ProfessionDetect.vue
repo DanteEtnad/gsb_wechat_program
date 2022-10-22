@@ -91,6 +91,9 @@
 				this.moreClass.push(more)
 			},
 			getPotentialPointData(){
+				uni.showLoading({
+					title: '加载中'
+				});
 				request({
 					url:"potentialPointInfo/queryList",
 					method:"post",
@@ -104,6 +107,11 @@
 				})
 				.then(res=>{
 					if(res.code===2000){
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载完成`,
+							duration: 2000
+						});
 						this.potentialPointData = res.data.PotentialPointInfoQueryListRsp
 						let list = this.potentialPointData.map((potentialPoint,index)=>{
 							if(potentialPoint.potentialPointLocationLatitude <= 90 && potentialPoint.potentialPointLocationLatitude >= -90 &&

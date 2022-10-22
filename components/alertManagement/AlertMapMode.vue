@@ -11,87 +11,87 @@
 			:show-location="true"
 			v-if="isAlert"
 		>
-			<cover-view :class="classObj">
-				<cover-view class="cover-alert-img">
-					<cover-view style="margin-bottom: 20px;">
+			<view :class="classObj">
+				<view class="cover-alert-img">
+					<view style="margin-bottom: 20px;">
 						预警图例
-					</cover-view>
-					<cover-view class="cover-alert-info">
-						<cover-view style="width: 20px;height: 10px;background-color: #DC0129;margin-right:10px;border-radius: 2px;"></cover-view>
-						<cover-view>一级</cover-view>
-					</cover-view>
-					<cover-view class="cover-alert-info">
-						<cover-view style="width: 20px;height: 10px;background-color: #EB9A03;margin-right:10px;border-radius: 2px;"></cover-view>
-						<cover-view>二级</cover-view>
-					</cover-view>
-					<cover-view class="cover-alert-info">
-						<cover-view style="width: 20px;height: 10px;background-color: #019EF5;margin-right:10px;border-radius: 2px;"></cover-view>
-						<cover-view>三级</cover-view>
-					</cover-view>
-					<cover-view class="cover-alert-info">
-						<cover-view style="width: 20px;height: 10px;background-color: #01F51E;margin-right:10px;border-radius: 2px;"></cover-view>
-						<cover-view>四级</cover-view>
-					</cover-view>
-				</cover-view>
-				<cover-view class="cover-potential-img">
-					<cover-view style="margin-bottom: 20px;">
+					</view>
+					<view class="cover-alert-info">
+						<view style="width: 20px;height: 10px;background-color: #DC0129;margin-right:10px;border-radius: 2px;"></view>
+						<view>一级</view>
+					</view>
+					<view class="cover-alert-info">
+						<view style="width: 20px;height: 10px;background-color: #EB9A03;margin-right:10px;border-radius: 2px;"></view>
+						<view>二级</view>
+					</view>
+					<view class="cover-alert-info">
+						<view style="width: 20px;height: 10px;background-color: #019EF5;margin-right:10px;border-radius: 2px;"></view>
+						<view>三级</view>
+					</view>
+					<view class="cover-alert-info">
+						<view style="width: 20px;height: 10px;background-color: #01F51E;margin-right:10px;border-radius: 2px;"></view>
+						<view>四级</view>
+					</view>
+				</view>
+				<view class="cover-potential-img">
+					<view style="margin-bottom: 20px;">
 						隐患点图例
-					</cover-view>
-					<cover-view class="cover-potential-info-container">
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/滑坡.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>滑坡</cover-view>
-						</cover-view>
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/崩塌.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>崩塌</cover-view>
-						</cover-view>
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/泥石流.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>泥石流</cover-view>
-						</cover-view>
-					</cover-view>
-					<cover-view class="cover-potential-info-container">
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/地面塌陷.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>地面塌陷</cover-view>
-						</cover-view>
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/地面沉降.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>地面沉降</cover-view>
-						</cover-view>
-					</cover-view>
-					<cover-view class="cover-potential-info-container">
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/地裂缝.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>地裂缝</cover-view>
-						</cover-view>
-						<cover-view class="cover-potential-info">
-							<cover-image src="../../static/Potential/不稳定斜坡.svg" class="cover-potential-icon"></cover-image>
-							<cover-view>不稳定斜坡</cover-view>
-						</cover-view>
-					</cover-view>
-				</cover-view>
-			</cover-view>
-			<cover-view style="display: flex;flex-direction: column;align-items: center;position: absolute;bottom: 50px;width:100%;">
-				<cover-image src="../../static/Potential/icon_back.svg" 
+					</view>
+					<view class="cover-potential-info-container">
+						<view class="cover-potential-info">
+							<image src="/static/Potential/huapo.svg" class="cover-potential-icon"></image>
+							<view>滑坡</view>
+						</view>
+						<view class="cover-potential-info">
+							<image src="/static/Potential/bengta.svg" class="cover-potential-icon"></image>
+							<view>崩塌</view>
+						</view>
+						<view class="cover-potential-info">
+							<image src="/static/Potential/nishiliu.svg" class="cover-potential-icon"></image>
+							<view>泥石流</view>
+						</view>
+					</view>
+					<view class="cover-potential-info-container">
+						<view class="cover-potential-info">
+							<image src="/static/Potential/dimiantaxian.svg" class="cover-potential-icon"></image>
+							<view>地面塌陷</view>
+						</view>
+						<view class="cover-potential-info">
+							<image src="/static/Potential/dimianchenjiang.svg" class="cover-potential-icon"></image>
+							<view>地面沉降</view>
+						</view>
+					</view>
+					<view class="cover-potential-info-container">
+						<view class="cover-potential-info">
+							<image src="/static/Potential/diliefeng.svg" class="cover-potential-icon"></image>
+							<view>地裂缝</view>
+						</view>
+						<view class="cover-potential-info">
+							<image src="/static/Potential/buwending.svg" class="cover-potential-icon"></image>
+							<view>不稳定斜坡</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view style="display: flex;flex-direction: column;align-items: center;position: absolute;bottom: 50px;width:100%;">
+				<image src="/static/Potential/icon_back.svg" 
 					style="width: 32px;height: 32px;" 
 					v-show="!isUp" 
-					@click="showImage(true,'cover-info-container-active','location-active','full-active','more-active')"></cover-image>
-				<cover-image src="../../static/Potential/icon_up.svg" 
+					@click="showImage(true,'cover-info-container-active','location-active','full-active','more-active')"></image>
+				<image src="/static/Potential/icon_up.svg" 
 					style="width: 32px;height: 32px;" 
 					v-show="isUp" 
-					@click="showImage(false,'cover-info-container','location','full','more')"></cover-image>
-			</cover-view>
-			<cover-view :class="locationClass" @click="getLocation">
-				<cover-image src="../../static/Potential/定位.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
-			<cover-view :class="fullClass">
-				<cover-image src="../../static/Potential/全景.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
-			<cover-view :class="moreClass"  @click="switchMap">
-				<cover-image src="../../static/Potential/更多.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
+					@click="showImage(false,'cover-info-container','location','full','more')"></image>
+			</view>
+			<view :class="locationClass" @click="getLocation">
+				<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
+			</view>
+			<view :class="fullClass">
+				<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
+			</view>
+			<view :class="moreClass" @click="switchMap">
+				<image src="/static/Potential/more.svg" style="width:20px;height:20px;"></image>
+			</view>
 		</map>
 		<view style="text-align: center;padding: 20px 0;" v-else>
 			<h1>今日暂无预警</h1>
@@ -139,13 +139,13 @@
 				potentialPointData:[],
 				enableSatellite:false,
 				iconUrl:{
-					"001":'../../static/Potential/不稳定斜坡.svg',
-					"002":'../../static/Potential/滑坡.svg',
-					"003":'../../static/Potential/崩塌.svg',
-					"004":'../../static/Potential/泥石流.svg',
-					"005":'../../static/Potential/地面塌陷.svg',
-					"006":'../../static/Potential/地裂缝.svg',
-					"007":'../../static/Potential/地面沉降.svg',
+					"001":'/static/Potential/buwending.png',
+					"002":'/static/Potential/huapo.png',
+					"003":'/static/Potential/bengta.png',
+					"004":'/static/Potential/nishiliu.png',
+					"005":'/static/Potential/dimiantaxian.png',
+					"006":'/static/Potential/diliefeng.png',
+					"007":'/static/Potential/dimianchenjiang.png',
 				}
 			}
 		},

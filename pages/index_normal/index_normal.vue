@@ -5,19 +5,25 @@
 				<uni-col>
 					<view class="demo-layout bg-pure-write">
 						<view style="display: flex;">
-							<u--image class="logo" src="/static/user.svg" width="17px" height="20px"></u--image>
-							<text style="font-size: 16px;margin-left: 5px;">{{name}}</text>
+							<u--image class="logo" src="/static/index_normal/user.svg" width="17px" height="20px"></u--image>
+							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{name}}</text>
 						</view>
 						<view>
-							<text style="font-size: 16px;margin-left: 5px;color:gray;">13500000000</text>
+							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{phonenum}}</text>
 						</view>
 					</view>
 				</uni-col>
 			</uni-row>
 			<uni-row>
 				<uni-col>
+					<view style="padding: 0 10px;margin: 10px 0 5px;">
+						<text style="font-size: 16px;font: Microsoft YaHei;font-weight: 400">预警预报</text>
+					</view>
+				</uni-col>
+			</uni-row>
+			<uni-row>
+				<uni-col>
 					<view style="padding: 0 10px;font-size: 14px;margin: 10px 0 5px;">
-						<text>预警预报</text>
 					</view>
 				</uni-col>
 			</uni-row>
@@ -28,43 +34,32 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/DaliyAlert')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/index_normal/jinriyujing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
-									<text>今日预警</text>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/SubmitDisaster')">
 									<view class="index-icon">
-										<u--image src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image src="/static/index_normal/xianqingshangbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
-									<text>险情上报</text>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/ProfessionDetect')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/index_normal/zhuanyejiance.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
-									<text>专业检测</text>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AroundPotential')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component1.png" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/index_normal/zhoubianyinhuan.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
-									<text>周边隐患</text>
 								</view>
 							</uni-col>
 						</uni-row>
-					</view>
-				</uni-col>
-			</uni-row>
-			<uni-row>
-				<uni-col>
-					<view style="padding: 0 10px;font-size: 14px;margin: 10px 0 5px;">
-						<text>预警单管理</text>
 					</view>
 				</uni-col>
 			</uni-row>
@@ -75,21 +70,141 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AlertCreate')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Component1.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/index_normal/yujingdanchuangjian.svg" width="60px" height="68px" mode="aspectFit"></u--image>
 									</view>
-									<text>预警单创建</text>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('alertManagement/AlertCheck')">
 									<view class="index-icon">
-										<u--image class="logo" src="/static/Potential/locate.svg" width="35px" height="35px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="/static/index_normal/yujingdanshenpi.svg" width="60px" height="68px" mode="aspectFit"></u--image>
 									</view>
-									<text>预警单审批</text>
 								</view>
 							</uni-col>
 						</uni-row>
 					</view>
+				</uni-col>
+			</uni-row>
+			<uni-row>
+				<uni-col>
+					<view style="padding: 0 10px;font-size: 14px;margin: 10px 0 5px;">
+						<text style="font-size: 16px;margin-left: 5px;">灾情查询</text>
+					</view>
+				</uni-col>
+			</uni-row>
+			<uni-row>
+				<uni-col>
+					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
+						<uni-row>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DisasterDetails')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/zaiqingxiangqing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DisasterStatistics')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/zaiqingtongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DisasterFilling')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/zaiqingtianbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DisasterCheck')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/zaiqingshenhe.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+						</uni-row>
+					</view>
+				</uni-col> 	
+			</uni-row>
+			<uni-row>
+				<uni-col>
+					<view style="padding: 0 10px;font-size: 14px;margin: 10px 0 5px;">
+						<text style="font-size: 16px;margin-left: 5px;">巡排查汇总</text>
+					</view>
+				</uni-col>
+			</uni-row>
+			<uni-row>
+				<uni-col>
+					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
+						<uni-row>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DateQuery')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/shujvchaxun.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/PatrolStatistics')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/xunchatongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DateFilling')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/shujvtianbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/DateCheck')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/shujvshenpi.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+						</uni-row>
+					</view>
+				</uni-col>
+			</uni-row>
+			<uni-row>
+				<uni-col>
+					<view style="padding: 0 10px;font-size: 14px;margin: 10px 0 5px;">
+						<text style="font-size: 16px;margin-left: 5px;">日常巡查</text>
+					</view>
+				</uni-col>
+			</uni-row>
+			<uni-row>
+				<uni-col>
+					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
+						<uni-row>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/ConductPatrol')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/kaizhanxuncha.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/ConductPatrol')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/xunchatongji1.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>
+							<uni-col :span="6">
+								<view class="index-icon-font" @click="toPages('alertManagement/PatrolRecord')">
+									<view class="index-icon">
+										<u--image class="logo" src="/static/index_normal/xunchajilu.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+									</view>
+								</view>
+							</uni-col>	
+						</uni-row>
+						</view>
 				</uni-col>
 			</uni-row>
 		</view>
@@ -101,7 +216,8 @@
 		data() {
 			return {
 				user_id: "adfa1",
-				name: "123"
+				name: "123",
+				phonenum:"13500000012"
 			}
 		},
 		methods:{

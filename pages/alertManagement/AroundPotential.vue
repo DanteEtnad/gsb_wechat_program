@@ -90,7 +90,7 @@
 				<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
 			</view>
 			<view :class="moreClass" @click="switchMap">
-				<image src="/static/Potential//more.svg" style="width:20px;height:20px;"></image>
+				<image src="/static/Potential/more.svg" style="width:20px;height:20px;"></image>
 			</view>
 			<view>
 				<uni-search-bar 
