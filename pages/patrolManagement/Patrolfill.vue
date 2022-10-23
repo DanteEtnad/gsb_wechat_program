@@ -13,7 +13,7 @@
 						</button>
 					</uni-col>
 					<uni-col :span="6">
-						<button @click="openCheckDialog">
+						<button @click="openCreateDialog">
 							<text>新增</text>
 							<uni-icons type="plusempty" size="16" color="#fff"></uni-icons>
 						</button>
@@ -246,8 +246,6 @@
 					console.log("成员",this.officeData)
 				})
 			},
-			
-			
 			getInfo(){
 				request({
 					method:'POST',
@@ -301,12 +299,16 @@
 				})
 				
 			},
-			async openCheckDialog(item){
-				const response = await uni.navigateTo({
+			openCreateDialog(){
+				uni.navigateTo({
 					url:'/pages/patrolManagement/Patrolnew',
 				})
-				
-				
+			},
+			openCheckDialog(){
+				uni.navigateTo({
+					url:'/pages/patrolManagement/Patrolnew',
+				})
+	
 			}
 		}
 	}

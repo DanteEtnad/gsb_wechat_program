@@ -648,6 +648,55 @@
 				})
 			},
 			DailyPatrolCreate(){
+				//表单校验
+				let patrolTaskLocation=this.DailyPatrolResultCreateReq.patrolTaskLocation
+				let reportPerson=this.DailyPatrolResultCreateReq.reportPerson
+				let reportPersonMobile=this.DailyPatrolResultCreateReq.reportPersonMobile
+				let patrolStartDate=this.DailyPatrolResultCreateReq.patrolStartDate
+				let patrolEndDate=this.DailyPatrolResultCreateReq.patrolEndDate
+				let isCrackDeformation=this.DailyPatrolResultCreateReq.isCrackDeformation
+				let isGroundDrum=this.DailyPatrolResultCreateReq.isGroundDrum
+				let isGroundCollapse=this.DailyPatrolResultCreateReq.isGroundCollapse
+				let isHouseDeformation=this.DailyPatrolResultCreateReq.isHouseDeformation
+				let isChannelBlockage=this.DailyPatrolResultCreateReq.isChannelBlockage
+				let isTreesAskew=this.DailyPatrolResultCreateReq.isTreesAskew
+				let isSpringWaterEmerges=this.DailyPatrolResultCreateReq.isSpringWaterEmerges
+				let phoneReg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+				if(!patrolTaskLocation){
+					uni.showToast({
+					title:"请输入任务地点",
+					icon:"none"
+					})
+				}else if(!reportPerson){
+					uni.showToast({
+					title:"请选择填报人",
+					icon:"none"
+					})
+				}else if(!phoneReg.test(reportPersonMobile)|| !reportPersonMobile){
+					uni.showToast({
+						title:"手机格式不正确",
+						icon:"none"
+					})
+				}else if(patrolStartDate>patrolEndDate){
+					uni.showToast({
+						title:"开始时间不能小于结束时间",
+						icon:"none"
+					})
+				}else if(!((isCrackDeformation!='N')||(isGroundDrum!='N')||(isGroundCollapse!='N')||
+				(isHouseDeformation!='N')||(isChannelBlockage!='N')||(isTreesAskew!='N')||(isSpringWaterEmerges!='N'))){
+					uni.showToast({
+						title:"请选择至少一种变形迹象",
+						icon:"none"
+					})
+				}else{
+					uni.showModal({
+						title:'成功',
+						content:'提交成功,点击确定返回',
+						showCancel:false
+					}).then(res=>{
+						uni.navigateBack()
+					})
+				}
 				console.log("填报内容",this.DailyPatrolResultCreateReq)
 				request({
 					method:'POST',
@@ -661,6 +710,8 @@
 					}else{
 					}
 				})
+				
+				
 			},
 	},
 	}

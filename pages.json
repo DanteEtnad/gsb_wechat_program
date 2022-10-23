@@ -248,7 +248,13 @@
 		        "enablePullDownRefresh" : false
 		    }
 		},
-		
+		{
+		    "path" : "pages/patrolManagement/Patrolnew",
+		    "style" : {
+		        "navigationBarTitleText" : "新增巡排查",
+		        "enablePullDownRefresh" : false
+		    }
+		},
 		{
 		    "path" : "pages/patrolManagement/Patrolnewdetails",
 		    "style" : {
