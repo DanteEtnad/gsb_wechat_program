@@ -151,6 +151,15 @@
 		        "navigationBarTitleText" : "巡查记录"
 		    }
 		}
+        ,{
+            "path" : "pages/patrolManagement/patrolStatics",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	
 	"globalStyle": {

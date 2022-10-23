@@ -147,7 +147,7 @@
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/PatrolStatistics')">
+								<view class="index-icon-font" @click="toPages('patrolManagement/patrolStatics')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchatongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
