@@ -97,28 +97,28 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DisasterDetails')">
+								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterDetails')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingxiangqing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DisasterStatistics')">
+								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterCount')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingtongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DisasterFilling')">
+								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterFillHistory')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingtianbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DisasterCheck')">
+								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterCheck')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingshenhe.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>

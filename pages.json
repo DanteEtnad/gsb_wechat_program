@@ -160,6 +160,88 @@
             }
             
         }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterDetailsDialog",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle":"custom"
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterCount",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情统计",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterFill",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情填报",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterFillchange",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情填报",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterFillHistory",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情填报-历史记录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterFIllCheck",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情审核",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/DisasterCheck",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "灾情审核",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/DisasterRecord/map",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "地图",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	
 	"globalStyle": {
