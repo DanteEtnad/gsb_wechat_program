@@ -1,21 +1,15 @@
 <template>
 		<view>
-			<!-- 自定义导航栏 -->
-			
-			<!-- 页面内容 -->
+
 		<view class="report-container">
 			
 		<uni-forms ref="form" :model="createForm">
 			
 			<view class="report-info-container">
 			<!-- 巡查开始时间 -->
-			
-					
 					<view style="flex:12">
 						<view style="flex:16"><text>所属行政区<text style="color: red;">*</text></text></view>
 					</view>	
-					
-						<uni-col :span="12">
 							<view class="select-input">
 								<uni-data-picker
 								:localdata="options1"
@@ -27,11 +21,6 @@
 								</uni-data-picker>
 								
 							</view>
-						</uni-col>
-					
-					
-					
-					
 			</view>
 			
 			
@@ -327,11 +316,6 @@
 				timeTransform = Date.slice(0, 4)  + Date.slice(5, 7) + Date.slice(8, 10);
 				return timeTransform;
 			},
-			addLocation(data){
-				this.popupData = data
-				this.popupLevel = data.level
-				this.$refs.popup.open('bottom')
-			},
 			number(e){
 				this.PatrolResultCreateReq.patrolNumber=e
 				console.log("填报内容",this.PatrolResultCreateReq)
@@ -442,7 +426,7 @@
 				this.PatrolResultCreateReq.administrativeRegion=e.detail.value[2].value
 			},
 			PatrolResultCreate(){
-				let administrativeRegion=this.PatrolResultCreateReq.patrolTaskLocation
+				let administrativeRegion=this.PatrolResultCreateReq.administrativeRegion
 				let patrolStartDate=this.PatrolResultCreateReq.patrolStartDate
 				let patrolEndDate=this.PatrolResultCreateReq.patrolEndDate
 				let patrolNumber=this.PatrolResultCreateReq.patrolNumber
@@ -463,19 +447,19 @@
 						icon:"none"
 					})
 				}
-				else if(!patrolNumber||isNum(patrolNumber)){
+				else if(!patrolNumber){
 					uni.showToast({
 					title:"请输入出动巡排查次数",
 					icon:"none"
 					})
-				}else if(!patrolTaskLocation){
+				}else if(!patrolPotentialPointNumber){
 					uni.showToast({
-					title:"请输入任务地点",
+					title:"请输入巡排查隐患次数",
 					icon:"none"
 					})
 				}else if(!reportPerson){
 					uni.showToast({
-					title:"请选择填报人",
+					title:"请选择上报人",
 					icon:"none"
 					})
 				}else if(!phoneReg.test(reportPersonMobile)|| !reportPersonMobile){
@@ -504,6 +488,7 @@
 								title: `提交完成`,
 								duration: 2000
 							});
+							this.$refs.message.open('center')
 						}else{
 						}
 					})
@@ -542,7 +527,6 @@
 			},
 			openMessageDialog(){
 				this.PatrolResultCreate()
-				this.$refs.message.open('center')
 			},
 			close(){
 				this.$refs.popup.close()

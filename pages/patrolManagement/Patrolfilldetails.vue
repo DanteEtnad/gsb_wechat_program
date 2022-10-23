@@ -1,24 +1,23 @@
 <template>
 		<view>
-			<!-- 自定义导航栏 -->
-			
-			<!-- 页面内容 -->
 		<view class="report-container">
-						
 			<view class="report-info-container">
-			<!-- 巡查开始时间 -->
-			
-					
-					<view style="flex:12">
-						<view style="flex:16"><text>市县镇村<text style="color: red;">*</text></text></view>
+					<view style="flex:1">
+						<view style="flex:16"><text>所属行政区<text style="color: red;">*</text></text></view>
 					</view>	
-					
-						{{dataCodeAreaTransform(PatrolData.administrativeRegion,"potentialPointBelongTowns")}}
-					
-					</view>
-			
-			
-			
+							<view class="select-input">
+								<uni-data-picker
+								v-model="PatrolData.administrativeRegion"
+								:localdata="options1"
+								popup-title="请选择地区"
+								@change="areaChange" 
+								style="flex:6;background-color:  #F7F7F8;"
+								>
+								<!-- @nodeclick="onnodeclick" -->
+								</uni-data-picker>
+								
+							</view>
+			</view>
 			<view class="report-info-container">
 			<!-- 巡查开始时间 -->
 			
@@ -26,9 +25,12 @@
 						<view style="flex:16"><text>巡查开始时间<text style="color: red;">*</text></text></view>
 					</view>
 					<view  style="flex:12">
-						{{PatrolData.patrolStartDate}}
+						<picker mode="date" :value="datestart" :start="startDate" :end="endDate" @change="PatrolStartDateChange">
+					            <view>{{ datestart }}</view>
+						</picker>
 					</view>
 			</view>
+			
 			<view class="report-info-container">
 			<!-- 巡查结束时间 -->
 			
@@ -173,8 +175,6 @@
 					reportPersonMobile:'',
 				},
 				
-				
-				
 				PotentialPointSurveyQueryReq:{
 				potentialPointBelongCity:'',
 				potentialPointBelongCounty:'',
@@ -243,6 +243,8 @@
 			eventChannel.on('openCheckDialog',data=>{
 				this.PatrolData= data.item
 				console.log("this.PatrolData",this.PatrolData)
+				console.log("this.administrativeRegion",this.administrativeRegion)
+				
 			})
 		},
 		

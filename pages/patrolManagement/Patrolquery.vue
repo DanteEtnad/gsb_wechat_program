@@ -8,6 +8,7 @@
 					<view class="query-select-input">
 						<text style="margin-right: 2px;flex:4">上报人</text>
 						<uni-data-picker
+						v-model="queryForm.level"
 						:localdata="options"
 						popup-title="请选择上报人"
 						@change="personChange" 
@@ -181,7 +182,12 @@
 				})
 			},300),
 			personChange(e) {
+				if (e.detail.value[0]==null){
+					this.PatrolRequestForm.reportPerson=""
+				}
+				else{
 				this.PatrolRequestForm.reportPerson=e.detail.value[0].value
+				}
 				this.officeData=[]
 				this.officePageInfo.currentPage=1
 				this.getInfo()
