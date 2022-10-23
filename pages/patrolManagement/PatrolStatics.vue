@@ -135,7 +135,7 @@
 			  			}),
 			  			startDate: getDate('start'),
 			  			endDate: getDate('end'),
-						count: 0,
+						count: 0, 
 						time: 0,
 						people: 0,
 						officeData:[],
