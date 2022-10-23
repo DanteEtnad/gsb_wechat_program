@@ -382,7 +382,6 @@
 		},
 		created(){
 			this.statusBarHeight = uni.getSystemInfoSync()['statusBarHeight'];
-			this.getPotentialPointQueryData()
 			this.getMemberData()
 		},
 		onLoad: function(option) {
@@ -392,6 +391,7 @@
 				this.DailyPatrolResult= data.item
 				this.area=this.dataCodeAreaTransform(this.DailyPatrolResult.patrolAdcode)
 				this.PotentialPointSurveyQueryReq.potentialPointName=this.DailyPatrolResult.patrolTaskName
+				this.getPotentialPointQueryData()
 				if (this.DailyPatrolResult.isCrackDeformation==='Y'){
 					this.officeData.push('裂缝变形')
 				}
@@ -478,7 +478,7 @@
 						PotentialPointInfoQueryListReq :this.PotentialPointSurveyQueryReq,
 						QueryPagingParamsReq :{
 							offset:0,
-							queryCount:9999
+							queryCount:10
 						}
 					}
 				})
@@ -489,17 +489,31 @@
 							title: `加载完成`,
 							duration: 2000
 						});
-						this.potentialPointResult=res.data.PotentialPointInfoQueryListRsp[0]
-						this.markers.push({
-											 	id:0,
-											 	longitude:this.potentialPointResult.potentialPointLocationLongitude,
-											 	latitude:this.potentialPointResult.potentialPointLocationLatitude,
-											 	title:this.potentialPointResult.potentialPointName,
-											 	iconPath:this.iconUrl[this.potentialPointResult.potentialPointType],
-											 	width:16,
-											 	height:16
-											 })
-						this.goPotential()
+						if(res.data.QuerySummaryRsp.dataAmount==1){
+							uni.hideLoading();
+							uni.showToast({
+								title: `找到了隐患点`,
+								duration: 2000
+							});
+							this.potentialPointResult=res.data.PotentialPointInfoQueryListRsp[0]
+							this.markers.push({
+												 	id:0,
+												 	longitude:this.potentialPointResult.potentialPointLocationLongitude,
+												 	latitude:this.potentialPointResult.potentialPointLocationLatitude,
+												 	title:this.potentialPointResult.potentialPointName,
+												 	iconPath:this.iconUrl[this.potentialPointResult.potentialPointType],
+												 	width:16,
+												 	height:16
+												 })
+							this.goPotential()
+						}
+						else{
+							uni.hideLoading();
+							uni.showToast({
+								title: `未找到隐患点`,
+								duration: 2000
+							});
+						}
 						console.log("data",this.potentialPointResult)
 						console.log("全部data",res.data.PotentialPointInfoQueryListRsp)
 					}else{

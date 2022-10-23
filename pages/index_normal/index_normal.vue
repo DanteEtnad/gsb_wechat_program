@@ -140,28 +140,28 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DateQuery')">
+								<view class="index-icon-font" @click="toPages('patrolManagement/Patrolquery')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/shujvchaxun.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('patrolManagement/patrolStatics')">
+								<view class="index-icon-font" @click="toPages('patrolManagement/PatrolStatics')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchatongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DateFilling')">
+								<view class="index-icon-font" @click="toPages('patrolManagement/Patrolfill')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/shujvtianbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DateCheck')">
+								<view class="index-icon-font" @click="toPages('patrolManagement/PatrolResultApproval')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/shujvshenpi.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>

@@ -10,15 +10,15 @@
 			:scale="scale"
 			:markers="markers"
 			>
-			<cover-view :class="locationClass" @click="getLocation">
-				<cover-image src="../../static/Potential/locate.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
-			<cover-view :class="fullClass">
-				<cover-image src="../../static/Potential/view.svg" style="width:20px;height:20px;"></cover-image>
-			</cover-view>
-			<cover-view :class="moreClass" @click="switchMap">
-				<cover-image src="../../static/Potential/more.svg" style="width:20px;height:20px;" ></cover-image>
-			</cover-view>
+			<view :class="locationClass" @click="getLocation">
+				<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
+			</view>
+			<view :class="fullClass" @click="goDisaster">
+				<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
+			</view>
+			<view :class="moreClass" @click="switchMap">
+				<image src="/static/Potential/more.svg" style="width:20px;height:20px;" ></image>
+			</view>
 		</map>
 		
 	</view>
@@ -33,23 +33,23 @@
 		},
 		data() {
 			return {
-				latitude: this.DisasterInfoQueryData.disasterLatitude,
-				longitude: this.DisasterInfoQueryData.disasterLongitude,
+				latitude: '26',
+				longitude: '113',
 				scale: 9.5, 							//地图缩放程度
 				enableSatellite:false,
 				locationClass:['location'],
 				fullClass:['full'],
 				moreClass:['more'],
 				markers:[],
-				enableSatellite:false,
+				location:[],
 				iconUrl:{
-					"001":'../../static/Potential/buwending.svg',
-					"002":'../../static/Potential/huapo.svg',
-					"003":'../../static/Potential/bengta.svg',
-					"004":'../../static/Potential/nishiliu.svg',
-					"005":'../../static/Potential/dimiantaxian.svg',
-					"006":'../../static/Potential/diliefeng.svg',
-					"007":'../../static/Potential/dimianchenjiang.svg',
+					"001":'/static/Potential/buwending.png',
+					"002":'/static/Potential/huapo.png',
+					"003":'/static/Potential/bengta.png',
+					"004":'/static/Potential/nishiliu.png',
+					"005":'/static/Potential/dimiantaxian.png',
+					"006":'/static/Potential/diliefeng.png',
+					"007":'/static/Potential/dimianchenjiang.png',
 				},
 			}
 			
@@ -58,10 +58,21 @@
 		async mounted(){
 			console.log('地图')
 			await this.showLocation()
+			this.mapContext = uni.createMapContext("map",this)
 		},
 		methods:{
 			switchMap(){
 				this.enableSatellite = !this.enableSatellite
+			},
+			goDisaster(){
+				console.log("信息",this.DisasterInfoQueryData)
+				this.latitude=Number(this.DisasterInfoQueryData.disasterLatitude)
+				this.longitude=Number(this.DisasterInfoQueryData.disasterLongitude)
+				console.log("经纬度位置",this.latitude)
+				uni.createMapContext("map", this).moveToLocation({
+									latitude: this.latitude,
+									longitude: this.longitude,
+								});
 			},
 			showLocation(){
 				this.latitude=this.DisasterInfoQueryData.disasterLatitude
@@ -79,16 +90,15 @@
 				}]
 				console.log("markers",this.markers)
 			},
+
 			getLocation(){
+				
 				uni.getLocation({
-					type: 'gcj02',	
+					type: 'gcj02'
 				}).then(res=>{
-					console.log(res)
-					uni.createMapContext('map',this).moveToLocation({
-						longitude:this.DisasterInfoQueryData.disasterLongitude,
-						latitude:this.DisasterInfoQueryData.disasterLatitude,
-					})
+					this.location=res
 				})
+				this.mapContext.moveToLocation()
 			},
 		}
 	}

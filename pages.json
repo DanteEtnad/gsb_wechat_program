@@ -151,15 +151,7 @@
 		        "navigationBarTitleText" : "巡查记录"
 		    }
 		}
-        ,{
-            "path" : "pages/patrolManagement/patrolStatics",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
+        
         ,{
             "path" : "pages/DisasterRecord/DisasterDetails",
             "style" :                                                                                    
@@ -241,7 +233,59 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+		    "path" : "pages/patrolManagement/PatrolResultApproval",
+		    "style" : {
+		        "navigationBarTitleText" : "数据审批",
+		        "enablePullDownRefresh" : false
+		    }
+		},
+		{
+		    "path" : "pages/patrolManagement/Patrolfill",
+		    "style" : {
+		        "navigationBarTitleText" : "数据填报",
+		        "enablePullDownRefresh" : false
+		    }
+		},
+		
+		{
+		    "path" : "pages/patrolManagement/Patrolnewdetails",
+		    "style" : {
+		        "navigationBarTitleText" : "巡排查统计",
+		        "enablePullDownRefresh" : false
+		    }
+		},
+			
+		
+		{
+		    "path" : "pages/patrolManagement/PatrolStatics",
+		    "style" : {
+		        "navigationBarTitleText" : "巡排查统计",
+		        "enablePullDownRefresh" : false
+		    }
+		},
+		{
+		    "path" : "pages/patrolManagement/Patrolfilldetails",
+		    "style" : {
+		        "navigationBarTitleText" : "详细报告",
+		        "enablePullDownRefresh" : false
+		    }
+		},
+		{
+		    "path" : "pages/patrolManagement/Patrolquery",
+		    "style" : {
+		        "navigationBarTitleText" : "巡排查数据查询",
+		        "enablePullDownRefresh" : false
+		    }
+		},
+		{
+		    "path" : "pages/patrolManagement/PatrolResultApprovaldetails",
+		    "style" : {
+		        "navigationBarTitleText" : "巡排查数据审核",
+		        "enablePullDownRefresh" : false
+		    }
+		}
     ],
 	
 	"globalStyle": {
