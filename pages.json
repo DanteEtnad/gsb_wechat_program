@@ -258,7 +258,8 @@
 		{
 		    "path" : "pages/patrolManagement/Patrolnewdetails",
 		    "style" : {
-		        "navigationBarTitleText" : "巡排查统计",
+		        "navigationBarTitleText" : "",
+				"navigationStyle" : "custom",
 		        "enablePullDownRefresh" : false
 		    }
 		},

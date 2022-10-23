@@ -17,6 +17,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 市县 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -39,6 +41,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 发灾地点 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -59,6 +63,8 @@
 					
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 关联隐患点 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -73,7 +79,9 @@
 						</uni-data-picker>
 					</view>
 				</uni-col>
-			</uni-row>	
+			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 灾害类型 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -128,6 +136,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
+			</view>
+			<view class="item-container">
 			<!-- 经度 -->
 			<uni-row>
 				<uni-col :span="7">
@@ -192,6 +202,8 @@
 				</uni-col>
 				
 			</uni-row>
+			</view>
+			<view class="item-container">
 			<!-- 灾害规模 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -235,6 +247,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
+			</view>
+			<view class="item-container">
 			<!-- 引发因素 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -255,6 +269,8 @@
 				</uni-col>
 			
 			</uni-row>
+			</view>
+			<view class="item-container">
 			<!-- 灾害等级 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -285,6 +301,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
+			</view>
+			<view class="item-container">
 			<!-- 填报人 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -304,6 +322,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
+			</view>
+			<view class="item-container">
 			<!-- 联系电话 -->
 			<uni-row :rules="rules">
 				<uni-col :span="7">
@@ -325,7 +345,7 @@
 					
 				</uni-col>
 			</uni-row>
-			
+			</view>
 		</view>
 		
 	</view>
@@ -715,6 +735,7 @@
 	.item-container {
 		// padding: 10px 5px;
 		background-color: white;
+		border-bottom: 1px solid black;
 		.Select-right {
 			margin-top: 5px;
 			margin-bottom: 20px;

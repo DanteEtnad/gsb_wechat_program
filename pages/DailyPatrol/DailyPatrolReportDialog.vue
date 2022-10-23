@@ -689,27 +689,28 @@
 						icon:"none"
 					})
 				}else{
-					uni.showModal({
-						title:'成功',
-						content:'提交成功,点击确定返回',
-						showCancel:false
-					}).then(res=>{
-						uni.navigateBack()
+					request({
+						method:'POST',
+						url:'patrolManage/dailyPatrolResultCreate',
+						data:{
+							DailyPatrolResultCreateReq :this.DailyPatrolResultCreateReq
+						},
+					})
+					.then(res=>{
+						if(res.code===2000){
+							uni.showModal({
+								title:'成功',
+								content:'提交成功,点击确定返回',
+								showCancel:false
+							}).then(res=>{
+								uni.navigateBack()
+							})
+						}else{
+						}
 					})
 				}
 				console.log("填报内容",this.DailyPatrolResultCreateReq)
-				request({
-					method:'POST',
-					url:'patrolManage/dailyPatrolResultCreate',
-					data:{
-						DailyPatrolResultCreateReq :this.DailyPatrolResultCreateReq
-					},
-				})
-				.then(res=>{
-					if(res.code===2000){
-					}else{
-					}
-				})
+
 				
 				
 			},

@@ -12,7 +12,7 @@
 			
 					
 					<view style="flex:12">
-						<view style="flex:16"><text>市县镇村<text style="color: red;">*</text></text></view>
+						<view style="flex:16"><text>所属行政区<text style="color: red;">*</text></text></view>
 					</view>	
 					
 						<uni-col :span="12">
@@ -74,7 +74,7 @@
 					</uni-easyinput>
 				</view>	
 			</view>
-			
+
 			<view class="report-info-container">
 				<view style="flex:12">
 					<text>巡排查隐患<text style="color: red;">*</text></text>
@@ -88,23 +88,30 @@
 			</view>
 			
 			<view class="report-info-container">
-            <u-form-item						label="隐患点"						labelWidth="90px"						ref="item1"
-						style="margin: 5px 0;padding: 10px"
-											>
+				<view style="flex:12">
+					<text>隐患点</text>
+				</view>
+				<view style="flex:12">
+					<uni-data-picker
+					:localdata="potentialPoint"
+					popup-title="隐患点"
+					@nodeclick="potentialChange" 
+					placeholder="请选择隐患点"
+					>
+					</uni-data-picker>
+				</view>
+			</view>
+			<view class="report-info-container" style="">
+				<div class="potentialpailie">
+					<view v-for="item in potentialData" :key ="item">
+							<view style="display: grid; grid-template-columns: 5fr 2fr 1fr; gap: 10px; align-items: center; border-bottom: 1px solid black;" >
+								<text>{{item.name}}</text>
+								<text>{{item.type}}</text>
+								<uni-icons type="closeempty" size="16" color="#000" @click="minus(item)"></uni-icons>
+							</view>
+					</view>
+				</div>
 				
-				<view style="flex:12" v-for="item in potentialData" :key ="item">												<uni-row>								<text >隐患点</text>								<view style="flex:12">
-									<uni-data-picker
-									:localdata="potentialPoint"
-									popup-title="隐患点"
-									@change="personChange" 
-									style="flex:6;background-color:  #F7F7F8;"
-									>
-									</uni-data-picker>								</view>						</uni-row>
-												<uni-row>								<view class="query-select-input">								<text>{{DailyPatrolResult.potentialPointName}}</text>								</view>						</uni-row>
-						
-						<uni-row>
-														<button @click="minus(item)">										<text>-删除</text>									</button></text>																									</uni-row>						</view>						<button style="margin-left: 5px;" @click="add()">							<text>+添加</text>						</button>
-							</u-form-item>
 			</view>
 			
 			<view class="report-info-container">
@@ -283,7 +290,8 @@
 				potentialData:[],
 				options1:[],
 				potentialPoint:[],
-
+				choose:[],
+				point:[],
 			}
 		},
 		
@@ -345,7 +353,56 @@
 				this.PatrolResultCreateReq.reasonForTransfer=e
 				console.log("填报内容",this.PatrolResultCreateReq)
 			},
-			
+			potentialChange(e){
+				this.potentialData.push({
+						type:'未选择',
+						num:'',
+						number:this.potentialData.length,
+						name:'',
+						nameId:'',
+					})
+				this.point=this.potentialData[this.potentialData.length-1]
+				for(var i=0; i<this.PotentialPointData.length; i++){
+					if(this.PotentialPointData[i].potentialPointName==e.text){
+						this.choose.push(i)
+						this.point.num=i
+						this.point.name=this.PotentialPointData[i].potentialPointName
+						this.point.nameId=this.PotentialPointData[i].potentialPointId
+						switch(this.PotentialPointData[i].potentialPointType){
+							case "001" :this.point.type="斜坡";break;
+							case "002" :this.point.type="滑坡";break;
+							case "003" :this.point.type="崩塌";break;
+							case "004" :this.point.type="泥石流";break;
+							case "005" :this.point.type="地面沉降与地裂缝";break;
+						}
+					}
+					}
+					this.maintain()
+			},
+			maintain(){
+				this.PatrolResultCreateReq.potentialPointId=[]
+				this.PatrolResultCreateReq.potentialType=[]
+				for(var i=0; i<this.choose.length; i++){
+					this.PatrolResultCreateReq.potentialPointId.push(this.PotentialPointData[this.choose[i]].potentialPointId)
+					this.PatrolResultCreateReq.potentialType.push(this.PotentialPointData[this.choose[i]].potentialPointType)
+				}
+				console.log("填报内容",this.PatrolResultCreateReq)
+			},
+			minus(item){
+				for(var i=item.number+1; i<this.potentialData.length; i++){
+					this.potentialData[i].number-=1;
+				}
+				console.log(item.number);
+				console.log(this.potentialData);
+				for(var j=0; j<this.choose.length; j++){
+					if(this.choose[j]==item.num){
+						this.choose.splice(j,1)
+					}
+				}
+				this.maintain()
+				this.potentialData.splice(item.number,1);
+				console.log("表单内容",this.potentialData)
+			},
 			mobile(e){
 				this.PatrolResultCreateReq.reportPersonMobile=e
 				console.log("填报内容",this.PatrolResultCreateReq)
@@ -384,23 +441,76 @@
 			areaChange(e) {
 				this.PatrolResultCreateReq.administrativeRegion=e.detail.value[2].value
 			},
-			DailyPatrolCreate(){
-				console.log("填报内容",this.DailyPatrolResultCreateReq)
-				request({
-					method:'POST',
-					url:'patrolManage/dailyPatrolResultCreate',
-					data:{
-						DailyPatrolResultCreateReq :this.DailyPatrolResultCreateReq
+			PatrolResultCreate(){
+				let administrativeRegion=this.PatrolResultCreateReq.patrolTaskLocation
+				let patrolStartDate=this.PatrolResultCreateReq.patrolStartDate
+				let patrolEndDate=this.PatrolResultCreateReq.patrolEndDate
+				let patrolNumber=this.PatrolResultCreateReq.patrolNumber
+				let patrolPotentialPointNumber=this.PatrolResultCreateReq.patrolPotentialPointNumber
+				let reportPerson=this.PatrolResultCreateReq.reportPerson
+				let reportPersonMobile=this.PatrolResultCreateReq.reportPersonMobile
+				let phoneReg = /^[1][3,4,5,7,8,9][0-9]{9}$/
 
-					},
-				})
-				.then(res=>{
-					if(res.code===2000){
-					}else{
-					}
-				})
+				if(!administrativeRegion){
+					uni.showToast({
+					title:"请选择所属行政区",
+					icon:"none"
+					})
+				}
+				else if(patrolStartDate>patrolEndDate){
+					uni.showToast({
+						title:"开始时间不能小于结束时间",
+						icon:"none"
+					})
+				}
+				else if(!patrolNumber||isNum(patrolNumber)){
+					uni.showToast({
+					title:"请输入出动巡排查次数",
+					icon:"none"
+					})
+				}else if(!patrolTaskLocation){
+					uni.showToast({
+					title:"请输入任务地点",
+					icon:"none"
+					})
+				}else if(!reportPerson){
+					uni.showToast({
+					title:"请选择填报人",
+					icon:"none"
+					})
+				}else if(!phoneReg.test(reportPersonMobile)|| !reportPersonMobile){
+					uni.showToast({
+						title:"手机格式不正确",
+						icon:"none"
+					})
+				}
+				else{
+					console.log("填报内容",this.PatrolResultCreateReq)
+					uni.showLoading({
+						title: '正在提交'
+					});
+					request({
+						method:'POST',
+						url:'patrolManage/patrolResultCreate',
+						data:{
+							PatrolResultCreateReq :this.PatrolResultCreateReq
+					
+						},
+					})
+					.then(res=>{
+						if(res.code===2000){
+							uni.hideLoading();
+							uni.showToast({
+								title: `提交完成`,
+								duration: 2000
+							});
+						}else{
+						}
+					})
+				}
+
 			},
-			add(){				this.potentialData.push({						type:'',						potential:'',						number:this.potentialData.length,					})					console.log(this.potentialData);			},			minus(item){				for(var i=item.number+1; i<this.potentialData.length; i++){					this.potentialData[i].number-=1;				}				console.log(item.number);				console.log(this.potentialData);				this.potentialData.splice(item.number,1);			},
+			add(){				this.potentialData.push({						type:'',						potential:'',						number:this.potentialData.length,					})					console.log(this.potentialData);			},
 			getPotentialPointQueryData(){
 				request({
 					method:'POST',
@@ -431,6 +541,7 @@
 				
 			},
 			openMessageDialog(){
+				this.PatrolResultCreate()
 				this.$refs.message.open('center')
 			},
 			close(){
@@ -513,7 +624,7 @@
 			margin: 5px 0;
 			display: flex;
 			align-items: center;
-			
+			border-bottom: 1px solid black;
 			padding: 10px;
 			background-color: white;
 		}
@@ -521,7 +632,7 @@
 			margin: 5px 0;
 			display: flex;
 			align-items: center;
-			
+			border-bottom: 1px solid black;
 			padding: 10px;
 			background-color: white;
 		}	
@@ -535,7 +646,9 @@
 		line-height: 36px;
 		background-color: #2E9BFF;
 		color: white;			}
-
-
+	.potentialpailie{
+		display: flex;
+		flex-direction: column;
+	}
 
 </style>

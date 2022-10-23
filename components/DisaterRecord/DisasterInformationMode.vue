@@ -19,6 +19,8 @@
 					<view style="padding-top: 7px;">人</view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 死亡人口 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -37,6 +39,8 @@
 					<view style="padding-top: 7px;">人</view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 失踪人口 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -55,6 +59,8 @@
 					<view style="padding-top: 7px;">人</view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 受伤人口 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -73,6 +79,8 @@
 					<view style="padding-top: 7px;">人</view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 经济损失 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -91,8 +99,9 @@
 				<uni-col :span="3">
 					<view style="padding-top: 7px;">万元</view>
 				</uni-col>
-			
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 受灾对象 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -108,7 +117,8 @@
 					</view>
 				</uni-col>
 			</uni-row>
-			
+		</view>
+		<view class="item-container">
 			<!-- 诱发原因 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -118,6 +128,8 @@
 					<view class="select-input"><uni-easyinput type="textarea" v-model="value" placeholder="请输入诱发原因" @input="DescriptionText"/></view>
 				</uni-col>
 			</uni-row>
+		</view>
+		<view class="item-container">
 			<!-- 防治措施 -->
 			<uni-row >
 				<uni-col :span="7">
@@ -130,7 +142,7 @@
 				</uni-col>
 			</uni-row>
 		</view>
-		
+		</view>
 	</view>
 		
 	
@@ -181,6 +193,7 @@
 	.item-container {
 		// padding: 10px 5px;
 		background-color: white;
+		border-bottom: 1px solid black;
 		.Select-right {
 			margin-top: 5px;
 			margin-bottom: 20px;

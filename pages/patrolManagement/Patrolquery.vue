@@ -4,9 +4,9 @@
 			<uni-forms :model="queryForm" ref="queryForm">
 				
 				<uni-row>
-					<uni-col :span="12"> 
+					<uni-col :span="9"> 
 					<view class="query-select-input">
-						<text style="margin-right: 5px;flex:4">上报人</text>
+						<text style="margin-right: 2px;flex:4">上报人</text>
 						<uni-data-picker
 						:localdata="options"
 						popup-title="请选择上报人"
@@ -16,10 +16,10 @@
 						</uni-data-picker>
 					</view>
 					</uni-col>
-					<uni-col :span="12"> 
+					<uni-col :span="15"> 
 						<view class="query-select-input">
-							<text style="margin-right: 5px;flex:4">区镇</text>
-							<uni-data-select v-model="queryForm.level" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<text style="margin-right: 2px;flex:1">区镇</text>
+							<uni-data-picker v-model="queryForm.level" :localdata="SelectProvince" @change="areaChange"  style="flex:5"></uni-data-picker>
 						</view>
 					</uni-col>
 				</uni-row>
@@ -70,10 +70,10 @@
 <script>
 	import {request} from '@/utils/request.js'
 	import {debounce} from "lodash"	
-	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins} from "@/utils/mixins.js"
+	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins} from "@/utils/mixins.js"
 	//import {getClassList} from '@/servies/class.js'
 	export default {
-		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins],
+		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],
 		data() {
 			return {
 				options:[],
@@ -83,6 +83,7 @@
 					queryCount:8,
 					currentPage:1,
 				},
+				SelectProvince:[],
 				queryForm:{
 					key:'',
 					level:'',
@@ -113,6 +114,7 @@
 		},
 		mounted() {
 				this.getInfo();
+				this.SelectProvince = this.getAreaOptions();
 				
 		
 		},
@@ -129,6 +131,19 @@
 			}
 		},
 		methods: {
+			areaChange(e) {
+				if (e.detail.value[2]==null){
+					this.PatrolRequestForm.administrativeRegion=""
+				}
+				else {
+					this.PatrolRequestForm.administrativeRegion=e.detail.value[2].value//440507007
+					// this.PatrolRequestForm.administrativeRegion="440507"//
+				}
+				console.log("this.PatrolRequestForm.administrativeRegion",this.PatrolRequestForm.administrativeRegion)
+				this.officeData=[]
+				this.officePageInfo.currentPage=1
+				this.getInfo()
+			},
 			input(e) {
 					this.inputTextSave = e
 					console.log("输入的文本为：",this.inputTextSave)
