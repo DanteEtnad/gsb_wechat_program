@@ -268,6 +268,7 @@
 				}
 				console.log("town",this.PotentialPointSurveyQueryReq.potentialPointBelongTown)
 				console.log("结果",e.detail.value)
+				this.totalNum=0
 				this.PotentialPointData=[]
 				this.officePageInfo.currentPage=1
 				this.getPotentialPointQueryData()
@@ -276,6 +277,7 @@
 			search(){
 				this.PotentialPointSurveyQueryReq.potentialPointName=this.inputTextSave
 				console.log(this.PotentialPointSurveyQueryReq.potentialPointName)
+				this.totalNum=0
 				this.PotentialPointData=[]
 				this.officePageInfo.currentPage=1
 				this.getPotentialPointQueryData()

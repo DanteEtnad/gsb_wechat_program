@@ -75,25 +75,12 @@
 				</view>
 			</view>
 		</view>
-		<view>
-			<uni-row>
-			<uni-col span="12">
-				<button :disabled=bup @click="up()">
-					<text>上一页</text>
-				</button>
-			</uni-col>
-			<uni-col span="12">
-				<button :disabled=bdown @click="down()">
-					<text>下一页</text>
-				</button>
-			</uni-col>
-			</uni-row>
-		</view>
 	</view>
 </template>
 
 <script>
 	import {request} from '@/utils/request.js'
+	import {debounce} from "lodash"
 	export default {
 		data() {
 			return {
@@ -171,16 +158,12 @@
 						patrolAdcode:'',
 						
 				},
-				bup:true,
-				bdown:false,
-				page:0,
-				totalpage:0,
 				userInfo:[],
 				officePageInfo:{
 					dataAmount:0,
 					offset:0,
-					queryCount:8,
-					currentPage:0,
+					queryCount:5,
+					currentPage:1,
 				},
 				inputTextSave:"",
 			}
@@ -196,44 +179,21 @@
 				console.log("user内容",this.userInfo)
 			})
 			this.DailyPatrolRequestForm.reportPerson=this.userInfo.memberId
-			this.getOfficeData()
+			this.getOfficeData(true)
+		},
+		onReachBottom() {
+			if(this.officeData.length<this.officePageInfo.dataAmount){
+				this.officePageInfo.currentPage++
+				this.getOfficeData()
+			}
+			else{
+			uni.showToast({
+				title: `已经到底了`,
+				duration: 2000
+			});
+			}
 		},
 		methods: {
-			down(){
-				this.officePageInfo.offset+=8;
-				this.getOfficeData();
-				this.page+=1;
-				if(this.page!=0){
-					this.bup=false;
-				}
-				if(this.page==this.totalpage){
-					this.bdown=true;
-				}
-				//取消选中时删除数组中的值
-				for (var i = 0; i < this.selectId.length; i++) {
-				    this.list[this.selectId[i]].selected = false;
-				    this.list[this.selectId[i]].unselected = true; 
-				}
-				this.selectId=[];
-			},
-			up(){
-				this.officePageInfo.offset-=8;
-				this.getOfficeData();
-				this.page-=1;
-				if(this.page==0){
-					this.bup=true;
-				}
-				if(this.page!=this.totalpage){
-					this.bdown=false;
-				}
-
-				//取消选中时删除数组中的值
-				for (var i = 0; i < this.selectId.length; i++) {
-				    this.list[this.selectId[i]].selected = false;
-				    this.list[this.selectId[i]].unselected = true; 
-				}
-				this.selectId=[];
-			},
 			input(e) {
 					this.inputTextSave = e
 					console.log("输入的文本为：",this.inputTextSave)
@@ -241,6 +201,8 @@
 			search(){
 				this.DailyPatrolRequestForm.patrolTaskName=this.inputTextSave
 				console.log(this.DailyPatrolRequestForm.reportPerson)
+				this.officeData=[]
+				this.officePageInfo.currentPage=1
 				this.getOfficeData()
 			},
 			
@@ -320,73 +282,74 @@
 
 					}
 				},
-			
-			getOfficeData(){
-				request({
-					method:'POST',
-					url:'patrolManage/dailyPatrolResultQuery',
-					data:{
-						DailyPatrolResultQueryReq: this.DailyPatrolRequestForm,
-						QueryPagingParamsReq :{
-							offset:this.officePageInfo.offset,
-							queryCount:this.officePageInfo.queryCount
-						},
-					}
-				})
-				.then(res=>{
-					if(res.code===2000){
-						this.officeData=res.data.PatrolResultQueryRsp
-						this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
-						console.log("总数",this.officePageInfo.dataAmount)
-						this.totalpage=Math.floor(parseInt(this.officePageInfo.dataAmount)/parseInt(this.officePageInfo.queryCount));
-						if(this.totalpage==0){
-							this.bdown=true
+				getOfficeData:debounce(function(reset=false){
+					uni.showLoading({
+						title: '加载中'
+					});
+					request({
+						method:'POST',
+						url:'patrolManage/dailyPatrolResultQuery',
+						data:{
+							DailyPatrolResultQueryReq: this.DailyPatrolRequestForm,
+							QueryPagingParamsReq :{
+								offset: (this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount,
+								queryCount:this.officePageInfo.queryCount
+							},
 						}
-						console.log("总页数",this.totalpage)
-					}else{
-						this.$message.error(res.message)
-					}
-					for (var j = 0; j < this.officeData.length; j++){
-						this.officeData[j].deformationIndication='';
-						this.officeData[j].show=[];
-
-						if (this.officeData[j].isCrackDeformation==='Y'){
-							this.officeData[j].deformationIndication+='裂缝变形 '
-							this.officeData[j].show.push(0)
-						}
-
-						if (this.officeData[j].isGroundDrum==='Y'){
-							this.officeData[j].deformationIndication+='新地鼓 '
-							this.officeData[j].show.push(1)
-						}						
-						if (this.officeData[j].isGroundCollapse==='Y'){
-							this.officeData[j].deformationIndication+='地面塌陷 '
-							this.officeData[j].show.push(2)
-						}
-						if (this.officeData[j].isHouseDeformation==='Y'){
-							this.officeData[j].deformationIndication+='房屋变形 '
-							this.officeData[j].show.push(3)
-						}						
-						if (this.officeData[j].isChannelBlockage==='Y'){
-							this.officeData[j].deformationIndication+='沟道阻塞 '
-							this.officeData[j].show.push(4)
-						}						
-						if (this.officeData[j].isTreesAskew==='Y'){
-							this.officeData[j].deformationIndication+='树木歪斜 '
-							this.officeData[j].show.push(5)
-						}
-						if (this.officeData[j].isSpringWaterEmerges==='Y'){
-							this.officeData[j].deformationIndication+='泉水露出及变浑浊 '
-							this.officeData[j].show.push(6)
-						}
-
-					}
-					this.showData=JSON.parse(JSON.stringify(this.officeData))
-					this.realshowData=JSON.parse(JSON.stringify(this.officeData))
-					console.log(this.officeData)
-				})
+					})
+					.then(res=>{
+						if(res.code===2000){
+							uni.hideLoading();
+							uni.showToast({
+								title: `加载完成`,
+								duration: 2000
+							});
+							this.officeData = [...this.officeData,...res.data.PatrolResultQueryRsp]
+							this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
 				
-			},
+						}else{
+							this.$message.error(res.message)
+						}
+						for (var j = 0; j < this.officeData.length; j++){
+							this.officeData[j].deformationIndication='';
+							this.officeData[j].show=[];
+							if (this.officeData[j].isCrackDeformation==='Y'){
+								this.officeData[j].deformationIndication+='裂缝变形 '
+								this.officeData[j].show.push(0)
+							}
+				
+							if (this.officeData[j].isGroundDrum==='Y'){
+								this.officeData[j].deformationIndication+='新地鼓 '
+								this.officeData[j].show.push(1)
+							}						
+							if (this.officeData[j].isGroundCollapse==='Y'){
+								this.officeData[j].deformationIndication+='地面塌陷 '
+								this.officeData[j].show.push(2)
+							}
+							if (this.officeData[j].isHouseDeformation==='Y'){
+								this.officeData[j].deformationIndication+='房屋变形 '
+								this.officeData[j].show.push(3)
+							}						
+							if (this.officeData[j].isChannelBlockage==='Y'){
+								this.officeData[j].deformationIndication+='沟道阻塞 '
+								this.officeData[j].show.push(4)
+							}						
+							if (this.officeData[j].isTreesAskew==='Y'){
+								this.officeData[j].deformationIndication+='树木歪斜 '
+								this.officeData[j].show.push(5)
+							}
+							if (this.officeData[j].isSpringWaterEmerges==='Y'){
+								this.officeData[j].deformationIndication+='泉水露出及变浑浊 '
+								this.officeData[j].show.push(6)
+							}
+				
+						}
+						this.showData=JSON.parse(JSON.stringify(this.officeData))
+						this.realshowData=JSON.parse(JSON.stringify(this.officeData))
+						console.log(this.officeData)
+					})
+					
+				},300)
 		}
 	}
 </script>

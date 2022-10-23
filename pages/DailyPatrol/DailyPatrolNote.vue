@@ -3,8 +3,8 @@
 		<u-sticky bgColor="#fff">
 			<u-tabs :list="list" :scrollable="false" @click="handleTabsClick"></u-tabs>
 		</u-sticky>
-		<NotePotentialMode v-show="!textShow"></NotePotentialMode>
-		<NoteUserMode v-show="textShow"></NoteUserMode>
+		<NotePotentialMode v-show="!textShow" :currentPage="officePageInfo.currentPage"></NotePotentialMode>
+		<NoteUserMode v-show="textShow" :currentPage="officePageInfo.currentPage"></NoteUserMode>
 	</view>
 </template>
 
@@ -20,9 +20,18 @@
 		},
 		data() {
 			return {
+				officePageInfo:{
+					dataAmount:0,
+					offset:0,
+					queryCount:4,
+					currentPage:1,
+				},
 				textShow:true,
 				list:[{name:'按用户查看',},{name:'按隐患点查看',}]
 			}
+		},
+		onReachBottom() {
+			this.officePageInfo.currentPage++
 		},
 		methods: {
 			getInfo(){

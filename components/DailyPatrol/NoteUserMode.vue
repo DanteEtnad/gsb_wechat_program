@@ -42,29 +42,47 @@
 				</view>
 			</view>
 		</view>
-		<view>
-			<uni-row>
-			<uni-col span="12">
-				<button :disabled=bup @click="up()">
-					<text>上一页</text>
-				</button>
-			</uni-col>
-			<uni-col span="12">
-				<button :disabled=bdown @click="down()">
-					<text>下一页</text>
-				</button>
-			</uni-col>
-			</uni-row>
-		</view>
+
 	</view>
 </template>
 
 <script>
 	import {request} from '@/utils/request.js'
 	import {requestAuthority} from '@/utils/request.js'
+	import {debounce} from "lodash"
 	export default {
+		props:{
+			currentPage:{
+                type:Number,
+                default:0
+            }
+		},
+		watch:{
+			currentPage(curVal,oldVal){
+				if(curVal){
+					this.currentPage=curVal
+					console.log("发生了边话,值为",this.currentPage)
+					if(this.memberData.length<this.officePageInfo.dataAmount){
+						this.officePageInfo.currentPage=this.currentPage
+						this.getMemberData()
+					}
+					else{
+					uni.showToast({
+						title: `已经到底了`,
+						duration: 2000
+					});
+					}
+				}
+			}
+		},
 		data() {
 			return {
+				officePageInfo:{
+					dataAmount:0,
+					offset:0,
+					queryCount:8,
+					currentPage:1,
+				},
 				city:[
 					{value:'1',text:'汕头市'},
 				],
@@ -109,12 +127,6 @@
 				],
 				officeData:[],
 				memberData:[],
-				dataAmount:0,
-				bup:true,
-				bdown:false,
-				page:0,
-				totalpage:0,
-				patrolAmount:0,
 				DailyPatrolRequestForm:{						
 						dailyPatrolResultId:'',
 						patrolEndDate:'',
@@ -138,50 +150,33 @@
 						memberIdentityCard:'',
 						
 				},
-				QueryPagingParamsReq:{
-					offset:0,
-					queryCount:4,
-				},
 				inputTextSave:"",
+				totalNum:0,
 			}
 		},
+		mounted() {
+			this.getMemberData(true);
+		},
 		created(){
-			this.getMemberData()
+
+		},
+		onLoad() {
+
 		},
 
 		methods: {
-			down(){
-				this.QueryPagingParamsReq.offset+=4;
-				this.getMemberData();
-				this.page+=1;
-				if(this.page!=0){
-					this.bup=false;
-				}
-				if(this.page==this.totalpage){
-					this.bdown=true;
-				}
-
-			},
-			up(){
-				this.QueryPagingParamsReq.offset-=4;
-				this.getMemberData();
-				this.page-=1;
-				if(this.page==0){
-					this.bup=true;
-				}
-				if(this.page!=this.totalpage){
-					this.bdown=false;
-				}
-
-			},
+			
 			input(e) {
 					this.inputTextSave = e
 					console.log("输入的文本为：",this.inputTextSave)
 			},
 			search(){
-				this.DailyPatrolRequestForm.reportPerson=this.inputTextSave
+				this.MemberQueryReq.memberName=this.inputTextSave
 				console.log(this.DailyPatrolRequestForm.reportPerson)
-				this.getOfficeData()
+				this.totalNum=0
+				this.officePageInfo.currentPage=1
+				this.memberData=[]
+				this.getMemberData()
 			},
 			async openDailyPatrolUser(item){
 				const response = await uni.navigateTo({
@@ -209,7 +204,7 @@
 				},
 						QueryPagingParamsReq:{
 							offset:0,
-							queryCount:10,
+							queryCount:9999,
 						},
 					}
 				})
@@ -219,7 +214,7 @@
 						this.patrolAmount=res.data.QuerySummaryRsp.dataAmount;
 						this.memberData[i].patrolAmount=this.patrolAmount;
 						console.log("次数为",i)
-						console.log("结果",this.memberDataData)
+						console.log("结果",this.memberData)
 					}else{
 						this.$message.error(res.message)
 					}
@@ -227,36 +222,44 @@
 				})
 				
 			},
-			getMemberData(){
+			getMemberData:debounce(function(reset=false){
+				uni.showLoading({
+					title: '加载中'
+				});
 				requestAuthority({
 					method:'POST',
 					url:'member/query',
 					data:{
 						MemberQueryReq: this.MemberQueryReq,
-						QueryPagingParamsReq: this.QueryPagingParamsReq,
+						QueryPagingParamsReq: {
+							offset: (this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount,
+							queryCount:this.officePageInfo.queryCount
+						}
 					}
 				})
 				.then(res=>{
 					if(res.code===2000){
-						this.memberData=res.data.MemberQueryRsp
-						this.dataAmount=res.data.QuerySummaryRsp
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载完成`,
+							duration: 2000
+						});
+						this.memberData= [...this.memberData,...res.data.MemberQueryRsp]
+						this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
+						console.log("总数",this.officePageInfo.dataAmount)
 					}else{
 						this.$message.error(res.message)
 					}
-					this.totalpage=Math.floor(parseInt(this.dataAmount.dataAmount)/parseInt(this.QueryPagingParamsReq.queryCount));
-					if(this.totalpage==0){
-						this.bdown=true
-					}
-					for (var i =0; i<this.memberData.length; i++){
+
+					for (var i =this.totalNum; i<this.memberData.length; i++){
 						this.getOfficeData(i);
 					}
+					this.totalNum=this.memberData.length
 					console.log("成员",this.memberData)
-					console.log("总数",this.dataAmount.dataAmount)
-					console.log("总页数",this.totalpage)
 				})
 				
 
-			},
+			},300),
 
 		}
 	}

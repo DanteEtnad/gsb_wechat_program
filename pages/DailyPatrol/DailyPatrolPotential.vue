@@ -75,25 +75,13 @@
 				</view>
 			</view>
 		</view>
-		<view>
-			<uni-row>
-			<uni-col span="12">
-				<button :disabled=bup @click="up()">
-					<text>上一页</text>
-				</button>
-			</uni-col>
-			<uni-col span="12">
-				<button :disabled=bdown @click="down()">
-					<text>下一页</text>
-				</button>
-			</uni-col>
-			</uni-row>
-		</view>
+
 	</view>
 </template>
 
 <script>
 	import {request} from '@/utils/request.js'
+	import {debounce} from "lodash"
 	export default {
 		data() {
 			return {
@@ -171,16 +159,12 @@
 						patrolAdcode:'',
 						
 				},
-				bup:true,
-				bdown:false,
-				page:0,
-				totalpage:0,
 				potentialInfo:[],
 				officePageInfo:{
 					dataAmount:0,
 					offset:0,
-					queryCount:8,
-					currentPage:0,
+					queryCount:5,
+					currentPage:1,
 				},
 				inputTextSave:"",
 			}
@@ -198,42 +182,19 @@
 			this.DailyPatrolRequestForm.patrolTaskName=this.potentialInfo.potentialPointName
 			this.getOfficeData()
 		},
+		onReachBottom() {
+			if(this.officeData.length<this.officePageInfo.dataAmount){
+				this.officePageInfo.currentPage++
+				this.getOfficeData()
+			}
+			else{
+			uni.showToast({
+				title: `已经到底了`,
+				duration: 2000
+			});
+			}
+		},
 		methods: {
-			down(){
-				this.officePageInfo.offset+=8;
-				this.getOfficeData();
-				this.page+=1;
-				if(this.page!=0){
-					this.bup=false;
-				}
-				if(this.page==this.totalpage){
-					this.bdown=true;
-				}
-				//取消选中时删除数组中的值
-				for (var i = 0; i < this.selectId.length; i++) {
-				    this.list[this.selectId[i]].selected = false;
-				    this.list[this.selectId[i]].unselected = true; 
-				}
-				this.selectId=[];
-			},
-			up(){
-				this.officePageInfo.offset-=8;
-				this.getOfficeData();
-				this.page-=1;
-				if(this.page==0){
-					this.bup=true;
-				}
-				if(this.page!=this.totalpage){
-					this.bdown=false;
-				}
-
-				//取消选中时删除数组中的值
-				for (var i = 0; i < this.selectId.length; i++) {
-				    this.list[this.selectId[i]].selected = false;
-				    this.list[this.selectId[i]].unselected = true; 
-				}
-				this.selectId=[];
-			},
 			input(e) {
 					this.inputTextSave = e
 					console.log("输入的文本为：",this.inputTextSave)
@@ -321,40 +282,42 @@
 					}
 				},
 			
-			getOfficeData(){
+			getOfficeData:debounce(function(reset=false){
+				uni.showLoading({
+					title: '加载中'
+				});
 				request({
 					method:'POST',
 					url:'patrolManage/dailyPatrolResultQuery',
 					data:{
 						DailyPatrolResultQueryReq: this.DailyPatrolRequestForm,
 						QueryPagingParamsReq :{
-							offset:this.officePageInfo.offset,
+							offset: (this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount,
 							queryCount:this.officePageInfo.queryCount
 						},
 					}
 				})
 				.then(res=>{
 					if(res.code===2000){
-						this.officeData=res.data.PatrolResultQueryRsp
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载完成`,
+							duration: 2000
+						});
+						this.officeData = [...this.officeData,...res.data.PatrolResultQueryRsp]
 						this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
-						console.log("总数",this.officePageInfo.dataAmount)
-						this.totalpage=Math.floor(parseInt(this.officePageInfo.dataAmount)/parseInt(this.officePageInfo.queryCount));
-						if(this.totalpage==0){
-							this.bdown=true
-						}
-						console.log("总页数",this.totalpage)
+			
 					}else{
 						this.$message.error(res.message)
 					}
 					for (var j = 0; j < this.officeData.length; j++){
 						this.officeData[j].deformationIndication='';
 						this.officeData[j].show=[];
-
 						if (this.officeData[j].isCrackDeformation==='Y'){
 							this.officeData[j].deformationIndication+='裂缝变形 '
 							this.officeData[j].show.push(0)
 						}
-
+			
 						if (this.officeData[j].isGroundDrum==='Y'){
 							this.officeData[j].deformationIndication+='新地鼓 '
 							this.officeData[j].show.push(1)
@@ -379,14 +342,14 @@
 							this.officeData[j].deformationIndication+='泉水露出及变浑浊 '
 							this.officeData[j].show.push(6)
 						}
-
+			
 					}
 					this.showData=JSON.parse(JSON.stringify(this.officeData))
 					this.realshowData=JSON.parse(JSON.stringify(this.officeData))
 					console.log(this.officeData)
 				})
 				
-			},
+			},300)
 		}
 	}
 </script>

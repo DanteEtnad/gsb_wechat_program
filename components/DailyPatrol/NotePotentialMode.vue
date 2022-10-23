@@ -110,31 +110,44 @@
 				
 			</view>
 		</navigator>
-		<view>
-			<uni-row>
-			<uni-col span="12">
-				<button :disabled=bup @click="up()">
-					<text>上一页</text>
-				</button>
-			</uni-col>
-			<uni-col span="12">
-				<button :disabled=bdown @click="down()">
-					<text>下一页</text>
-				</button>
-			</uni-col>
-			</uni-row>
-		</view>
+
 	</view>
 
 </template>
 
 <script>
 	import {request} from '@/utils/request.js'
+	import {debounce} from "lodash"
 	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins} from "@/utils/mixins.js"
 	export default {
+		props:{
+			currentPage:{
+		        type:Number,
+		        default:0
+		    }
+		},
+		watch:{
+			currentPage(curVal,oldVal){
+				if(curVal){
+					this.currentPage=curVal
+					console.log("发生了边话,值为",this.currentPage)
+					if(this.PotentialPointData.length<this.officePageInfo.dataAmount){
+						this.officePageInfo.currentPage=this.currentPage
+						this.getPotentialPointQueryData()
+					}
+					else{
+					uni.showToast({
+						title: `已经到底了`,
+						duration: 2000
+					});
+					}
+				}
+			}
+		},
 		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],
 		data() {
 			return {
+				totalNum:0,
 				placeholderStyle: "primaryColor:rgba(0,0,0,0)",
 				style:"color:blue",
 				index:0,
@@ -156,15 +169,11 @@
 						createTime:''
 					},
 				PotentialPointData:[],
-				bup:true,
-				bdown:false,
-				page:0,
-				totalpage:0,
 				officePageInfo:{
 					dataAmount:0,
 					offset:0,
 					queryCount:5,
-					currentPage:0,
+					currentPage:1,
 				},
 				SelectProvince: [{value:'440500',text:'广东省汕头市'}],
 				ScaleDisaster: 
@@ -255,30 +264,7 @@
 				  this.PotentialPointData[i].distance=this.distance
 			  })
 			},
-			down(){
-				this.officePageInfo.offset+=5;
-				this.getPotentialPointQueryData();
-				this.page+=1;
-				if(this.page!=0){
-					this.bup=false;
-				}
-				if(this.page==this.totalpage){
-					this.bdown=true;
-				}
 			
-			},
-			up(){
-				this.officePageInfo.offset-=5;
-				this.getPotentialPointQueryData();
-				this.page-=1;
-				if(this.page==0){
-					this.bup=true;
-				}
-				if(this.page!=this.totalpage){
-					this.bdown=false;
-				}
-			
-			},
 			// 获取输入框文本内容函数
 			input(e) {
 					this.inputTextSave = e
@@ -294,16 +280,19 @@
 				}
 				console.log("town",this.PotentialPointSurveyQueryReq.potentialPointBelongTown)
 				console.log("结果",e.detail.value)
+				this.totalNum=0
+				this.PotentialPointData=[]
+				this.officePageInfo.currentPage=1
 				this.getPotentialPointQueryData()
 			},
-			// 灾害规模列表下列列表更新数据函数
-			scalePickerChange(e) {		
-				
-			},
+
 			// 搜索函数
 			search(){
 				this.PotentialPointSurveyQueryReq.potentialPointName=this.inputTextSave
 				console.log(this.PotentialPointSurveyQueryReq.potentialPointName)
+				this.totalNum=0
+				this.PotentialPointData=[]
+				this.officePageInfo.currentPage=1
 				this.getPotentialPointQueryData()
 			},
 			getOfficeData(i){
@@ -340,37 +329,43 @@
 				})
 				
 			},
-			getPotentialPointQueryData(){
+			getPotentialPointQueryData:debounce(function(reset=false){
+				uni.showLoading({
+					title: '加载中'
+				});
 				request({
 					method:'POST',
 					url:'potentialPointInfo/queryList',
 					data:{
 						PotentialPointInfoQueryListReq :this.PotentialPointSurveyQueryReq,
 						QueryPagingParamsReq :{
-							offset:this.officePageInfo.offset,
+							offset: (this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount,
 							queryCount:this.officePageInfo.queryCount
 						}
 					}
 				})
 				.then(res=>{
+					uni.hideLoading();
+					uni.showToast({
+						title: `加载完成`,
+						duration: 2000
+					});
 					if(res.code===2000){
-						this.PotentialPointData=res.data.PotentialPointInfoQueryListRsp
+						this.PotentialPointData = [...this.PotentialPointData,...res.data.PotentialPointInfoQueryListRsp]
 						this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
-						console.log("总数",this.officePageInfo.dataAmount)
-						this.totalpage=Math.floor(parseInt(this.officePageInfo.dataAmount)/parseInt(this.officePageInfo.queryCount));
-						if(this.totalpage==0){
-							this.bdown=true
-						}
 					}else{
 						this.$message.error(res.message)
 					}
-					for (var i =0; i<this.PotentialPointData.length; i++){
+					for (var i =this.totalNum; i<this.PotentialPointData.length; i++){
 						this.PotentialPointData[i].patrolAmount=0;
 						this.getOfficeData(i);
 					}
-					console.log("结果data",this.PotentialPointData)
+					this.totalNum=this.PotentialPointData.length
+					console.log("@res@",res)
+					console.log("data",this.PotentialPointData)
 				})
-			},
+				
+			},300),
 			async openDailyPatrolPotential(item){
 				const response = await uni.navigateTo({
 					url:'/pages/DailyPatrol/DailyPatrolPotential',
