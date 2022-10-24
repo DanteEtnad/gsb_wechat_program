@@ -490,6 +490,11 @@
 							});
 							this.$refs.message.open('center')
 						}else{
+							uni.hideLoading();
+							uni.showToast({
+								title: `提交失败`,
+								duration: 2000
+							});
 						}
 					})
 				}

@@ -206,6 +206,11 @@
 						});
 						this.memberData=res.data.MembersIdAndNameRsp
 					}else{
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载失败`,
+							duration: 2000
+						});
 						this.$message.error(res.message)
 					}
 					console.log("成员",this.memberData)
