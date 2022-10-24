@@ -93,6 +93,7 @@
 						popup-title="隐患点"
 						@nodeclick="potentialChange" 
 						placeholder="请选择隐患点"
+						:readonly="true"
 						>
 						</uni-data-picker>
 					</view>
@@ -103,7 +104,7 @@
 								<view style="display: grid; grid-template-columns: 5fr 2fr 1fr; gap: 10px; align-items: center; border-bottom: 1px solid black;" >
 									<text>{{item.name}}</text>
 									<text>{{item.type}}</text>
-									<uni-icons type="closeempty" size="16" color="#000" @click="minus(item)"></uni-icons>
+									<uni-icons type="closeempty" size="16" color="#000"></uni-icons>
 								</view>
 						</view>
 					</div>
@@ -148,7 +149,6 @@
 					</view>	
 					<view style="flex:16">
 						<uni-easyinput
-						@input="peopletrans"
 						v-model=PatrolData.numberOfPeopleTransferred
 						:disabled="true"
 						>
@@ -201,7 +201,7 @@
 					    </view>	
 					    <view style="flex:16">
 						<uni-easyinput
-						@input="peopletrans"
+						@input="checkText"
 						>
 						</uni-easyinput>
 			            </view>	
@@ -251,10 +251,24 @@
 					approvalRemarks:'',
 					
 				},
-				
-				potentialData:[
-				],
-				
+				officePageInfo:{
+					dataAmount:0,
+					offset:0,
+					queryCount:99999,
+					currentPage:0,
+				},
+				PotentialPointSurveyQueryReq:{
+				potentialPointBelongCity:'',
+				potentialPointBelongCounty:'',
+				potentialPointBelongTown:'',
+				potentialPointId:'',
+				potentialPointName:'',
+				potentialPointStatus:'',
+				potentialPointType:'',
+				},
+				PotentialPointData:[],
+				potentialData:[],
+				potentialList:{},
 				PatrolData:{},
 				memberData:[],
 				memberList:{},
@@ -274,19 +288,62 @@
 			this.location=this.dataCodeAreaTransform(this.PatrolData.administrativeRegion,"potentialPointBelongTowns")
 			console.log("location",this.location)
 			this.options1=this.getAreaOptions()
-			this.PatrolData.potentialType[i];
-			for(var i=0;i<this.PatrolData.potentialType.length;i++){
-				this.potentialData.push({
-							type:'',		
-							name:'',
-							nameId:'',
-						})
-					
-				}
+			this.getPotentialPointQueryData()
+
 			}
 			
 		,
 		methods: {
+			getPotentialPointQueryData(){
+				request({
+					method:'POST',
+					url:'potentialPointInfo/queryList',
+					data:{
+						PotentialPointInfoQueryListReq :this.PotentialPointSurveyQueryReq,
+						QueryPagingParamsReq :{
+							offset:this.officePageInfo.offset,
+							queryCount:this.officePageInfo.queryCount
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.PotentialPointData=res.data.PotentialPointInfoQueryListRsp
+						this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
+					
+					}else{
+						this.$message.error(res.message)
+					}
+					for(var i=0; i<this.PotentialPointData.length; i++){
+						this.potentialList[this.PotentialPointData[i].potentialPointId]=this.PotentialPointData[i].potentialPointName
+					}
+					console.log("列表为",this.potentialList)
+					this.Patrol.potentialType=JSON.parse(this.PatrolData.potentialType)
+					this.Patrol.potentialPointId=JSON.parse(this.PatrolData.potentialPointId)
+					console.log("类型列表",this.Patrol.potentialType)
+					console.log("类型列表长度",this.Patrol.potentialType.length)
+					for(var j=0;j<this.Patrol.potentialType.length;j++){
+						let name=this.potentialList[this.Patrol.potentialPointId[j]]
+						let type=''
+						switch(this.Patrol.potentialType[j]){
+							case "001" :type="斜坡";break;
+							case "002" :type="滑坡";break;
+							case "003" :type="崩塌";break;
+							case "004" :type="泥石流";break;
+							case "005" :type="地面沉降与地裂缝";break;
+						}
+						console.log("名字是",name)
+						console.log("类型是",type)
+						this.potentialData.push({
+									type:type,		
+									name:name,
+								})
+							
+						}
+					console.log("结果data",this.PotentialPointData)
+				})
+				
+			},
 			check(e){
 				this.Patrol.approvalResults='Y'
 				this.Patrol.patrolResultId=this.PatrolData.patrolResultId
@@ -297,14 +354,9 @@
 				this.Patrol.patrolResultId=this.PatrolData.patrolResultId
 				console.log("this.Patrol.approvalResults",this.Patrol.approvalResults)
 			},
-			
-			minus(item){
-				for(var i=item.number+1; i<this.potentialData.length; i++){
-					this.potentialData[i].number-=1;
-				}
-				console.log(item.number);
-				console.log(this.potentialData);
-				this.potentialData.splice(item.number,1);
+			checkText(e){
+				this.Patrol.approvalRemarks=e
+				console.log("this.Patrol.approvalRemarks",this.Patrol.approvalRemarks)
 			},
 			openMessageDialog(){
 				console.log('1111111111111',this.Patrol)

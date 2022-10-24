@@ -250,19 +250,6 @@
 					currentPage:0,
 				},
 				
-				id:0, // 使用 marker点击事件 需要填写id
-				title: 'map',
-				latitude: 39.909,
-				longitude: 116.39742,
-				covers: [{
-				latitude: 39.909,
-				longitude: 116.39742,
-				iconPath: '/static/locate.svg'
-				}, {
-				latitude: 39.90,
-				longitude: 116.39,
-				iconPath: '/static/locate.svg'
-				}],
 				statusBarHeight:0,
 				navBarHeight: 70,
 				createForm:{
@@ -284,7 +271,6 @@
 			}
 		},
 		
-		city:[					{value:'1',text:'汕头市'},					{value:'2',text:'长沙市'},				],				district:[					{value:'1',text:'金平区'},					{value:'2',text:'龙湖区'},					{value:'3',text:'澄海区'},					{value:'4',text:'濠江区'},					{value:'5',text:'潮阳区'},					{value:'6',text:'潮南区'},					{value:'7	',text:'南澳县'},				],
 		
 		props:{
 			

@@ -1,14 +1,19 @@
 <template>
 		<view>
+
 		<view class="report-container">
+			
+		<uni-forms ref="form" :model="createForm">
+			
 			<view class="report-info-container">
-					<view style="flex:1">
+			<!-- 巡查开始时间 -->
+					<view style="flex:12">
 						<view style="flex:16"><text>所属行政区<text style="color: red;">*</text></text></view>
 					</view>	
 							<view class="select-input">
 								<uni-data-picker
-								v-model="PatrolData.administrativeRegion"
 								:localdata="options1"
+								v-model="PatrolData.administrativeRegion"
 								popup-title="请选择地区"
 								@change="areaChange" 
 								style="flex:6;background-color:  #F7F7F8;"
@@ -18,6 +23,9 @@
 								
 							</view>
 			</view>
+			
+			
+			
 			<view class="report-info-container">
 			<!-- 巡查开始时间 -->
 			
@@ -30,37 +38,72 @@
 						</picker>
 					</view>
 			</view>
-			
 			<view class="report-info-container">
 			<!-- 巡查结束时间 -->
 			
 					<view style="flex:12">
 						<view style="flex:16"><text>巡查结束时间<text style="color: red;">*</text></text></view>
-					</view  style="flex:12">
-					      {{PatrolData.patrolEndDate}}
-			        
-			        </view>
+					</view>
+			
+					<view style="flex:12">
+						<picker mode="date" :value="dateend" :start="startDate" :end="endDate" @change="PatrolEndDateChange">
+					            <view>{{ dateend }}</view>
+						</picker>
+					</view>
+			
+			</view>
 			
 			<view class="report-info-container">
 				<view style="flex:12">
 					<text>出动巡排查<text style="color: red;">*</text></text>
 				</view>
 				<view style="flex:12">
-					{{PatrolData.patrolNumber}}
+					<uni-easyinput
+					v-model="PatrolData.patrolNumber"
+					@input="number"
+					>
+					</uni-easyinput>
 				</view>	
 			</view>
-			
+
 			<view class="report-info-container">
 				<view style="flex:12">
 					<text>巡排查隐患<text style="color: red;">*</text></text>
 				</view>
 				<view style="flex:12">
-					{{PatrolData.patrolPotentialPointNumber}}
+					<uni-easyinput
+					@input="pointnumber"
+					v-model="PatrolData.patrolPotentialPointNumber"
+					>
+					</uni-easyinput>
 				</view>	
 			</view>
 			
 			<view class="report-info-container">
-
+				<view style="flex:12">
+					<text>隐患点</text>
+				</view>
+				<view style="flex:12">
+					<uni-data-picker
+					:localdata="potentialPoint"
+					popup-title="隐患点"
+					@nodeclick="potentialChange" 
+					placeholder="请选择隐患点"
+					>
+					</uni-data-picker>
+				</view>
+			</view>
+			<view class="report-info-container" style="">
+				<div class="potentialpailie">
+					<view v-for="item in potentialData" :key ="item">
+							<view style="display: grid; grid-template-columns: 5fr 2fr 1fr; gap: 10px; align-items: center; border-bottom: 1px solid black;" >
+								<text>{{item.name}}</text>
+								<text>{{item.type}}</text>
+								<uni-icons type="closeempty" size="16" color="#000" @click="minus(item)"></uni-icons>
+							</view>
+					</view>
+				</div>
+				
 			</view>
 			
 			<view class="report-info-container">
@@ -68,7 +111,14 @@
 				<text>上报人<text style="color: red;">*</text></text>
 				</view>
 				<view style="flex:12">
-				{{PatrolData.reportPersonName}}
+				<uni-data-picker
+				v-model="PatrolData.reportPerson"
+				:localdata="options"
+				popup-title="请选择上报人"
+				@change="personChange" 
+				style="flex:6;background-color:  #F7F7F8;"
+				>
+				</uni-data-picker>
 				</view>
 			</view>
 			<view class="report-info-container">
@@ -76,7 +126,11 @@
 					<text>上报人手机号<text style="color: red;">*</text></text>
 				</view>
 				<view style="flex:12">
-					{{PatrolData.reportPersonMobile}}
+					<uni-easyinput
+					@input="mobile"
+					v-model=PatrolData.reportPersonMobile
+					>
+					</uni-easyinput>
 				</view>	
 			</view>
 			
@@ -87,7 +141,11 @@
 					<text>转移人数</text>
 				</view>	
 				<view style="flex:16">
-					{{PatrolData.numberOfPeopleTransferred}}
+					<uni-easyinput
+					v-model=PatrolData.numberOfPeopleTransferred
+					@input="peopletrans"
+					>
+					</uni-easyinput>
 				</view>	
 			</view>
 
@@ -96,7 +154,11 @@
 					<text>转移位置</text>
 				</view>	
 				<view style="flex:16">
-					{{PatrolData.transferPosition}}
+					<uni-easyinput
+					@input="locationtrans"
+					v-model=PatrolData.transferPosition
+					>
+					</uni-easyinput>
 				</view>	
 			</view>
 			<view class="report-input-container">
@@ -104,10 +166,14 @@
 					<text>转移原因</text>
 				</view>	
 				<view style="flex:16">
-					{{PatrolData.reasonForTransfer}}
+					<uni-easyinput
+					@input="reasontrans"
+					v-model=PatrolData.reasonForTransfer
+					>
+					</uni-easyinput>
 				</view>	
 			</view>
-	
+		</uni-forms>
 	</view>
 	<view class="report-container">
 				<button  @click="openMessageDialog" class="submit-button">提交并发送短信</button>
@@ -188,23 +254,9 @@
 				officePageInfo:{
 					dataAmount:0,
 					offset:0,
-					queryCount:99999,
+					queryCount:9999,
 					currentPage:0,
 				},
-				
-				id:0, // 使用 marker点击事件 需要填写id
-				title: 'map',
-				latitude: 39.909,
-				longitude: 116.39742,
-				covers: [{
-				latitude: 39.909,
-				longitude: 116.39742,
-				iconPath: '/static/locate.svg'
-				}, {
-				latitude: 39.90,
-				longitude: 116.39,
-				iconPath: '/static/locate.svg'
-				}],
 				statusBarHeight:0,
 				navBarHeight: 70,
 				createForm:{
@@ -221,12 +273,13 @@
 				potentialData:[],
 				options1:[],
 				potentialPoint:[],
-
+				choose:[],
+				point:[],
 			}
 		},
 		
 		
-		city:[					{value:'1',text:'汕头市'},					{value:'2',text:'长沙市'},				],				district:[					{value:'1',text:'金平区'},					{value:'2',text:'龙湖区'},					{value:'3',text:'澄海区'},					{value:'4',text:'濠江区'},					{value:'5',text:'潮阳区'},					{value:'6',text:'潮南区'},					{value:'7	',text:'南澳县'},				],
+		
 		
 		props:{
 			
@@ -345,7 +398,15 @@
 				})
 				.then(res=>{
 					if(res.code===2000){
+						uni.showToast({
+							title: `数据填报完成`,
+							duration: 2000
+						});
 					}else{
+						uni.showToast({
+							title: `数据填报失败`,
+							duration: 2000
+						});
 					}
 				})
 			},
@@ -462,7 +523,7 @@
 			margin: 5px 0;
 			display: flex;
 			align-items: center;
-			
+			border-bottom: 1px solid black;
 			padding: 10px;
 			background-color: white;
 		}
@@ -470,7 +531,7 @@
 			margin: 5px 0;
 			display: flex;
 			align-items: center;
-			
+			border-bottom: 1px solid black;
 			padding: 10px;
 			background-color: white;
 		}	

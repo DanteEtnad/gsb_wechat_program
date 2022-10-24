@@ -12,27 +12,32 @@
 							<uni-icons type="search" size="16" color="#fff"></uni-icons>
 						</button>
 					</uni-col>
-					
 				</uni-row>
+			<uni-forms :model="queryForm" ref="queryForm">
+				
 				<uni-row>
-					<uni-col :span="12">
-						<view class="query-select-input">
-							<text style="margin-right: 5px;flex:3">填报人</text>
-							<uni-col :span="15">
-							<uni-easyinput placeholder=" " v-model="queryForm.key"></uni-easyinput>
-						    </uni-col>
-						</view>
-						
-						
+					<uni-col :span="9"> 
+					<view class="query-select-input">
+						<text style="margin-right: 2px;flex:4">上报人</text>
+						<uni-data-picker
+						v-model="queryForm.key"
+						:localdata="options"
+						popup-title="请选择上报人"
+						@change="personChange" 
+						style="flex:6;"
+						>
+						</uni-data-picker>
+					</view>
 					</uni-col>
-					<uni-col :span="12"> 
+					<uni-col :span="15"> 
 						<view class="query-select-input">
-							<text style="margin-right: 5px;flex:4">审核情况</text>
-							<uni-data-select v-model="queryForm.level" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<text style="margin-right: 2px;flex:1">区镇</text>
+							<uni-data-picker v-model="queryForm.level" :localdata="SelectProvince" @change="areaChange"  style="flex:5"></uni-data-picker>
 						</view>
 					</uni-col>
 				</uni-row>
 			 
+			</uni-forms>
 			</uni-forms>
 		</view>
 		
@@ -76,7 +81,7 @@
 				<view class="alert-item-info">
 					<uni-row>
 						<uni-col :span="12">
-							<text>填报人：{{item.reportPersonName}}</text>
+							<text>填报人：{{memberList[item.reportPerson]}}</text>
 						</uni-col>
 						<uni-col :span="12">
 							<text>联系电话：{{item.reportPersonMobile}}</text>
@@ -87,30 +92,17 @@
 			
 		</view>
 	
-	<view>
-		<uni-row>
-		<uni-col span="12">
-			<button :disabled=bup @click="up()">
-				<text>上一页</text>
-			</button>
-		</uni-col>
-		<uni-col span="12">
-			<button :disabled=bdown @click="down()">
-				<text>下一页</text>
-			</button>
-		</uni-col>
-		</uni-row>
-	</view>
 	
 	</view>
 </template>
 
 <script>
 	import {request} from '@/utils/request.js'
-	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins} from "@/utils/mixins.js"
+	import {debounce} from "lodash"	
+	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins} from "@/utils/mixins.js"
 	//import {getClassList} from '@/servies/class.js'
 	export default {
-		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins],
+		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],
 		data() {
 			return {
 				bup:true,
@@ -121,7 +113,7 @@
 					dataAmount:0,
 					offset:0,
 					queryCount:8,
-					currentPage:0,
+					currentPage:1,
 				},
 				queryForm:{
 					key:'',
@@ -131,13 +123,9 @@
 					createMethod:'',
 					createTime:''
 				},
+				options:[],
+				SelectProvince:[],
 				selectId: [],
-				levelColor:{
-					'一级':'#DC0129',
-					'二级':'#EB9A03',
-					'三级':'#FCF66A',
-					'四级':'#019EF5'
-				},
 				alertLevels:[
 					{value:'1',text:'待审批'},
 					{value:'2',text:'通过'},
@@ -145,127 +133,97 @@
 					
 				],
 				officeData:[],
-				
+				PatrolRequestForm:{
+					patrolResultId:'',
+					administrativeRegion:'',
+					potentialType:'',
+					reportPerson:'',
+					reportPersonMobile:'',
+					patrolStartDate:'',
+					patrolEndDate:'',
+					approvalRemarks:'',
+				},
 				memberData:[],
+				memberList:{},
 				
-				alertData:[
-					{
-						level:'0次',
-						now:'0处',
-						status:'test1',
-						createMethod:'13111',
-						createTime:'2022-07-22 14:54:23'
-					},
-					{
-						level:'1次',
-						now:'3处',
-						status:'test2',
-						createMethod:'13112',
-						createTime:'2022-07-22 14:54:23'
-					},
-					{
-						level:'2次',
-						now:'5处',
-						status:'test3',
-						createMethod:'13113',
-						createTime:'2022-07-22 14:54:23'
-					},
-					{
-						level:'3次',
-						now:'0处',
-						status:'test4',
-						createMethod:'13114',
-						createTime:'2022-07-22 14:54:23'
-					}
-				]
 			}
 		},
 		created(){
 			this.getInfo();
 		},
 		mounted() {
+				this.getMemberData();
 				this.getInfo();
+				this.SelectProvince = this.getAreaOptions();
 				
 		
-		},	
+		},
+		onReachBottom() {
+			if(this.officeData.length<this.officePageInfo.dataAmount){
+				this.officePageInfo.currentPage++
+				this.getInfo()
+			}
+			else{
+			uni.showToast({
+				title: `已经到底了`,
+				duration: 2000
+			});
+			}
+		},
 		methods: {
-			down(){
-				this.officePageInfo.offset+=8;
-				this.getInfo();
-				this.page+=1;
-				if(this.page!=0){
-					this.bup=false;
+			areaChange(e) {
+				if (e.detail.value[2]==null){
+					this.PatrolRequestForm.administrativeRegion=""
 				}
-				if(this.page==this.totalpage){
-					this.bdown=true;
+				else {
+					this.PatrolRequestForm.administrativeRegion=e.detail.value[2].value//440507007
+					// this.PatrolRequestForm.administrativeRegion="440507"//
 				}
-				//取消选中时删除数组中的值
-				for (var i = 0; i < this.selectId.length; i++) {
-				    this.list[this.selectId[i]].selected = false;
-				    this.list[this.selectId[i]].unselected = true; 
-				}
-				this.selectId=[];
+				console.log("this.PatrolRequestForm.administrativeRegion",this.PatrolRequestForm.administrativeRegion)
+				this.officeData=[]
+				this.officePageInfo.currentPage=1
+				this.getInfo()
 			},
-			up(){
-				this.officePageInfo.offset-=8;
-				this.getInfo();
-				this.page-=1;
-				if(this.page==0){
-					this.bup=true;
+			personChange(e) {
+				if (e.detail.value[0]==null){
+					this.PatrolRequestForm.reportPerson=""
 				}
-				if(this.page!=this.totalpage){
-					this.bdown=false;
+				else{
+				this.PatrolRequestForm.reportPerson=e.detail.value[0].value
 				}
-			
-				//取消选中时删除数组中的值
-				for (var i = 0; i < this.selectId.length; i++) {
-				    this.list[this.selectId[i]].selected = false;
-				    this.list[this.selectId[i]].unselected = true; 
-				}
-				this.selectId=[];
+				this.officeData=[]
+				this.officePageInfo.currentPage=1
+				this.getInfo()
 			},
-			getInfo(){
+			getInfo:debounce(function(reset=false){
+				uni.showLoading({
+					title: '加载中'
+				});
 				request({
 					method:'POST',
 					url:'patrolManage/patrolResultQuery',
 					data:{
-						PatrolResultQueryReq:{
-							patrolResultId:'',
-							administrativeRegion:'',
-							potentialType:'',
-							reportPerson:'',
-							reportPersonMobile:'',
-							patrolStartDate:'',
-							patrolEndDate:'',
-							approvalRemarks:'',
-							approvalResults:'',
-						},
+						PatrolResultQueryReq:this.PatrolRequestForm,
 						QueryPagingParamsReq:{
-							offset:this.officePageInfo.offset,
+							offset: (this.officePageInfo.currentPage - 1) * this.officePageInfo.queryCount,
 							queryCount:this.officePageInfo.queryCount
-							
 						}
 						
 					}
 				})
 				.then(res=>{
-					this.officeData=res.data.PatrolResultQueryRsp
+					uni.hideLoading();
+					uni.showToast({
+						title: `加载完成`,
+						duration: 2000
+					});
+					this.officeData = [...this.officeData,...res.data.PatrolResultQueryRsp]
 					this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
-					console.log("总数",this.officePageInfo.dataAmount)
-					this.totalpage=Math.floor(parseInt(this.officePageInfo.dataAmount)/parseInt(this.officePageInfo.queryCount));
-					if(this.totalpage==0){
-						this.bdown=true
-						console.log("总页数",this.totalpage)
-					}
-					console.log("@res@",res)
-					this.getMemberData()
-					
 				})
 				.catch(error=>{
 					console.log(error)
 				})
-				console.log(this.officeData)
-			},
+			},300),
 			getMemberData(){
 				request({
 					method:'GET',
@@ -273,25 +231,28 @@
 				})
 				.then(res=>{
 					if(res.code===2000){
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载完成`,
+							duration: 2000
+						});
 						this.memberData=res.data.MembersIdAndNameRsp
 					}else{
 						this.$message.error(res.message)
 					}
 					console.log("成员",this.memberData)
-					for(var j=0; j<this.officeData.length; j++){
-						for(var i=0; i<this.memberData.length; i++){
-							if(this.officeData[j].reportPerson==this.memberData[i].memberId){
-								this.officeData[j].reportPersonName=this.memberData[i].memberName
-							}
-
-						}
+					for(var i=0; i<this.memberData.length; i++){
+						this.memberList[this.memberData[i].memberId]=this.memberData[i].memberName
+						this.options.push({text:this.memberData[i].memberName,
+						value:this.memberData[i].memberId
+						})
 					}
 					console.log("成员",this.officeData)
 				})
 			},
 			
-			
 			async openCheckDialog(item){
+				item.reportPersonName=this.memberList[item.reportPerson]
 				const response = await uni.navigateTo({
 					url:'/pages/patrolManagement/PatrolResultApprovaldetails',
 				})

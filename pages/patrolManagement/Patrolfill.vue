@@ -88,7 +88,7 @@
 				<view class="alert-item-info">
 					<uni-row>
 						<uni-col :span="12">
-							<text>填报人：{{item.reportPersonName}}</text>
+							<text>填报人：{{memberList[item.reportPerson]}}</text>
 						</uni-col>
 						<uni-col :span="12">
 							<text>联系电话：{{item.reportPersonMobile}}</text>
@@ -192,6 +192,7 @@
 			this.getInfo();
 		},
 		mounted() {
+				this.getMemberData();
 				this.getInfo();
 				this.SelectProvince = this.getAreaOptions();
 		
@@ -276,15 +277,20 @@
 					}
 				})
 				.then(res=>{
+					uni.hideLoading();
+					uni.showToast({
+						title: `加载完成`,
+						duration: 2000
+					});
 					this.officeData = [...this.officeData,...res.data.PatrolResultQueryRsp]
 					this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
-					this.getMemberData()
 				})
 				.catch(error=>{
 					console.log(error)
 				})
 			},300),
 			async openCheckDialog1(item){
+				item.reportPersonName=this.memberList[item.reportPerson]
 				const response = await uni.navigateTo({
 					url:'/pages/patrolManagement/Patrolfilldetails',
 				})

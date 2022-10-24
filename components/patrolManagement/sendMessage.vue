@@ -209,7 +209,7 @@
 					})
 				}
 			},
-			//上传灾害信息
+			//审核信息
 			upload() {
 				console.log('aaaaaaaaaaaaaaaaa',this.Patrol)
 				request({
