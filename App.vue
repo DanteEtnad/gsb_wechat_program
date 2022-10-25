@@ -8,7 +8,7 @@
 		onLaunch: function() {
 			if(uni.getStorageSync('token')){
 				uni.redirectTo({
-					url:'/pages/index_normal/index_normal'
+					url:'/pages_index_normal/index_normal'
 				})
 			}
 		},

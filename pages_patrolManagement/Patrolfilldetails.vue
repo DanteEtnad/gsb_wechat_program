@@ -189,7 +189,7 @@
 
 <script>
 	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,getAreaOptionsMixins,getMemberOptionsMixins} from "@/utils/mixins.js"
-	import sendMessage from '@/pages_components/DisaterRecord/sendMessage.vue'
+	import sendMessage from '@/pages_patrolManagement/components/sendMessage.vue'
 	import {request} from '@/utils/request.js'
 	function getDate(type) {
 	    const date = new Date();

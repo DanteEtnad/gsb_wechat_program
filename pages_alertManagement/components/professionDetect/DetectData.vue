@@ -35,7 +35,7 @@
 </template>
 
 <script>
-	import * as echarts from '@/uni_modules/lime-echart/static/echarts.min.js';
+	import * as echarts from '@/pages_alertManagement/components/echarts.min.js';
 	// import myEcharts from '@/components/mpvue-echarts/src/echarts.vue';
 	import LEchart from '@/uni_modules/lime-echart/components/l-echart/l-echart.vue';
 	import {getNowDateMixins} from "@/utils/mixins.js"

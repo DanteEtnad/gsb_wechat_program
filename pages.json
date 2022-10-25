@@ -16,9 +16,13 @@
 				"navigationStyle": "custom",
 				"backgroundColor": "#E5E5E5"
 			}
-		},
+		}
+		],	
+		"subPackages": [
 		{
-			"path": "pages/index_normal/index_normal",
+			"root": "pages_index_normal",
+			"pages": [{
+			"path": "index_normal",
 			"style": {
 				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
 				"backgroundColor": "#ff0000"
@@ -26,15 +30,14 @@
 
 		},
 		{
-			"path": "pages/index_normal/index_feizhuanye",
+			"path": "index_feizhuanye",
 			"style": {
 				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
 				"backgroundColor": "#ff0000"
 			}
 		
-		}
-		],	
-		"subPackages": [
+		}]
+		},
 		{
 				"root": "pages_alertManagement",
 				"pages": [
@@ -329,71 +332,6 @@
 					        "navigationBarTitleText" : "巡排查数据审核",
 					        "enablePullDownRefresh" : false
 					    }
-					}
-				]
-			},
-			{
-				"root": "pages_components",
-				"pages": [
-					{
-						"path" : "alertManagement/AlertMapMode"
-					},
-					{
-						"path" : "alertManagement/AlertTextMode"
-					},
-					{
-						"path" : "DailyPatrol/NotePotentialMode"
-					},
-					{
-						"path" : "DailyPatrol/NoteUserMode"
-					},
-					{
-						"path" : "DisaterRecord/BasicInformationChangeMode"
-					},
-					{
-						"path" : "DisaterRecord/BasicInformationCheckMode"
-					},
-					{
-						"path" : "DisaterRecord/BasicInformationMode"
-					},
-					{
-						"path" : "DisaterRecord/DisasterInformationChangeMode"
-					},
-					{
-						"path" : "DisaterRecord/DisasterInformationCheckMode"
-					},
-					{
-						"path" : "DisaterRecord/DisasterInformationMode"
-					},
-					{
-						"path" : "DisaterRecord/mapDisatserMode"
-					},
-					{
-						"path" : "DisaterRecord/mapMode"
-					},
-					{
-						"path" : "DisaterRecord/navBarMode"
-					},
-					{
-						"path" : "DisaterRecord/sendMessage"
-					},
-					{
-						"path" : "DisaterRecord/sendMessageTochang"
-					},
-					{
-						"path" : "patrolManagement/sendMessage"
-					},
-					{
-						"path" : "professionDetect/DetectData"
-					},
-					{
-						"path" : "professionDetect/DetectPicture"
-					},
-					{
-						"path" : "professionDetect/DetectInfo"
-					},
-					{
-						"path" : "Message"
 					}
 				]
 			}

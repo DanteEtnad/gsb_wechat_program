@@ -111,7 +111,7 @@ methods: {
 					let token = uni.getStorageSync('token')
 					console.log("token",token)
 					uni.navigateTo({
-					url:'/pages/index_normal/index_normal?phone='+this.memberMobile
+					url:'/pages_index_normal/index_normal?phone='+this.memberMobile
 						})
 					uni.$u.toast('登录成功')
 				})

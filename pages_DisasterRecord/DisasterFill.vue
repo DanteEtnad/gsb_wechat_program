@@ -61,10 +61,10 @@
 
 <script>
 	import {request} from '@/utils/request.js'
-	import DisasterInformationMode  from "@/pages_components/DisaterRecord/DisasterInformationMode.vue"
-	import BasicInformationMode from '@/pages_components/DisaterRecord/BasicInformationMode.vue'
-	import sendMessage from '@/pages_components/DisaterRecord/sendMessage.vue'
-	import mapMode from '@/pages_components/DisaterRecord/mapMode.vue'
+	import DisasterInformationMode  from "@/pages_DisasterRecord/components/DisasterInformationMode.vue"
+	import BasicInformationMode from '@/pages_DisasterRecord/components/BasicInformationMode.vue'
+	import sendMessage from '@/pages_DisasterRecord/components/sendMessage.vue'
+	import mapMode from '@/pages_DisasterRecord/components/mapMode.vue'
 	export default {
 		components:{
 			DisasterInformationMode,

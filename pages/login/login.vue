@@ -152,7 +152,7 @@ methods: {
 						let token = uni.getStorageSync('token')
 						console.log("token",token)
 						uni.navigateTo({
-						url:'/pages/index_normal/index_feizhuanye'
+						url:'/pages_index_normal/index_feizhuanye'
 							})
 						uni.$u.toast('登录成功')
 					})

@@ -227,7 +227,7 @@
 
 <script>
 	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins} from "@/utils/mixins.js"
-	import sendMessage from '@/pages_components/patrolManagement/sendMessage.vue'
+	import sendMessage from '@/pages_patrolManagement/components/sendMessage.vue'
 	import {request} from '@/utils/request.js'
 	export default {
 		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],

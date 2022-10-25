@@ -11,8 +11,8 @@
 <script>
 	import {request} from '@/utils/request.js'
 	
-	import NotePotentialMode from '@/pages_components/DailyPatrol/NotePotentialMode.vue'
-	import NoteUserMode from '@/pages_components/DailyPatrol/NoteUserMode.vue'
+	import NotePotentialMode from '@/pages_DailyPatrol/components/NotePotentialMode.vue'
+	import NoteUserMode from '@/pages_DailyPatrol/components/NoteUserMode.vue'
 	export default {
 		components:{
 			NotePotentialMode,
