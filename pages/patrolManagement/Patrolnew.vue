@@ -214,21 +214,18 @@
 				area:'',
 				PatrolResultCreateReq:{
 					administrativeRegion: '',
-					numberOfPeopleTransferred: '',
-					patrolArea:'',
-					patrolEndDate:getDate({ format: true}),
 					patrolNumber:'',
-					patrolPlanDescription:'',
-					patrolPlanFrequency:'',
-					patrolPlanName:'',
-					patrolPlanType:'',
 					patrolPotentialPointNumber:'',
-					patrolStartDate:getDate({ format: true}),
-					patrolTeamId:'',
-					potentialPointId:'',
-					potentialType:'',
-					reportPerson:'',
+					potentialPointId:[],
+					potentialType:[],
+					eportPerson:'',
 					reportPersonMobile:'',
+					patrolEndDate:getDate({ format: true}),
+					patrolStartDate:getDate({ format: true}),
+					numberOfPeopleTransferred: '',
+					transferPosition:'',
+					reasonForTransfer:'',
+					
 				},
 				
 				
@@ -268,6 +265,7 @@
 				potentialPoint:[],
 				choose:[],
 				point:[],
+				potentialList:{},
 			}
 		},
 		

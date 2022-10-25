@@ -241,11 +241,6 @@
 				})
 				.then(res=>{
 					if(res.code===2000){
-						uni.hideLoading();
-						uni.showToast({
-							title: `加载完成`,
-							duration: 2000
-						});
 						this.memberData=res.data.MembersIdAndNameRsp
 					}else{
 						this.$message.error(res.message)

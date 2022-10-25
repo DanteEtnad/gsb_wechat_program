@@ -4,15 +4,16 @@
 			<u--text color="#000000" size=16px text="欢迎登录"></u--text>
 			<u--text color="#000000" size=18px text="汕头市地址灾害气象预报预警平台"></u--text>
 		</view>
-		<view class="form" style="margin-top: 20%; margin-left: 10%;">
+		<view class="form" style="margin-top: 20%; margin-left: 10%;margin-right: 10%;">
 			<u--form
+							label-width="70"
 							labelPosition="left"
 							:model="model1"
 							:rules="rules"
 							ref="form1"
 					>
 						<u-form-item
-								label="账号"
+								label="手机号"
 								prop="userInfo.name"
 								borderBottom
 								ref="item1"
@@ -20,36 +21,52 @@
 							<u--input
 									v-model="model1.userInfo.name"
 									border="none"
-									placeholder="请输入手机号或者成员编号"
+									placeholder="请输入手机号"
+									@input = 'obtain'
 							></u--input>
 						</u-form-item>
+						<u-button
+							text="发送验证码"
+							@click="getVerifyCode"
+						></u-button>
 						<u-form-item
-								label="密码"
+								
+								label="验证码"
 								prop="code"
 								borderBottom
 							>
 								<u--input
 									v-model="model1.code"
 									border="none"
-									placeholder="请填写密码"
+									placeholder="请填验证码"
+									@input="inputcode"
 								></u--input>
 						</u-form-item>			
 					</u--form>
 					<u-button
 						type="primary"
 						text="登录"
-						customStyle="margin-top: 50px"
 						@click="submit"
-					></u-button>				
+					></u-button>	
+						<view style="margin-top:15px;">
+							<u-button
+								text="专业用户登录"
+								@click="tologinside"
+							></u-button>	
+						</view>
 		</view>
+
 	</view>
 </template>
 
 <script>
-	import {requestAuthority} from '@/utils/request.js'
-export default {
+	import {requestAuthority,request,requestAuthority1} from '@/utils/request.js'
+	export default {
 	data() {
 		return {
+			memberData:{},
+			phoneNumber:"",
+			phonecode:'',
 			model1: {
 				userInfo: {
 					name: '',
@@ -60,50 +77,88 @@ export default {
 				'userInfo.name': {
 					type: 'string',
 					required: true,
-					message: '请填写账号',
+					message: '请填写手机号',
 					trigger: ['blur', 'change']
 				},
 			code: {
 				type: 'string',
 					required: true,
-					message: '请填写密码',
+					message: '请填写验证码',
 					trigger: ['blur']
 			},				
 			},
-
-		};
+		}
 	},
-	methods: {
-		submit() {
-			// console.log('name', this.model1.userInfo.name);
-			// // 如果有错误，会在catch中返回报错信息数组，校验通过则在then中返回true
-			// this.$refs.form1.validate().then(res => {
-			// 	uni.$u.toast('登录成功')
-			// 	uni.navigateTo({
-			// 		url:'/pages/index_normal/index_normal?name=' + this.model1.userInfo.name
-			// 	})
-			// }).catch(errors => {
-			// 	uni.$u.toast('登录失败')
-			// })
-			uni.setStorageSync('token',"W92Mtj8biO0RRQOlWsQqPyjJDCvrN3pFEWgRvdh/fikuS+c8xZwLTUakS1xEsB/yVmM0AztR2rFDx9571bN6FymzL1OVUjCFo3pb+hs+lvOxspvV5Ei7EKzeGRu8GoCI2xQH3vhCOWLw9jvtQim0WMyXLrq3xUkfF2pU/KPoSryEGKJP6x/IoREqL9zuZg7w+7Asr9gC2xHIN3eGZ9GFiuNniJ72L+g4yzfBP4DVfoC8gA/tQbNQswM5Ne12JZeHmFX9jTjerSFa1Fm6EdIGEfgFIvZ6ldV6UeLMmgfzGjpGodiVGZ9X+VATeAKsYTNOFgkV8OEVncmGtGUfm8zhOw==")
-			requestAuthority({
-				method:'POST',
-				url:'login/login',
-				data:{
-					UserLoginReq:{
-						"memberMobile": "13512345678",
-						"memberLoginPassword": "c6f057b86584942e415435ffb1fa93d4"
-					}
-				}
-			})
-			.then(res=>{
-
-				uni.$u.toast('登录成功')
-				uni.navigateTo({
-					url:'/pages/index_normal/index_normal'
-				})
-			}) 
+methods: {
+	tologinside(){
+		uni.navigateTo({
+			url:'/pages/login/logininside'
+		})
+	},
+	obtain(e){
+		this.phoneNumber=e;
+		console.log(e);
 		},
+	inputcode(e) {
+		this.phonecode=e;
+		console.log(e);
 	},
-}
+			getVerifyCode(){
+						requestAuthority1({
+							method:'POST',
+							url:'login/verifyCode',
+							data:{
+								LoginVerifyCodeReq:{
+									"userPhone":this.phoneNumber,
+								}
+							},
+						})
+						.then(res=>{
+							console.log("@res@",res)
+						})
+						.catch(error=>{
+							console.log(error)
+						})
+					},
+				submit(){
+					requestAuthority1({
+					method:'POST',
+					url:'login/login',
+					data:{
+					LoginReq :{
+							"userPhone":this.phoneNumber,
+							"verifyCode":this.phonecode,
+						}
+					}
+				})
+				.then(res=>{
+						uni.setStorageSync('token',res.data.tokenRsp.token)
+						let token = uni.getStorageSync('token')
+						console.log("token",token)
+						uni.navigateTo({
+						url:'/pages/index_normal/index_feizhuanye'
+							})
+						uni.$u.toast('登录成功')
+					})
+					.catch(error=>{
+						uni.$u.toast('验证码错误')
+					})
+			},
+			},
+		}
+		// 	console.log("this.phoneNumber",this.phoneNumber);
+		// 	console.log("this.phonecode",this.phonecode);
 </script>
+
+
+<style lang="scss" scoped>
+.box {
+    font-size: 15px;
+	color: red;
+	font-weight: bold;
+}
+.form{
+	font-size: 10px;
+	color: red;
+}
+</style>

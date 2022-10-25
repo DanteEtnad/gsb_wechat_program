@@ -9,14 +9,31 @@
 				"navigationStyle": "custom",
 				"backgroundColor": "#E5E5E5"
 			}
-		}, {
+		},
+		{
+			"path": "pages/login/logininside",
+			"style": {
+				"navigationStyle": "custom",
+				"backgroundColor": "#E5E5E5"
+			}
+		},
+		{
 			"path": "pages/index_normal/index_normal",
 			"style": {
 				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
 				"backgroundColor": "#ff0000"
 			}
 
-		}, {
+		}
+		,{
+			"path": "pages/index_normal/index_feizhuanye",
+			"style": {
+				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
+				"backgroundColor": "#ff0000"
+			}
+		
+		}, 
+		{
 			"path": "pages/alertManagement/DaliyAlert",
 			"style": {
 				"navigationBarTitleText": "今日预警",

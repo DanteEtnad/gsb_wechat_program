@@ -6,10 +6,10 @@
 					<view class="demo-layout bg-pure-write">
 						<view style="display: flex;">
 							<u--image class="logo" src="/static/index_normal/user.svg" width="17px" height="20px"></u--image>
-							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{name}}</text>
+							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{memberName}}</text>
 						</view>
 						<view>
-							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{phonenum}}</text>
+							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{memberPhone}}</text>
 						</view>
 					</view>
 				</uni-col>
@@ -212,20 +212,87 @@
 </template>
 
 <script>
+	import {requestAuthority,request,requestAuthority1} from '@/utils/request.js'
 	export default {
 		data() {
 			return {
+				code:'',
 				user_id: "adfa1",
-				name: "123",
-				phonenum:"13500000012"
+				memberData:[],
+				memberList:{},
+				memberName: "",
+				memberPhone:"",
+				MemberQuery:{
+					memberId:"",
+					unitId:"",
+					memberName:"",
+					memberStatus:"",
+					memberGender:"",
+					memberIdentityCard:"",
+				},
+				QueryPagingParams:{
+					queryCount:9999,
+					offset:0,
+				},
+				
 			}
+		},
+		onLoad(options){
+			this.code=options.phone
+			this.getUserInfo()
+			console.log("this.MemberQuery.memberId",this.MemberQuery.memberId)
+		},
+		mounted() {
+			this.getUserInfo()
 		},
 		methods:{
 			toPages(pageName){
 				console.log(pageName)
 				uni.navigateTo({
-          url:`/pages/${pageName}`
-        })
+	      url:`/pages/${pageName}`
+	    })
+			},
+			getname(){
+				
+			},
+			getUserInfo(){
+				requestAuthority({
+						method:'post',
+						url:'member/query',
+						data:{
+							MemberQueryReq:this.MemberQuery,
+							QueryPagingParamsReq:this.QueryPagingParams
+						}
+					})
+					.then(res=>{
+						this.memberData=res.data.MemberQueryRsp
+						let phoneReg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+						if(phoneReg.test(this.code)){
+							console.log("是电话")
+							console.log("Data",this.memberData)
+							for(var i=0;i<this.memberData.length;i++){
+								
+								if(this.memberData[i].memberMobile==this.code){
+									console.log("找到了",i)
+									this.memberName=this.memberData[i].memberName
+									this.memberPhone=this.memberData[i].memberMobile
+								}
+							}
+							
+						}else{
+							console.log("是编号")
+							for(var i=0;i<this.memberData.length;i++){
+								if(this.memberData[i].memberId==this.code){
+									console.log("找到了",i)
+									this.memberName=this.memberData[i].memberName
+									this.memberPhone=this.memberData[i].memberMobile
+								}
+							}
+						
+						}
+							console.log("@res@",res)
+							console.log("this.memberData",this.memberData)
+						})
 			}
 		}
 	}
