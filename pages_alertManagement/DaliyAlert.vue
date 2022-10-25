@@ -11,8 +11,8 @@
 <script>
 	import {dataCodeTransformMixins} from '@/utils/mixins.js'
 	import {request} from '@/utils/request.js'
-	import alertTextMode from '@/components/alertManagement/AlertTextMode.vue'
-	import alertMapMode from '@/components/alertManagement/AlertMapMode.vue'
+	import alertTextMode from '@/pages_components/alertManagement/AlertTextMode.vue'
+	import alertMapMode from '@/pages_components/alertManagement/AlertMapMode.vue'
 	export default {
 		components:{
 			alertTextMode,

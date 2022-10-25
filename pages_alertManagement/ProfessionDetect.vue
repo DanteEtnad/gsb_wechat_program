@@ -46,9 +46,9 @@
 </template>
 
 <script>
-	import DetectData from "@/components/professionDetect/DetectData.vue"
-	import DetectInfo from "@/components/professionDetect/DetectInfo.vue"
-	import DetectPicture from "@/components/professionDetect/DetectPicture.vue"
+	import DetectData from "@/pages_components/professionDetect/DetectData.vue"
+	import DetectInfo from "@/pages_components/professionDetect/DetectInfo.vue"
+	import DetectPicture from "@/pages_components/professionDetect/DetectPicture.vue"
 	import { request } from "@/utils/request"
 	// import { loadModules } from "esri-loader";
 	export default{

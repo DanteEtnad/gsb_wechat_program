@@ -113,8 +113,8 @@
 
 <script>
 	import {dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins} from "@/utils/mixins.js"
-	import mapDisatserMode from '@/components/DisaterRecord/mapDisatserMode.vue'
-	import navBarMode from '@/components/DisaterRecord/navBarMode.vue'
+	import mapDisatserMode from '@/pages_components/DisaterRecord/mapDisatserMode.vue'
+	import navBarMode from '@/pages_components/DisaterRecord/navBarMode.vue'
 	//将度转换成为度分秒
 	import {request} from '@/utils/request.js'
 	export default {

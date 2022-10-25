@@ -70,10 +70,10 @@
 
 <script>
 	import {request} from '@/utils/request.js'
-	import DisasterInformationCheckMode  from "@/components/DisaterRecord/DisasterInformationCheckMode.vue"
-	import BasicInformationCheckMode from '@/components/DisaterRecord/BasicInformationCheckMode.vue'
-	import sendMessageTochang from '@/components/DisaterRecord/sendMessageTochang.vue'
-	import mapMode from '@/components/DisaterRecord/mapMode.vue'
+	import DisasterInformationCheckMode  from "@/pages_components/DisaterRecord/DisasterInformationCheckMode.vue"
+	import BasicInformationCheckMode from '@/pages_components/DisaterRecord/BasicInformationCheckMode.vue'
+	import sendMessageTochang from '@/pages_components/DisaterRecord/sendMessageTochang.vue'
+	import mapMode from '@/pages_components/DisaterRecord/mapMode.vue'
 	export default {
 		components:{
 			DisasterInformationCheckMode,
