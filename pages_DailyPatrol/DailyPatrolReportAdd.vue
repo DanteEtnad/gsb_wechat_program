@@ -356,7 +356,7 @@
 			
 			async openPatrolReportDialog(item){
 				const response = await uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolReportDialog',
+					url:'/pages_DailyPatrol/DailyPatrolReportDialog',
 				})
 				response[1].eventChannel.emit('openCheckDialog',{
 					item: item

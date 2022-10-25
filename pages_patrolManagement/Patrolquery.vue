@@ -114,7 +114,6 @@
 			this.getInfo();
 		},
 		mounted() {
-				this.getMemberData()
 				this.getInfo();
 				this.SelectProvince = this.getAreaOptions();
 				
@@ -174,13 +173,9 @@
 					}
 				})
 				.then(res=>{
-					uni.hideLoading();
-					uni.showToast({
-						title: `加载完成`,
-						duration: 2000
-					});
 					this.officeData = [...this.officeData,...res.data.PatrolResultQueryRsp]
 					this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
+					this.getMemberData()
 				})
 				.catch(error=>{
 					console.log(error)
@@ -198,9 +193,6 @@
 				this.getInfo()
 			},
 			getMemberData(){
-				uni.showLoading({
-					title: '加载中'
-				});
 				request({
 					method:'GET',
 					url:'member/getAllMembersIdAndName',
@@ -233,7 +225,7 @@
 			},
 			async openCheckDialog(item){
 				const response = await uni.navigateTo({
-					url:'/pages/patrolManagement/Patrolnewdetails',
+					url:'/pages_patrolManagement/Patrolnewdetails',
 				})
 				response[1].eventChannel.emit('openCheckDialog',{
 					item: item

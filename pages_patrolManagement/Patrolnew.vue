@@ -13,7 +13,6 @@
 							<view class="select-input">
 								<uni-data-picker
 								:localdata="options1"
-								v-model="PatrolData.administrativeRegion"
 								popup-title="请选择地区"
 								@change="areaChange" 
 								style="flex:6;background-color:  #F7F7F8;"
@@ -59,7 +58,6 @@
 				</view>
 				<view style="flex:12">
 					<uni-easyinput
-					v-model="PatrolData.patrolNumber"
 					@input="number"
 					>
 					</uni-easyinput>
@@ -73,7 +71,6 @@
 				<view style="flex:12">
 					<uni-easyinput
 					@input="pointnumber"
-					v-model="PatrolData.patrolPotentialPointNumber"
 					>
 					</uni-easyinput>
 				</view>	
@@ -112,7 +109,6 @@
 				</view>
 				<view style="flex:12">
 				<uni-data-picker
-				v-model="PatrolData.reportPerson"
 				:localdata="options"
 				popup-title="请选择上报人"
 				@change="personChange" 
@@ -128,7 +124,6 @@
 				<view style="flex:12">
 					<uni-easyinput
 					@input="mobile"
-					v-model=PatrolData.reportPersonMobile
 					>
 					</uni-easyinput>
 				</view>	
@@ -142,7 +137,6 @@
 				</view>	
 				<view style="flex:16">
 					<uni-easyinput
-					v-model=PatrolData.numberOfPeopleTransferred
 					@input="peopletrans"
 					>
 					</uni-easyinput>
@@ -156,7 +150,6 @@
 				<view style="flex:16">
 					<uni-easyinput
 					@input="locationtrans"
-					v-model=PatrolData.transferPosition
 					>
 					</uni-easyinput>
 				</view>	
@@ -168,7 +161,6 @@
 				<view style="flex:16">
 					<uni-easyinput
 					@input="reasontrans"
-					v-model=PatrolData.reasonForTransfer
 					>
 					</uni-easyinput>
 				</view>	
@@ -176,7 +168,7 @@
 		</uni-forms>
 	</view>
 	<view class="report-container">
-				<button  @click="openMessageDialog" class="submit-button">修改并发送短信</button>
+				<button  @click="openMessageDialog" class="submit-button">提交并发送短信</button>
 				<uni-popup ref="message" background-color="#fff">
 					<sendMessage  @closeDialog="closeMessageDialog" @afterSendMessage="afterSendMessage" :DisasterRecordForm="DisasterRecordForm"></sendMessage>
 				</uni-popup>
@@ -207,7 +199,6 @@
 	}
 	export default {
 		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,getAreaOptionsMixins,getMemberOptionsMixins],
-		
 		components:{
 	
 			sendMessage,
@@ -216,32 +207,28 @@
 		},
 		data() {
 			return {
-				Patrol:{
-					approvalResults:'',
-					patrolResultId:'',
-					approvalRemarks:'',
-					
-				},
-				PatrolData:[],
 				datestart: getDate({ format: true}),
 				dateend: getDate({ format: true}),
 				startDate: getDate('start'),
 				endDate: getDate('end'),
 				area:'',
-				PatrolResultMaintainReq:{
+				PatrolResultCreateReq:{
 					administrativeRegion: '',
 					patrolNumber:'',
 					patrolPotentialPointNumber:'',
 					potentialPointId:[],
 					potentialType:[],
-					eportPerson:'',
+					reportPerson:'',
 					reportPersonMobile:'',
 					patrolEndDate:getDate({ format: true}),
 					patrolStartDate:getDate({ format: true}),
 					numberOfPeopleTransferred: '',
 					transferPosition:'',
 					reasonForTransfer:'',
+					
 				},
+				
+				
 				
 				PotentialPointSurveyQueryReq:{
 				potentialPointBelongCity:'',
@@ -256,9 +243,10 @@
 				officePageInfo:{
 					dataAmount:0,
 					offset:0,
-					queryCount:9999,
+					queryCount:99999,
 					currentPage:0,
 				},
+				
 				statusBarHeight:0,
 				navBarHeight: 70,
 				createForm:{
@@ -270,7 +258,6 @@
 				popupLevel:'',
 				popupData:{},
 				DailyPatrolResult:{},
-				potentialList:{},
 				options:[],
 				memberData:[],
 				potentialData:[],
@@ -278,10 +265,9 @@
 				potentialPoint:[],
 				choose:[],
 				point:[],
+				potentialList:{},
 			}
 		},
-		
-		
 		
 		
 		props:{
@@ -294,19 +280,47 @@
 			this.getPotentialPointQueryData();
 		},
 		
-		onLoad: function(option) {
-			const eventChannel = this.getOpenerEventChannel();
-			eventChannel.on('openCheckDialog',data=>{
-				this.PatrolData= data.item
-				this.PatrolResultMaintainReq=data.item
-				console.log("this.PatrolData",this.PatrolData)
-				console.log("this.administrativeRegion",this.administrativeRegion)
-				
-			})
-		},
-		
 		
 		methods: {
+
+			//发灾时间
+			PatrolStartDateChange: function(e) {
+			    this.PatrolResultCreateReq.patrolStartDate =e.detail.value
+				this.datestart=e.detail.value
+				console.log("填报内容",this.PatrolResultCreateReq)
+			        },
+			PatrolEndDateChange: function(e) {
+			    this.PatrolResultCreateReq.patrolEndDate =e.detail.value
+				this.dateend=e.detail.value
+				console.log("填报内容",this.PatrolResultCreateReq)
+			        },
+			//时间映射
+			timeTypeChange(Date){
+				var timeTransform;
+				timeTransform = Date.slice(0, 4)  + Date.slice(5, 7) + Date.slice(8, 10);
+				return timeTransform;
+			},
+			number(e){
+				this.PatrolResultCreateReq.patrolNumber=e
+				console.log("填报内容",this.PatrolResultCreateReq)
+			},
+			pointnumber(e){
+				this.PatrolResultCreateReq.patrolPotentialPointNumber=e
+				console.log("填报内容",this.PatrolResultCreateReq)
+			},
+			
+			peopletrans(e){
+				this.PatrolResultCreateReq.numberOfPeopleTransferred=e
+				console.log("填报内容",this.DailyPatrolResultCreateReq)
+			},
+			locationtrans(e){
+				this.PatrolResultCreateReq.transferPosition=e
+				console.log("填报内容",this.PatrolResultCreateReq)
+			},			
+			reasontrans(e){
+				this.PatrolResultCreateReq.reasonForTransfer=e
+				console.log("填报内容",this.PatrolResultCreateReq)
+			},
 			potentialChange(e){
 				this.potentialData.push({
 						type:'未选择',
@@ -331,18 +345,16 @@
 						}
 					}
 					}
-					console.log("隐患点内容",this.potentialData)
 					this.maintain()
 			},
 			maintain(){
-				this.PatrolResultMaintainReq.potentialPointId=[]
-				this.PatrolResultMaintainReq.potentialType=[]
+				this.PatrolResultCreateReq.potentialPointId=[]
+				this.PatrolResultCreateReq.potentialType=[]
 				for(var i=0; i<this.choose.length; i++){
-					this.PatrolResultMaintainReq.potentialPointId.push(this.PotentialPointData[this.choose[i]].potentialPointId)
-					this.PatrolResultMaintainReq.potentialType.push(this.PotentialPointData[this.choose[i]].potentialPointType)
+					this.PatrolResultCreateReq.potentialPointId.push(this.PotentialPointData[this.choose[i]].potentialPointId)
+					this.PatrolResultCreateReq.potentialType.push(this.PotentialPointData[this.choose[i]].potentialPointType)
 				}
-				console.log("隐患点内容",this.potentialData)
-				console.log("填报内容",this.PatrolResultMaintainReq)
+				console.log("填报内容",this.PatrolResultCreateReq)
 			},
 			minus(item){
 				for(var i=item.number+1; i<this.potentialData.length; i++){
@@ -355,70 +367,24 @@
 						this.choose.splice(j,1)
 					}
 				}
-				console.log("choose内容",this.choose)
 				this.maintain()
 				this.potentialData.splice(item.number,1);
-				console.log("隐患点内容",this.potentialData)
 				console.log("表单内容",this.potentialData)
 			},
-			//发灾时间
-			PatrolStartDateChange: function(e) {
-			    this.PatrolResultMaintainReq.patrolStartDate =e.detail.value
-				this.datestart=e.detail.value
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			        },
-			PatrolEndDateChange: function(e) {
-			    this.PatrolResultMaintainReq.patrolEndDate =e.detail.value
-				this.dateend=e.detail.value
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			        },
-			//时间映射
-			timeTypeChange(Date){
-				var timeTransform;
-				timeTransform = Date.slice(0, 4)  + Date.slice(5, 7) + Date.slice(8, 10);
-				return timeTransform;
-			},
-			addLocation(data){
-				this.popupData = data
-				this.popupLevel = data.level
-				this.$refs.popup.open('bottom')
-			},
-			number(e){
-				this.PatrolResultMaintainReq.patrolNumber=e
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			},
-			pointnumber(e){
-				this.PatrolResultMaintainReq.patrolPotentialPointNumber=e
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			},
-			
-			peopletrans(e){
-				this.PatrolResultMaintainReq.numberOfPeopleTransferred=e
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			},
-			locationtrans(e){
-				this.PatrolResultMaintainReq.transferPosition=e
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			},			
-			reasontrans(e){
-				this.PatrolResultMaintainReq.reasonForTransfer=e
-				console.log("填报内容",this.PatrolResultMaintainReq)
-			},
-			
 			mobile(e){
-				this.PatrolResultMaintainReq.reportPersonMobile=e
-				console.log("填报内容",this.PatrolResultMaintainReq)
+				this.PatrolResultCreateReq.reportPersonMobile=e
+				console.log("填报内容",this.PatrolResultCreateReq)
 			},
 			back(){
 				uni.navigateBack()
 			},
 			personChange(e) {
 
-				this.PatrolResultMaintainReq.reportPerson=e.detail.value[0].value
+				this.PatrolResultCreateReq.reportPerson=e.detail.value[0].value
 
-				console.log("人",this.PatrolResultMaintainReq.reportPerson)
+				console.log("人",this.PatrolResultCreateReq.reportPerson)
 				console.log("结果",e.detail.value)
-				console.log("填报内容",this.PatrolResultMaintainReq)
+				console.log("填报内容",this.PatrolResultCreateReq)
 			},
 			getMemberData(){
 				request({
@@ -441,17 +407,16 @@
 				})
 			},
 			areaChange(e) {
-				this.PatrolResultMaintainReq.administrativeRegion=e.detail.value[2].value
+				this.PatrolResultCreateReq.administrativeRegion=e.detail.value[2].value
 			},
-			PatrolMaintain(){
-				
-				let administrativeRegion=this.PatrolResultMaintainReq.administrativeRegion
-				let patrolStartDate=this.PatrolResultMaintainReq.patrolStartDate
-				let patrolEndDate=this.PatrolResultMaintainReq.patrolEndDate
-				let patrolNumber=this.PatrolResultMaintainReq.patrolNumber
-				let patrolPotentialPointNumber=this.PatrolResultMaintainReq.patrolPotentialPointNumber
-				let reportPerson=this.PatrolResultMaintainReq.reportPerson
-				let reportPersonMobile=this.PatrolResultMaintainReq.reportPersonMobile
+			PatrolResultCreate(){
+				let administrativeRegion=this.PatrolResultCreateReq.administrativeRegion
+				let patrolStartDate=this.PatrolResultCreateReq.patrolStartDate
+				let patrolEndDate=this.PatrolResultCreateReq.patrolEndDate
+				let patrolNumber=this.PatrolResultCreateReq.patrolNumber
+				let patrolPotentialPointNumber=this.PatrolResultCreateReq.patrolPotentialPointNumber
+				let reportPerson=this.PatrolResultCreateReq.reportPerson
+				let reportPersonMobile=this.PatrolResultCreateReq.reportPersonMobile
 				let phoneReg = /^[1][3,4,5,7,8,9][0-9]{9}$/
 
 				if(!administrativeRegion){
@@ -488,15 +453,15 @@
 					})
 				}
 				else{
-					console.log("填报内容",this.PatrolResultMaintainReq)
+					console.log("填报内容",this.PatrolResultCreateReq)
 					uni.showLoading({
-						title: '正在修改'
+						title: '正在提交'
 					});
 					request({
 						method:'POST',
-						url:'patrolManage/patrolResultMaintain',
+						url:'patrolManage/patrolResultCreate',
 						data:{
-							PatrolResultMaintainReq :this.PatrolResultMaintainReq
+							PatrolResultCreateReq :this.PatrolResultCreateReq
 					
 						},
 					})
@@ -504,7 +469,7 @@
 						if(res.code===2000){
 							uni.hideLoading();
 							uni.showToast({
-								title: `修改成功`,
+								title: `提交完成`,
 								duration: 2000
 							});
 							this.$refs.message.open('center')
@@ -519,6 +484,7 @@
 				}
 
 			},
+			add(){				this.potentialData.push({						type:'',						potential:'',						number:this.potentialData.length,					})					console.log(this.potentialData);			},
 			getPotentialPointQueryData(){
 				request({
 					method:'POST',
@@ -544,51 +510,12 @@
 						value:this.PotentialPointData[i].potentialPointId
 						})
 					}
-					for(var i=0; i<this.PotentialPointData.length; i++){
-						this.potentialList[this.PotentialPointData[i].potentialPointId]=this.PotentialPointData[i].potentialPointName
-					}
-					console.log("列表为",this.potentialList)
-					console.log("neitong为",this.PatrolData)
-					console.log("neitong2为",this.PatrolData.potentialType)
-					this.Patrol.potentialType=JSON.parse(this.PatrolData.potentialType)	
-					this.Patrol.potentialPointId=JSON.parse(this.PatrolData.potentialPointId)
-					console.log("类型列表",this.Patrol.potentialType)
-					console.log("类型列表长度",this.Patrol.potentialType.length)
-					for(var j=0;j<this.Patrol.potentialType.length;j++){
-
-						let name=this.potentialList[this.Patrol.potentialPointId[j]]
-						for(var i=0; i<this.PotentialPointData.length; i++){
-							if(this.PotentialPointData[i].potentialPointName==name){
-								this.choose.push(i)
-							}
-							}
-						let type=''
-						switch(this.Patrol.potentialType[j]){
-							case "001" :type="斜坡";break;
-							case "002" :type="滑坡";break;
-							case "003" :type="崩塌";break;
-							case "004" :type="泥石流";break;
-							case "005" :type="地面沉降与地裂缝";break;
-						}
-						console.log("名字是",name)
-						console.log("类型是",type)
-						this.potentialData.push({
-									type:type,		
-									name:name,
-									number:j,
-									num:this.choose[j],
-								})
-							
-						}
-						console.log("choose内容",this.choose)
-						this.maintain()
-						console.log("隐患点内容",this.potentialData)
 					console.log("结果data",this.PotentialPointData)
 				})
 				
 			},
 			openMessageDialog(){
-				this.PatrolMaintain()
+				this.PatrolResultCreate()
 			},
 			close(){
 				this.$refs.popup.close()
@@ -692,7 +619,9 @@
 		line-height: 36px;
 		background-color: #2E9BFF;
 		color: white;			}
-
-
+	.potentialpailie{
+		display: flex;
+		flex-direction: column;
+	}
 
 </style>

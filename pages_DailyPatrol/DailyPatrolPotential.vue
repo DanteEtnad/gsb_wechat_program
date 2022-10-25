@@ -3,19 +3,13 @@
 		<view style="padding: 5px;background-color: white;">
 			<uni-forms :model="queryForm" ref="queryForm">
 				<uni-row>
-					<uni-col :span="12">
+					<uni-col :span="18">
 						<uni-easyinput placeholder="请输入关键字" @input="input" v-model="queryForm.key"></uni-easyinput>
 					</uni-col>
 					<uni-col :span="6">
 						<button style="margin-left: 5px;" @click="search()">
 							<text>搜索</text>
 							<uni-icons type="search" size="16" color="#fff"></uni-icons>
-						</button>
-					</uni-col>
-					<uni-col :span="6">
-						<button @click="openCreateDialog">
-							<text>新增</text>
-							<uni-icons type="plusempty" size="16" color="#fff"></uni-icons>
 						</button>
 					</uni-col>
 				</uni-row>
@@ -81,6 +75,7 @@
 				</view>
 			</view>
 		</view>
+
 	</view>
 </template>
 
@@ -164,6 +159,7 @@
 						patrolAdcode:'',
 						
 				},
+				potentialInfo:[],
 				officePageInfo:{
 					dataAmount:0,
 					offset:0,
@@ -171,14 +167,20 @@
 					currentPage:1,
 				},
 				inputTextSave:"",
-				fromLocation:'',
-				toLocation:'',
 			}
 		},
-		mounted() {
-			this.getOfficeData(true)
-		},
 		created(){
+		},
+		onLoad: function(option) {
+			const eventChannel = this.getOpenerEventChannel();
+			
+			eventChannel.on('potential',data=>{
+				this.potentialInfo= data.item
+				
+				console.log("user内容",this.potentialInfo)
+			})
+			this.DailyPatrolRequestForm.patrolTaskName=this.potentialInfo.potentialPointName
+			this.getOfficeData()
 		},
 		onReachBottom() {
 			if(this.officeData.length<this.officePageInfo.dataAmount){
@@ -200,20 +202,12 @@
 			search(){
 				this.DailyPatrolRequestForm.patrolTaskName=this.inputTextSave
 				console.log(this.DailyPatrolRequestForm.reportPerson)
-				this.officeData=[]
-				this.officePageInfo.currentPage=1
 				this.getOfficeData()
-			},
-			
-			openCreateDialog(){
-				uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolReportAdd'
-				})
 			},
 			
 			async openPatrolReportDialog(item){
 				const response = await uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolReport',
+					url:'/pages_DailyPatrol/DailyPatrolReport',
 				})
 				response[1].eventChannel.emit('openReport',{
 					item: item
@@ -281,6 +275,7 @@
 
 					}
 				},
+			
 			getOfficeData:debounce(function(reset=false){
 				uni.showLoading({
 					title: '加载中'
@@ -305,7 +300,7 @@
 						});
 						this.officeData = [...this.officeData,...res.data.PatrolResultQueryRsp]
 						this.officePageInfo.dataAmount=res.data.QuerySummaryRsp.dataAmount
-
+			
 					}else{
 						this.$message.error(res.message)
 					}
@@ -316,7 +311,7 @@
 							this.officeData[j].deformationIndication+='裂缝变形 '
 							this.officeData[j].show.push(0)
 						}
-
+			
 						if (this.officeData[j].isGroundDrum==='Y'){
 							this.officeData[j].deformationIndication+='新地鼓 '
 							this.officeData[j].show.push(1)
@@ -341,7 +336,7 @@
 							this.officeData[j].deformationIndication+='泉水露出及变浑浊 '
 							this.officeData[j].show.push(6)
 						}
-
+			
 					}
 					this.showData=JSON.parse(JSON.stringify(this.officeData))
 					this.realshowData=JSON.parse(JSON.stringify(this.officeData))

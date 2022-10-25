@@ -32,14 +32,14 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DaliyAlert')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagementl/DaliyAlert')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/jinriyujing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/SubmitDisaster')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagementl/SubmitDisaster')">
 									<view class="index-icon">
 										<u--image src="/static/index_normal/xianqingshangbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
@@ -58,7 +58,7 @@
 							<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 								<uni-row>
 									<uni-col :span="6">
-										<view class="index-icon-font" @click="toPages('login/logininside')">
+										<view class="index-icon-font" @click="toPages('pages/login/logininside')">
 											<view class="index-icon">
 												<u--image class="logo" src="/static/login.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 												<text style="font-size: 16px;">用户登录</text>
@@ -89,7 +89,7 @@
 			toPages(pageName){
 				console.log(pageName)
 				uni.navigateTo({
-          url:`/pages/${pageName}`
+          url:`/${pageName}`
         })
 			}
 		}

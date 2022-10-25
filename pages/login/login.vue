@@ -104,6 +104,9 @@ methods: {
 		console.log(e);
 	},
 			getVerifyCode(){
+				uni.showLoading({
+					title: '发送中'
+				});
 						requestAuthority1({
 							method:'POST',
 							url:'login/verifyCode',
@@ -113,11 +116,24 @@ methods: {
 								}
 							},
 						})
-						.then(res=>{
+						.then(res=>{if(res.code===2000){
+							uni.hideLoading();
+							uni.showToast({
+								title: `验证码发送成功`,
+								duration: 2000
+							});}
+							else{
+								uni.hideLoading();
+								uni.showToast({
+									title: `验证码发送失败`,
+									duration: 2000
+								});
+								console.log(error)
+							}
 							console.log("@res@",res)
 						})
 						.catch(error=>{
-							console.log(error)
+							
 						})
 					},
 				submit(){

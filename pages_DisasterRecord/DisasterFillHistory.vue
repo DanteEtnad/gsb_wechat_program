@@ -301,7 +301,7 @@
 			// 跳转页面函数
 			openCreateDialog(a){
 				uni.navigateTo({
-					url:'/pages/DisasterRecord/DisasterFill',
+					url:'/pages_DisasterRecord/DisasterFill',
 					
 				})
 				// console.log(a)
@@ -394,7 +394,7 @@
 			
 			async openCheckDialog(item){
 					const response = await uni.navigateTo({
-						url:'/pages/DisasterRecord/DisasterFillchange',
+						url:'/pages_DisasterRecord/DisasterFillchange',
 					})
 					response[1].eventChannel.emit('openCheckDialog',{
 						item: item

@@ -180,7 +180,7 @@
 			},
 			async openDailyPatrolUser(item){
 				const response = await uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolUser',
+					url:'/pages_DailyPatrol/DailyPatrolUser',
 				})
 				response[1].eventChannel.emit('user',{
 					item: item

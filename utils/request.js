@@ -1,5 +1,5 @@
-// // const REQUEST_BASEURL = 'http://47.107.42.236:8082'
-// // const REQUEST_AUTHORITY_BASEURL = 'http://47.107.42.236:8081'
+// const REQUEST_BASEURL = 'http://47.107.42.236:8082'
+// const REQUEST_AUTHORITY_BASEURL = 'http://47.107.42.236:8081'
 // const REQUEST_AUTHORITY_BASEURL1 = 'http://47.107.42.236:8084'
 const REQUEST_BASEURL = 'https://stdzpt.com:8082'
 const REQUEST_AUTHORITY_BASEURL = 'https://stdzpt.com:8081'

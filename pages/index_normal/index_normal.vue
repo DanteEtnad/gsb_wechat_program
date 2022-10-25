@@ -32,28 +32,28 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/DaliyAlert')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagement/DaliyAlert')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/jinriyujing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/SubmitDisaster')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagement/SubmitDisaster')">
 									<view class="index-icon">
 										<u--image src="/static/index_normal/xianqingshangbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/ProfessionDetect')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagement/ProfessionDetect')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zhuanyejiance.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/AroundPotential')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagement/AroundPotential')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zhoubianyinhuan.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
@@ -68,14 +68,14 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/AlertCreate')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagement/AlertCreate')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/yujingdanchuangjian.svg" width="60px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('alertManagement/AlertCheck')">
+								<view class="index-icon-font" @click="toPages('pages_alertManagement/AlertCheck')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/yujingdanshenpi.svg" width="60px" height="68px" mode="aspectFit"></u--image>
 									</view>
@@ -97,28 +97,28 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterDetails')">
+								<view class="index-icon-font" @click="toPages('pages_DisasterRecord/DisasterDetails')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingxiangqing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterCount')">
+								<view class="index-icon-font" @click="toPages('pages_DisasterRecord/DisasterCount')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingtongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterFillHistory')">
+								<view class="index-icon-font" @click="toPages('pages_DisasterRecord/DisasterFillHistory')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingtianbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DisasterRecord/DisasterCheck')">
+								<view class="index-icon-font" @click="toPages('pages_DisasterRecord/DisasterCheck')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/zaiqingshenhe.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
@@ -140,28 +140,28 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('patrolManagement/Patrolquery')">
+								<view class="index-icon-font" @click="toPages('pages_patrolManagement/Patrolquery')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/shujvchaxun.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('patrolManagement/PatrolStatics')">
+								<view class="index-icon-font" @click="toPages('pages_patrolManagement/PatrolStatics')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchatongji.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('patrolManagement/Patrolfill')">
+								<view class="index-icon-font" @click="toPages('pages_patrolManagement/Patrolfill')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/shujvtianbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('patrolManagement/PatrolResultApproval')">
+								<view class="index-icon-font" @click="toPages('pages_patrolManagement/PatrolResultApproval')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/shujvshenpi.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
@@ -183,21 +183,21 @@
 					<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
 						<uni-row>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DailyPatrol/DailyPatrol')">
+								<view class="index-icon-font" @click="toPages('pages_DailyPatrol/DailyPatrol')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/kaizhanxuncha.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DailyPatrol/DailyPatrolCount')">
+								<view class="index-icon-font" @click="toPages('pages_DailyPatrol/DailyPatrolCount')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchatongji1.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
-								<view class="index-icon-font" @click="toPages('DailyPatrol/DailyPatrolNote')">
+								<view class="index-icon-font" @click="toPages('pages_DailyPatrol/DailyPatrolNote')">
 									<view class="index-icon">
 										<u--image class="logo" src="/static/index_normal/xunchajilu.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
@@ -249,7 +249,7 @@
 			toPages(pageName){
 				console.log(pageName)
 				uni.navigateTo({
-	      url:`/pages/${pageName}`
+	      url:`/${pageName}`
 	    })
 			},
 			getname(){

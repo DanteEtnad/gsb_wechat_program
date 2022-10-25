@@ -360,7 +360,7 @@
 			},300),
 			async openCheckDialog(item){
 				const response = await uni.navigateTo({
-					url:'/pages/DisasterRecord/DisasterDetailsDialog',
+					url:'/pages_DisasterRecord/DisasterDetailsDialog',
 				})
 				response[1].eventChannel.emit('openCheckDialog',{
 					item: item

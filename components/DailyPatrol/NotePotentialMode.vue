@@ -368,7 +368,7 @@
 			},300),
 			async openDailyPatrolPotential(item){
 				const response = await uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolPotential',
+					url:'/pages_DailyPatrol/DailyPatrolPotential',
 				})
 				response[1].eventChannel.emit('potential',{
 					item: item
