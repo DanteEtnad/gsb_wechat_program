@@ -175,11 +175,12 @@
 			
 			eventChannel.on('user',data=>{
 				this.userInfo= data.item
-				
-				console.log("user内容",this.userInfo)
+				this.DailyPatrolRequestForm.reportPerson=this.userInfo.memberId
+				this.getOfficeData()
+				console.log("user内容",this.userInfo.memberId)
 			})
-			this.DailyPatrolRequestForm.reportPerson=this.userInfo.memberId
-			this.getOfficeData(true)
+				console.log("user内容2",this.userInfo.memberId)
+
 		},
 		onReachBottom() {
 			if(this.officeData.length<this.officePageInfo.dataAmount){
@@ -200,21 +201,16 @@
 			},
 			search(){
 				this.DailyPatrolRequestForm.patrolTaskName=this.inputTextSave
-				console.log(this.DailyPatrolRequestForm.reportPerson)
+				console.log("填报人为",this.DailyPatrolRequestForm.reportPerson)
 				this.officeData=[]
 				this.officePageInfo.currentPage=1
 				this.getOfficeData()
 			},
 			
-			openCreateDialog(){
-				uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolReportAdd'
-				})
-			},
 			
 			async openPatrolReportDialog(item){
 				const response = await uni.navigateTo({
-					url:'/pages/DailyPatrol/DailyPatrolReport',
+					url:'/pages_DailyPatrol/DailyPatrolReport',
 				})
 				response[1].eventChannel.emit('openReport',{
 					item: item

@@ -176,11 +176,11 @@
 			
 			eventChannel.on('potential',data=>{
 				this.potentialInfo= data.item
-				
+				this.DailyPatrolRequestForm.patrolTaskName=this.potentialInfo.potentialPointName
+				this.getOfficeData()
 				console.log("user内容",this.potentialInfo)
 			})
-			this.DailyPatrolRequestForm.patrolTaskName=this.potentialInfo.potentialPointName
-			this.getOfficeData()
+		
 		},
 		onReachBottom() {
 			if(this.officeData.length<this.officePageInfo.dataAmount){
