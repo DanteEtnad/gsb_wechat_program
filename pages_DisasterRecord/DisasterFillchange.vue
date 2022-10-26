@@ -47,7 +47,7 @@
 				@tap="tapPopup"
 				>
 				<!-- @click="submit" -->
-				提交并发送短信
+				修改并发送短信
 				</button>
 				<uni-popup ref="message" background-color="#fff">
 					<sendMessageTochang  

@@ -63,24 +63,25 @@
 						}
 					}
 				})
-				.then(res=>{
+				.then(async res=>{
 					if(res.code===2000){
 						const alertData = res.data.QueryAlertListRsp.filter(item=>{
 							return item.alertStartTime <= this.todayTime && item.alertEndTime >= this.todayTime
 						})
+						if(alertData.length !== 0){
+							
+							await this.getAlertMap(alertData[0])
+							//this.getAlertMap(alertData[0])
+							this.$refs.text.init(alertData[0])
+							this.$refs.map.getPotentialPointData()
+							this.isAlert = true
+						}
 						uni.hideLoading();
 						uni.showToast({
 							title: `加载完成`,
 							duration: 2000
 						});
 						//const alertData = res.data.QueryAlertListRsp
-						if(alertData.length !== 0){
-							this.isAlert = true
-							this.mapUrl = this.getAlertMap(alertData[0])
-							//this.getAlertMap(alertData[0])
-							this.$refs.text.init(alertData[0])
-							this.$refs.map.getPotentialPointData()
-						}
 					}
 				})
 			},
@@ -118,7 +119,7 @@
 						}
 					})
 					if(res.code===2000){
-						return res.data.AlertAreaMapUrl
+						this.mapUrl = res.data.AlertAreaMapUrl
 					}
 				}catch(error){
 					console.log(error)

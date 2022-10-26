@@ -47,7 +47,7 @@
 				<text>{{timeTransform(alert.alertStartTime)}} - {{timeTransform(alert.alertEndTime)}}</text>
 			</view>
 			<view class="check-info-picture">
-				<u--image src="/static/test.jpg" mode="aspectFit"></u--image>
+				<u--image :src="alert.alertMapUrl" mode="aspectFit"></u--image>
 			</view>
 			<view class="check-info-text">
 				<p style="color: rgba(0,0,0,.65);text-indent:2em" v-for="(description,index) in alertDescription" :key="index">

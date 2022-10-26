@@ -100,15 +100,11 @@
 </template>
 
 <script>
-	import * as echarts from '@/pages_alertManagement/components/echarts.min.js';
-	// import myEcharts from '@/components/mpvue-echarts/src/echarts.vue';
-	import LEchart from '@/uni_modules/lime-echart/components/l-echart/l-echart.vue';
-	// import { loadModules } from "esri-loader";
+
 	import {request} from "@/utils/request.js"
 	export default{
 		components: {
-			// myEcharts,
-			LEchart
+
 		},
 		props:['isAlert','mapUrl'],
 		data(){
@@ -213,17 +209,17 @@
 				})
 			},
 			addAlertMap(){
-				this.mapContext.addGroundOverlay({
+				uni.createMapContext("map",this).addGroundOverlay({
 					id:114514,
 					src:this.mapUrl,
 					bounds:{
 						southwest:{
-							longitude:116,
-							latitude:23
+							longitude:116.0952,
+							latitude:22.950
 						},
 						northeast:{
-							longitude:117.2,
-							latitude:23.7
+							longitude:117.2082,
+							latitude:23.693
 						}
 					}
 				})

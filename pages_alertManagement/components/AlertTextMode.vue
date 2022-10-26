@@ -29,7 +29,7 @@
 			</view>
 		</view>
 		<view style="text-align: center;padding: 20px 0;" v-else>
-			<h1>今日暂无预警</h1>
+			<h1>{{text}}</h1>
 		</view>
 	</view>
 </template>
@@ -42,6 +42,7 @@
 		props:['isAlert'],
 		data(){
 			return{
+				text:'加载中',
 				mapUrl:'',
 				alertData:'',
 				todayTime:'',
@@ -78,6 +79,7 @@
 				this.getAlertLocation(this.alertData.alertLevelFourthAdcode,3)
 				this.mapUrl = this.alertData.alertMapUrl
 				console.log(this.alertLevels);
+				this.text='今日暂无预警'
 			},
 			getAlertLocation(levelAdcode,index){
 				let alertLevelAdcode = levelAdcode.split(',').filter(item=>item.length===9)
