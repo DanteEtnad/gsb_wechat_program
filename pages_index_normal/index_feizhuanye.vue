@@ -5,7 +5,7 @@
 				<uni-col>
 					<view class="demo-layout bg-pure-write">
 						<view style="display: flex;">
-							<u--image class="logo" src="http://47.107.42.236:9000/user.svg" width="17px" height="20px"></u--image>
+							<u--image class="logo" src="http://47.107.42.236:9000/index_normal/user.svg" width="17px" height="20px"></u--image>
 							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{name}}</text>
 						</view>
 						<view>
@@ -46,29 +46,6 @@
 								</view>
 							</uni-col>
 						</uni-row>
-					<uni-row>
-						<uni-col>
-							<view style="font-size: 14px;">
-								<text style="font-size: 16px;">专业用户登录</text>
-							</view>
-						</uni-col>
-					</uni-row>
-					<uni-row>
-						<uni-col>
-							<view style="background-color: white;margin: 0 10px;border-radius: 8px;">
-								<uni-row>
-									<uni-col :span="6">
-										<view class="index-icon-font" @click="toPages('pages/login/logininside')">
-											<view class="index-icon">
-												<u--image class="logo" src="http://47.107.42.236:9000/login.svg" width="48px" height="68px" mode="aspectFit"></u--image>
-												<text style="font-size: 16px;">用户登录</text>
-											</view>
-										</view>
-									</uni-col>
-								</uni-row>
-							</view>
-						</uni-col>
-					</uni-row>
 					</view>
 				</uni-col>
 			</uni-row>

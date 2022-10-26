@@ -1,14 +1,14 @@
 <template>
-	<view>
-		<view style="padding: 10px;margin-top:35px">
-			<u--image class="logo" @click="backFn" src="/static/backlogin.svg" width="25px" height="25px" ></u--image>
-		</view>
-		<view class="content" style="margin-left: 15px; margin-top:15%">
+		<view style="position: absolute; background :linear-gradient(35deg,white,rgba(212,237,244,0.8));width: 100%;height: 100%;">
+		<view>
+		<view class="content" style="margin-left: 12.6%; margin-top:25%">
+		<view style="margin-bottom: 20px;">
 			<u--text color="#000000" size=16px text="欢迎登录"></u--text>
-			<u--text color="#000000" size=18px text="汕头市地址灾害气象预报预警平台"></u--text>
 		</view>
-		
-		<view class="form" style="margin-top: 20%; margin-left: 10%;">
+		<u--text color="#000000" size=18px text="汕头市地址灾害气象预报预警平台"></u--text>
+	</view>
+	</view>
+		<view  class="form" style="margin-top: 20%; margin-left: 10%;margin-right: 10%;">
 			<u--form
 							labelPosition="left"
 							:model="model1"
@@ -41,11 +41,13 @@
 								></u--input>
 						</u-form-item>			
 					</u--form>
+					<view style="margin-top: 7%;margin-right: 2%;">
 					<u-button
 						type="primary"
 						text="登录"
 						@click="submit"
 					></u-button>	
+					</view>
 		</view>
 
 	</view>
@@ -123,5 +125,5 @@ methods: {
 		}
 </script>
 <style lang="scss">
-	
+
 </style>

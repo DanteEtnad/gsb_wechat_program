@@ -1,63 +1,78 @@
 <template>
-	<view>
-		<view class="content" style="margin-left: 15px; margin-top:15%">
-			<u--text color="#000000" size=16px text="欢迎登录"></u--text>
-			<u--text color="#000000" size=18px text="汕头市地址灾害气象预报预警平台"></u--text>
-		</view>
-		<view class="form" style="margin-top: 20%; margin-left: 10%;margin-right: 10%;">
-			<u--form
-							label-width="70"
-							labelPosition="left"
-							:model="model1"
-							:rules="rules"
-							ref="form1"
-					>
-						<u-form-item
-								label="手机号"
-								prop="userInfo.name"
-								borderBottom
-								ref="item1"
-						>
-							<u--input
-									v-model="model1.userInfo.name"
-									border="none"
-									placeholder="请输入手机号"
-									@input = 'obtain'
-							></u--input>
-						</u-form-item>
-						<u-button
-							text="发送验证码"
-							@click="getVerifyCode"
-						></u-button>
-						<u-form-item
+	<view style="position: absolute; background :linear-gradient(35deg,white,rgba(212,237,244,0.8));width: 100%;height: 100%;">
+		<view>
+			<view class="content" style="margin-left: 12.6%; margin-top:25%">
+				<view style="margin-bottom: 20px;">
+					<u--text color="#000000" size=16px text="欢迎登录"></u--text>
+				</view>
+				<u--text color="#000000" size=18px text="汕头市地址灾害气象预报预警平台"></u--text>
+			</view>
+			<view class="form" style="margin-top: 30%; margin-left: 10%;margin-right: 10%;margin-bottom: 10%;">
+				<u--form
+								label-width="80"
+								labelPosition="left"
+								:model="model1"
+								:rules="rules"
+								ref="form1"
 								
-								label="验证码"
-								prop="code"
-								borderBottom
+						>
+							<u-form-item
+									label="手机号码"
+									prop="userInfo.name"
+									borderBottom
+									ref="item1"
 							>
 								<u--input
-									v-model="model1.code"
-									border="none"
-									placeholder="请填验证码"
-									@input="inputcode"
+										v-model="model1.userInfo.name"
+										border="none"
+										placeholder="请输入手机号码"
+										@input = 'obtain'
 								></u--input>
-						</u-form-item>			
-					</u--form>
-					<u-button
-						type="primary"
-						text="登录"
-						@click="submit"
-					></u-button>	
-						<view style="margin-top:15px;">
-							<u-button
-								text="专业用户登录"
-								@click="tologinside"
-							></u-button>	
-						</view>
+							</u-form-item>
+							<u-form-item
+									style="position: relative;"
+									label="验证码"
+									prop="code"
+									borderBottom
+								>
+									<template>
+										<view style="position: relative;">
+											<u--input
+												v-model="model1.code"
+												border="none"
+												placeholder="请填验证码"
+												@input="inputcode"
+											></u--input>
+											<button 
+												class="button11"
+												@click="getVerifyCode"
+											>获取验证码</button>
+										</view>
+									</template>
+									
+							</u-form-item>
+						</u--form>
+						
+							<view style="margin-top:32%;">
+								<u-button
+									color="linear-gradient(to right, rgba(66, 83, 216,0.5), rgba(163,205,57,0.5))"
+									text="专业用户登录"
+									@click="tologinside"
+								></u-button>	
+							</view>
+			</view>
+					
 		</view>
-
+		<view class="content" style="margin-left: 12.6%; margin-top:25%">
+		<button style = "position: absolute;width: 80%;height: 40px;left: 10%;top:49.5%;background: #2E9BFF;border-radius: 6px;font-family: Microsoft YaHei;
+								font-size: 16px;color: white;"
+			@click="submit"
+		>登录</button>
+		</view>
 	</view>
+	
 </template>
+
 
 <script>
 	import {requestAuthority,request,requestAuthority1} from '@/utils/request.js'
@@ -160,7 +175,7 @@ methods: {
 						uni.$u.toast('验证码错误')
 					})
 			},
-			},
+		},
 		}
 		// 	console.log("this.phoneNumber",this.phoneNumber);
 		// 	console.log("this.phonecode",this.phonecode);
@@ -176,5 +191,20 @@ methods: {
 .form{
 	font-size: 10px;
 	color: red;
+}
+.button11{
+		z-index: 200;
+		position: absolute;
+		right: 0px;
+		top: 0px;
+		width: 100px;
+		height: 120%;
+		background: rgba(0, 0, 0, 0.05);border-radius: 6px;font-family: Microsoft YaHei;
+		font-size: 14px;
+		color: #2E9BFF;
+		font-weight: 400;
+		line-height: 30px;
+		letter-spacing: 0px;
+		text-align: center;
 }
 </style>
