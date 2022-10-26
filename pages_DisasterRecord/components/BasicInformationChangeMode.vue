@@ -481,12 +481,18 @@
 				this.disaster.city=this.dataCodeAreaTransform(this.sendData.disasterAdcode,"disasterAdcode")
 				
 				//更新地图要用到
+				
 				this.longitudeText1=v4
 				this.longitudeText2=v5
 				this.longitudeText3=v6
 				this.latitudeText1=v1
 				this.latitudeText2=v2
 				this.latitudeText3=v3
+				this.emit()
+				
+				
+				// this.sendData.disasterLatitude=JSON.stringify(this.sendData.disasterLatitude)
+				// this.sendData.disasterLongitude=JSON.stringify(this.sendData.disasterLongitude)
 				
 				for(var index=0;index<7;index++){
 					if(this.sendData.disasterRecordType==this.list[index].value){
@@ -511,7 +517,15 @@
 				}
 			
 			},
-			
+			emit(){
+				this.$emit("longitude1",this.longitudeText1)
+				this.$emit("longitude2",this.longitudeText2)
+				this.$emit("longitude3",this.longitudeText3)
+				this.$emit("latitude1",this.latitudeText1)
+				this.$emit("latitude2",this.latitudeText2)
+				this.$emit("latitude3",this.latitudeText3)
+				
+			},
 			//市县选择
 			areaChange(e) {
 				this.$emit("getCity",e.detail.value[2].value)
@@ -684,7 +698,7 @@
 		
 			async refreshMap(e){
 					const response = await uni.navigateTo({
-						url:'/pages/DisasterRecord/map',
+						url:'/pages_DisasterRecord/map',
 					})
 					response[1].eventChannel.emit('openCheckDialog',{
 						// 		//度分秒(DMS)换算成度(DDD)

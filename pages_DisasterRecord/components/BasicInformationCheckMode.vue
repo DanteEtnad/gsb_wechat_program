@@ -482,13 +482,23 @@
 				this.disaster.factor= this.sendData.disasterTrigger
 				this.disaster.potentialid= this.sendData.potentialPointId
 				
+				
+				
 				 //更新地图要用到
+				// this.longitudeText1=JSON.stringify(v4)
+				// this.longitudeText2=JSON.stringify(v5)
+				// this.longitudeText3=JSON.stringify(v6)
+				// this.latitudeText1=JSON.stringify(v1)
+				// this.latitudeText2=JSON.stringify(v2)
+				// this.latitudeText3=JSON.stringify(v3)
 				 this.longitudeText1=v4
 				 this.longitudeText2=v5
 				 this.longitudeText3=v6
 				 this.latitudeText1=v1
 				 this.latitudeText2=v2
 				 this.latitudeText3=v3
+				 this.emit()
+				 
 				// for(var i=0;i<this.potentionIdData.length;i++){
 						
 				// }
@@ -513,7 +523,15 @@
 				}
 				
 			},
-			
+			emit(){
+				this.$emit("longitude1",this.longitudeText1)
+				this.$emit("longitude2",this.longitudeText2)
+				this.$emit("longitude3",this.longitudeText3)
+				this.$emit("latitude1",this.latitudeText1)
+				this.$emit("latitude2",this.latitudeText2)
+				this.$emit("latitude3",this.latitudeText3)
+				
+			},
 			//市县选择
 			areaChange(e) {
 				this.$emit("getCity",e.detail.value[2].value)
@@ -670,7 +688,7 @@
 		
 			async refreshMap(e){
 					const response = await uni.navigateTo({
-						url:'/pages/DisasterRecord/map',
+						url:'/pages_DisasterRecord/map',
 					})
 					response[1].eventChannel.emit('openCheckDialog',{
 						// 		//度分秒(DMS)换算成度(DDD)

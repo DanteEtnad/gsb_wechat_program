@@ -613,7 +613,7 @@
 		
 			async refreshMap(e){
 					const response = await uni.navigateTo({
-						url:'/pages/DisasterRecord/map',
+						url:'/pages_DisasterRecord/map',
 					})
 					response[1].eventChannel.emit('openCheckDialog',{
 						// 		//度分秒(DMS)换算成度(DDD)
