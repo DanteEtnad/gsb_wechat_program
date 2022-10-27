@@ -142,12 +142,13 @@
 				Date: new Date().toISOString().slice(0, 10),
 				currentDate: '',
 				currentYear: new Date().toISOString().slice(0, 4),
+				year:'',
 				//存放后端发来的灾情统计数据
 				AlarmCountData:[],
 				// 存放发送到后端的月份数据
 				DisasterRecordStatisticsForm :{
 					beginDate:"",
-					endDate:"",
+					endDate:"20221027",
 					
 				},
 				//统计灾情总数
@@ -169,6 +170,9 @@
 			//调用后端请求数据函数
 			this.getAlarmCountData()
 			this.currentDate=this.timeTypeChange(this.Date)
+			this.year=this.currentYear+"0000"
+			console.log("this.year",this.year)
+			console.log("this.currentDate",this.currentDate)
 		},
 		methods: {
 			//时间转换格式
@@ -178,7 +182,7 @@
 				return timeTransform;
 				
 			},
-
+			
 			// 获取选中时间value值并更新数据
 			timechange:function(e) {
 				this.DisasterRecordStatisticsForm.beginDate=this.timeTypeChange(e[0]);
@@ -198,17 +202,22 @@
 			},
 			//后端请求数据函数
 			getAlarmCountData(){
+				this.DisasterRecordStatisticsForm.beginDate=this.year
 				request({
 					method:'POST',
 					url:'disasterRecord/statistics',
 					data:{
-						DisasterRecordStatisticsReq:this.DisasterRecordStatisticsForm	
+						DisasterRecordStatisticsReq:this.DisasterRecordStatisticsForm,
+						
 						},
 					
 				})
 				.then(res=>{
 					if(res.code===2000){
 						this.AlarmCountData=res.data.DisasterRecordStatisticsRsp  
+						for(var i=0;i<7;i++){
+							this.TotalCount=Number(this.AlarmCountData[i].disasterCount)+this.TotalCount
+						}
 						// 根据数据各自统计各区的情况
 				
 					}

@@ -149,6 +149,7 @@
 					disasterTrigger:"",
 					disasterRecordLevel:"",
 					disasterAdcode:"",
+					approvalStatus:'CKD',
 					
 					},
 				bup:true,

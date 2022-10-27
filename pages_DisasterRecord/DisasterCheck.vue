@@ -186,7 +186,7 @@
 		},
 		mounted() {
 				this.getDisasterRecordQueryData(true)
-				this.getAllData()
+				// this.getAllData()
 		
 		},	
 		onReachBottom() {
@@ -206,18 +206,23 @@
 			
 			//审核情况筛选逻辑
 			CheckPickerChange(e) {
-				var flag=0
-				// this.officePageInfo.currentPage = 1
+				this.officePageInfo.currentPage = 1
 				this.DisasterRecordQueryData = []
-				this.ALLData.forEach((item,index)=>{
-					if(item.approvalStatus==e){
-						this.DisasterRecordQueryData[flag]=item
-						flag=flag+1
-					}else{
-						console.log("null")
-					}
-				})
-				this.getMemberData()
+				this.disasterRecordForm.approvalStatus=e
+				this.getDisasterRecordQueryData()
+				
+				// var flag=0
+				// // this.officePageInfo.currentPage = 1
+				// this.DisasterRecordQueryData = []
+				// this.ALLData.forEach((item,index)=>{
+				// 	if(item.approvalStatus==e){
+				// 		this.DisasterRecordQueryData[flag]=item
+				// 		flag=flag+1
+				// 	}else{
+				// 		console.log("null")
+				// 	}
+				// })
+				// this.getMemberData()
 				// console.log("DisasterRecordQueryData",this.DisasterRecordQueryData)
 			},
 			
