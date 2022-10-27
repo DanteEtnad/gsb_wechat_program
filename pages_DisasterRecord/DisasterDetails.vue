@@ -67,7 +67,14 @@
 				</uni-col>
 			</uni-row>
 		</view>
-		
+		<uni-row>
+			<uni-col :span="12">
+			<view @click="getLocation">
+				<text style="margin-right: 5px;flex:2">获取当前距离</text>
+				<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
+			</view>
+			</uni-col>
+		</uni-row>
 		<navigator url="/pages/information/informationSkip" hover-class="none">
 			<view class="item-container" v-for="item in DisasterRecordQueryListData" :key="item" @click="openCheckDialog(item)">
 				<view class="Details-item">
@@ -178,10 +185,11 @@
 				inputTextSave:"",
 				selectScaleValueSave:'',
 				selectId: [],
-				location:[],
-				toLocation:'',
 				fromLocation:'',
-				disasterDisatance:[],
+				toLocation:'',
+				distance:'',
+				totalNum:0,
+				
 			}
 		},
 		
@@ -204,74 +212,59 @@
 			}
 		},
 		methods: {
-			
 			getLocation(){
 				uni.getLocation({
 					type: 'gcj02'
 				}).then(res=>{
 					this.location=res
+					console.log("位置",this.location)
+					this.toLocation=''
 					this.toLocation=this.toLocation+JSON.stringify(this.location[1].latitude)+','+JSON.stringify(this.location[1].longitude)
-					console.log("位置",this.toLocation)
-					console.log("经纬度",this.location)
+					console.log("weizhii",this.toLocation)
 				})
+				for (var i =0; i<this.DisasterRecordQueryListData.length; i++){
+				this.fromLocation='';
+				console.log("经纬度",this.DisasterRecordQueryListData[i].disasterLatitude)
+				this.fromLocation=this.fromLocation+this.DisasterRecordQueryListData[i].disasterLatitude+','+this.DisasterRecordQueryListData[i].disasterLongitude;
+				this.getDistance(i)
+				}
 			},
-			//计算所有距离
-			getDistance(){
-				var locationforDisaster;
-				for(var i=0;i<this.DisasterRecordQueryListData.length;i++){
-					this.disasterDisatance[i]=0
-				}
-				for(var i=0;i<this.DisasterRecordQueryListData.length;i++){
-					locationforDisaster=this.DisasterRecordQueryListData[i].disasterLatitude+','+this.DisasterRecordQueryListData[i].disasterLongitude
-					// locationforDisaster='39.071510,117.190091'
-					console.log("locationforDisaster",locationforDisaster)
-					this.disasterDisatance[i]=this.caculateDistance(locationforDisaster)
-					
-				}
-				for(var i=0;i<this.DisasterRecordQueryListData.length;i++){
-					if(this.disasterDisatance[i]==undefined){
-						this.disasterDisatance[i]=0
-					}
-					this.DisasterRecordQueryListData[i].distance=this.disasterDisatance[i]
-				}
 			
-				console.log("this.disasterDisatance",this.disasterDisatance)
-				console.log("this.DisasterRecordQueryListData",this.DisasterRecordQueryListData)
-				
-			},
-			//计算距离函数
-			caculateDistance(fromLocation) {
-				console.log("标记1",fromLocation)
+			getDistance(i) {
+				this.distance='未定义',
+				console.log("标记1",this.fromLocation)
 				console.log("标记2",this.toLocation)
 			  uni.request({
-			      url: 'https://apis.map.qq.com/ws/distance/v1/', //距离计算接口地址。
-			      method: 'GET',
-			      data: {
-			        mode: 'walking',
-			        from: fromLocation,
-			        to: this.toLocation,
-			        key: 'YPSBZ-X2HKG-WHWQQ-INE4R-BSYCF-M3BNJ'
-			      },
-			      success: (res) => {
-			        console.log(res);
-			        let hw = res.data.result.elements[0].distance; //拿到距离(米)
-			        if (hw && hw !== -1) {
-			          if (hw < 1000) {
-			            hw = hw + 'm';
-			          }
-			          //转换成公里
-			          else {
-			            hw = (hw / 2 / 500).toFixed(2) + 'km'
-			          }
-			        } else {
-			          hw = "距离太近或请刷新重试"
-			        }
-			        console.log("距离为",hw);
-			      }
-			    });
-			  },
+			    url: 'https://apis.map.qq.com/ws/distance/v1/', //距离计算接口地址。
+			    method: 'GET',
+			    data: {
+			      mode: 'walking',
+			      from: this.fromLocation,
+			      to: this.toLocation,
+			      key: 'YPSBZ-X2HKG-WHWQQ-INE4R-BSYCF-M3BNJ'
+			    },
+			  }).then(res=>{
+				  console.log("结果",res[1].data);
+				  let hw = res[1].data.result.elements[0].distance; //拿到距离(米)
+				  if (hw && hw !== -1) {
+				    if (hw < 1000) {
+				      hw = hw + 'm';
+				    }
+				    //转换成公里
+				    else {
+				      hw = (hw / 2 / 500).toFixed(2) + 'km'
+				    }
+				  } else {
+				    hw = "距离太近或请刷新重试"
+				  }
+				  console.log("距离为",hw);
+				  this.distance=hw;
+				  console.log("距离为",this.distance);
+				  this.DisasterRecordQueryListData[i].distance=this.distance
+			  })
+			},
+		
 			
-			// 获取输入框文本内容函数
 			input(e) {
 					this.inputTextSave = e
 					console.log("输入的文本为：",this.inputTextSave)

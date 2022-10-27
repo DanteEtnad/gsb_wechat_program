@@ -1,5 +1,8 @@
 <template>
 		<view style="position: absolute; background :linear-gradient(35deg,white,rgba(212,237,244,0.8));width: 100%;height: 100%;">
+		<view  @click="backlogin()" style="margin-top: 10%;margin-left: 10px;">
+			<u--image  src="/static/back.svg" width="24px" height="34px"></u--image>
+		</view>
 		<view>
 		<view class="content" style="margin-left: 12.6%; margin-top:25%">
 		<view style="margin-bottom: 20px;">
@@ -85,7 +88,7 @@
 		}
 	},
 methods: {
-	backFn(){
+	backlogin(){
 	       uni.navigateBack();
 	     },
 	obtain(e){

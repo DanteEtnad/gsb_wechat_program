@@ -148,7 +148,7 @@
 				// 存放发送到后端的月份数据
 				DisasterRecordStatisticsForm :{
 					beginDate:"",
-					endDate:"20221027",
+					endDate:"",
 					
 				},
 				//统计灾情总数
@@ -182,27 +182,35 @@
 				return timeTransform;
 				
 			},
-			
+			 addZero(s){
+			      return s<10?('0'+s):s;
+			    },
 			// 获取选中时间value值并更新数据
-			timechange:function(e) {
-				this.DisasterRecordStatisticsForm.beginDate=this.timeTypeChange(e[0]);
-				this.DisasterRecordStatisticsForm.endDate=this.timeTypeChange(e[1]);
-				this.TotalCount=0;
-				this.Distric.JingPing.disaterCount=0;
-				this.Distric.LongHu.disaterCount=0;
-				this.Distric.ChengHai.disaterCount=0;
-				this.Distric.HaoJiang.disaterCount=0;
-				this.Distric.ChaoYang.disaterCount=0;
-				this.Distric.ChaoNan.disaterCount=0;
-				this.Distric.NanAo.disaterCount=0;
-				console.log(this.DisasterRecordStatisticsForm.beginDate);
-				console.log(this.DisasterRecordStatisticsForm.endDate);
-				this.getAlarmCountData();
+			// timechange:function(e) {
+			// 	this.DisasterRecordStatisticsForm.beginDate=this.timeTypeChange(e[0]);
+			// 	this.DisasterRecordStatisticsForm.endDate=this.timeTypeChange(e[1]);
+			// 	this.TotalCount=0;
+			// 	this.Distric.JingPing.disaterCount=0;
+			// 	this.Distric.LongHu.disaterCount=0;
+			// 	this.Distric.ChengHai.disaterCount=0;
+			// 	this.Distric.HaoJiang.disaterCount=0;
+			// 	this.Distric.ChaoYang.disaterCount=0;
+			// 	this.Distric.ChaoNan.disaterCount=0;
+			// 	this.Distric.NanAo.disaterCount=0;
+			// 	console.log(this.DisasterRecordStatisticsForm.beginDate);
+			// 	console.log(this.DisasterRecordStatisticsForm.endDate);
+			// 	this.getAlarmCountData();
 				
-			},
+			// },
 			//后端请求数据函数
 			getAlarmCountData(){
+				
 				this.DisasterRecordStatisticsForm.beginDate=this.year
+				var a=new Date();
+				var year=a.getFullYear();
+				var mon=a.getMonth()+1;
+				var day=a.getDate();
+				this.DisasterRecordStatisticsForm.endDate=year+this.addZero(mon)+this.addZero(day)
 				request({
 					method:'POST',
 					url:'disasterRecord/statistics',

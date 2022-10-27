@@ -21,11 +21,12 @@
 				<uni-col :span="11">
 					<view style="display: flex;margin-top: 5px;">
 						<text style="margin-top: 5px;margin-right: 5px;	font-size 12px;">填报人</text>	
-						<uni-easyinput
+						<!-- <uni-easyinput
 						placeholder="请输入姓名" 
 						@input="inputName" 
 						>
-						</uni-easyinput>
+						</uni-easyinput> -->
+						<uni-data-select  v-model="telephoneNumber" :localdata="members" placeholder="请选择填报人" @change="NameText"/>
 					</view>
 				</uni-col>
 				<uni-col :span="13">
@@ -180,12 +181,14 @@
 
 					],
 					status:[],
+				members:[],
 					
 			
 			}
 		},
 		mounted() {
 				this.getDisasterRecordQueryData(true)
+				this.gerMembers()
 				// this.getAllData()
 		
 		},	
@@ -203,12 +206,21 @@
 		},
 		methods: {
 			
-			
+			//填报人获取
+			NameText(e) {
+				this.officePageInfo.currentPage = 1
+				this.DisasterRecordQueryData = []
+				this.disasterRecordForm.memberId=e
+				console.log("this.disasterRecordForm.memberId",this.disasterRecordForm.memberId)
+				this.getDisasterRecordQueryData()
+							
+			},
 			//审核情况筛选逻辑
 			CheckPickerChange(e) {
 				this.officePageInfo.currentPage = 1
 				this.DisasterRecordQueryData = []
 				this.disasterRecordForm.approvalStatus=e
+				console.log("this.disasterRecordForm.approvalStatus",this.disasterRecordForm.approvalStatus)
 				this.getDisasterRecordQueryData()
 				
 				// var flag=0
@@ -281,6 +293,32 @@
 				})
 				
 			},300),
+			gerMembers(){
+				request({
+					method:'GET',
+					url:'member/getAllMembersIdAndName',
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.members = res.data.MembersIdAndNameRsp.map(item=>{
+							return {
+								value:item.memberId,
+								text:item.memberName,
+							}
+						})
+						this.members=res.data.MembersIdAndNameRsp
+						for(var i=0;i<this.members.length;i++){
+							if(this.DisasterInfoQueryData.memberId==this.members[i].memberId){
+									this.DisasterInfoQueryData.memberId=this.members[i].memberName
+							}
+						}
+						console.log("members",this.members)
+					}else{
+						this.$message.error(res.message)
+					}
+					
+				})
+			},
 			getMemberData(){
 				request({
 					method:'GET',
@@ -304,32 +342,8 @@
 					console.log("成员",this.DisasterRecordQueryData)
 				})
 			},
-			//编写筛选逻辑函数需要获取到全部数据
-			getAllData(){
-				request({
-					method:'POST',
-					url:'disasterRecord/queryList',
-					data:{
-						DisasterRecordQueryListReq:this.disasterRecordForm,
-						QueryPagingParamsReq:{
-							offset:0,
-							queryCount:9999,
-						}
-					}
-				})
-				.then(res=>{
-					if(res.code===2000){
-						this.ALLData=res.data.DisasterRecordQueryListRsp
-						// console.log("ALLData",this.ALLData)
-						res.data.DisasterRecordQueryListRsp.forEach((item,index)=>{this.status[index]=item.approvalStatus})
-						// console.log("this.status",this.status)
-					}else{
-						this.$message.error(res.message)
-					}
-					console.log("@res@",res)
-				})
-				
-			},
+	
+			
 			async openCheckDialog(item){
 					const response = await uni.navigateTo({
 						url:'/pages_DisasterRecord/DisasterFIllCheck',
@@ -360,7 +374,7 @@
 		}
 	
 	 .input-set {
-		 width:85px
+		 width:90px
 	 }
 	 .Details-item-container {
 	 	padding:10px 5px;
