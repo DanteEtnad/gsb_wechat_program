@@ -49,20 +49,12 @@
 					</view>
 				</uni-col>
 			</uni-row>
-			<uni-row>
-				<uni-col :span="12">
-				<view @click="getLocation">
-					<text style="margin-right: 5px;flex:2">获取当前距离</text>
-					<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
-				</view>
-				</uni-col>
-			</uni-row>
 		</view>
 		
 		<navigator url="/pages/information/informationSkip" hover-class="none">
-			<view class="item-container" v-for="item in PotentialPointData" :key="item" @click="openPatrolReportDialog(item)">
+			<view class="item-container" v-for="item in PotentialPointData" :key="item">
 				<view class="Details-item">
-					<view style="display: flex;justify-content: space-between;border-bottom: 1rpx dotted #c7c7c7;padding: 0 5px 5px">
+					<view style="display: flex;justify-content: space-between;border-bottom: 1rpx dotted #c7c7c7;padding: 0 5px 5px" @click="openPatrolReportDialog(item)">
 						<view style="display: flex;">
 							<image v-if="item.potentialPointType=='001'" src="/static/Potential/bengta.svg" style="width: 18px; height: 24px;" mode="aspectFit"></image>
 							<image v-else-if="item.potentialPointType=='002'" src="/static/Potential/huapo.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
@@ -98,11 +90,15 @@
 							</uni-col>
 						</uni-row>
 					</view>
-					<view class="Details-item-info">
+					<view class="Details-item-info" @click="getLocation2(item)">
 						<uni-row>
-							<uni-col :span="24">
+							<uni-col :span="12">
 								<text>巡查次数：<text>{{item.patrolAmount}}</text></text>
-							</uni-col>	
+							</uni-col>
+							<uni-col :span="12">
+								<text style="margin-right: 5px;flex:2">获取当前距离</text>
+								<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
+							</uni-col>
 						</uni-row>
 					</view>
 				</view>
@@ -218,6 +214,72 @@
 				this.fromLocation=this.fromLocation+this.PotentialPointData[i].potentialPointLocationLatitude+','+this.PotentialPointData[i].potentialPointLocationLongitude;
 				this.getDistance(i)
 				}
+			},
+			getLocation2(item){
+				uni.getLocation({
+					type: 'gcj02'
+				}).then(res=>{
+					this.location=res
+					console.log("位置",this.location)
+					this.toLocation=''
+					this.toLocation=this.toLocation+JSON.stringify(this.location[1].latitude)+','+JSON.stringify(this.location[1].longitude)
+					console.log("weizhii",this.toLocation)
+				})
+			
+				this.fromLocation='';
+				console.log("经纬度",item.potentialPointLocationLatitude)
+				this.fromLocation=this.fromLocation+item.potentialPointLocationLatitude+','+item.potentialPointLocationLongitude;
+			
+			
+			
+				this.distance='未定义',
+				console.log("标记1",this.fromLocation)
+				console.log("标记2",this.toLocation)
+			  uni.request({
+			    url: 'https://apis.map.qq.com/ws/distance/v1/', //距离计算接口地址。
+			    method: 'GET',
+			    data: {
+			      mode: 'walking',
+			      from: this.fromLocation,
+			      to: this.toLocation,
+			      key: 'YPSBZ-X2HKG-WHWQQ-INE4R-BSYCF-M3BNJ'
+			    },
+			  }).then(res=>{
+				  if(res[1].data.status===0){
+				    console.log("结果",res[1].data);
+				    console.log("结果2",res[1].data.status);
+				    uni.showToast({
+				    	title: `计算完成`,
+				    	duration: 2000
+				    });
+				  console.log("结果",res[1].data);
+				  let hw = res[1].data.result.elements[0].distance; //拿到距离(米)
+				  if (hw && hw !== -1) {
+				    if (hw < 1000) {
+				      hw = hw + 'm';
+				    }
+				    //转换成公里
+				    else {
+				      hw = (hw / 2 / 500).toFixed(2) + 'km'
+				    }
+				  } else {
+				    hw = "距离太近或请刷新重试"
+				  }
+				  console.log("距离为",hw);
+				  this.distance=hw;
+				  console.log("距离为",this.distance);
+				  item.distance=this.distance
+			  }
+			  else {
+			  		uni.showToast({
+			  			title: `经纬度错误`,
+			  			duration: 2000,
+			  			icon: "error"
+			  		});			  
+			  }
+			  
+			  })
+			
 			},
 			getDistance(i) {
 				this.distance='未定义',
