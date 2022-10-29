@@ -81,7 +81,7 @@
 
 <script>
 	import {dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins} from "@/utils/mixins.js"
-	import Message from "@/components/Message.vue"
+	import Message from "@/pages_alertManagement/components/Message.vue"
 	import {request} from '@/utils/request.js'
 	export default {
 		mixins:[dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],
