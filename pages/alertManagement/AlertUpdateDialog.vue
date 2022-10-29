@@ -247,22 +247,39 @@
 					}
 				})
 				console.log(updateForm)
-				request({
-					url:'alertManage/alertModify',
-					method:'post',
-					data:{
-						AlertModifyReq:{
-							...updateForm
-						}
+				if(updateForm.alertName===''||updateForm.alertStartTime===''||updateForm.alertEndTime===''){
+					uni.showModal({
+						title:'失败',
+						content:'请输入日期或名字',
+						showCancel:false
+					})
+				}else{
+					if(updateForm.alertStartTime.length!==14||updateForm.alertEndTime.length!==14){
+						uni.showModal({
+							title:'失败',
+							content:'请选择时间',
+							showCancel:false
+						})
+					}else{
+						request({
+							url:'alertManage/alertModify',
+							method:'post',
+							data:{
+								AlertGenerateReq:{
+									...updateForm
+								}
+							}
+						})
+						.then(res=>{
+							if(res.code===2000){
+								this.openMessageDialog()
+							}
+						})
 					}
-				})
-				.then(res=>{
-					if(res.code===2000){
-						this.openMessageDialog()
-					}
-				})
+				}
 			},
 			imgGenerate(){
+				console.log(this.alertForm)
 				let areas = []
 				let mapForm = {
 					alertName:this.alertForm.alertName,
@@ -273,36 +290,52 @@
 					alertAreaLevel:[],
 					mode:0
 				}
+				
+				console.log(this.createData);
 				this.createData.forEach((item,index)=>{
-					let locations = item.location.split(',')
-					areas = [...areas,...locations.map(area=>{
-						return{
-							level:index+1,
-							areaName:area
-						}
-					})]
+					if(item.location.length!==0){
+						let locations = item.location.split(',')
+						areas = [...areas,...locations.map(area=>{
+							return{
+								level:index+1,
+								areaName:area
+							}
+						})]
+					}
 				})
 				mapForm.alertAreaLevel = areas
 				console.log(mapForm);
 				if(this.alertForm.alertName===''||this.alertForm.alertStartTime===''||this.alertForm.alertEndTime===''){
 					uni.showModal({
 						title:'失败',
-						content:'请输入时间或名字',
+						content:'请输入日期或名字',
 						showCancel:false
 					})
 				}else{
-					request({
-						url:'alertManage/generateAlertAreaMap',
-						method:'post',
-						data:{
-							AlertAreaMapReq:mapForm
-						}
-					})
-					.then(res=>{
-						if(res.code===2000){
-							this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
-						}
-					})
+					if(mapForm.effectiveStartTime.length!==14||mapForm.effectiveEndTime.length!==14){
+						uni.showModal({
+							title:'失败',
+							content:'请选择时间',
+							showCancel:false
+						})
+					}else{
+						uni.showLoading({
+							title: '加载中'
+						});
+						request({
+							url:'alertManage/generateAlertAreaMap',
+							method:'post',
+							data:{
+								AlertAreaMapReq:mapForm
+							}
+						})
+						.then(res=>{
+							if(res.code===2000){
+								this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
+								uni.hideLoading();
+							}
+						})
+					}
 				}
 			},
 			imgChange(){
