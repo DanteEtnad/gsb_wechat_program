@@ -29,7 +29,7 @@
 							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">金平区</text>
 						</uni-col>
 						<uni-col :span="6">
-							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[0].dataCount}}</text>
+							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[1].dataCount}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -39,7 +39,7 @@
 							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">龙湖区</text>
 						</uni-col>
 						<uni-col :span="6">
-							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[1].dataCount}}</text>
+							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[0].dataCount}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -49,7 +49,7 @@
 							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">澄海区</text>
 						</uni-col>
 						<uni-col :span="6">
-							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[2].dataCount}}</text>
+							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[5].dataCount}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -59,7 +59,7 @@
 							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">濠江区</text>
 						</uni-col>
 						<uni-col :span="6">
-							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[3].dataCount}}</text>
+							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[2].dataCount}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -69,7 +69,7 @@
 							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">潮阳区</text>
 						</uni-col>
 						<uni-col :span="6">
-							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[4].dataCount}}</text>
+							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[3].dataCount}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -79,7 +79,7 @@
 							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">潮南区</text>
 						</uni-col>
 						<uni-col :span="6">
-							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[5].dataCount}}</text>
+							<text style="margin-left: 10px;  font-size: 14px;text-align: center;">{{officeData[4].dataCount}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
