@@ -9,85 +9,352 @@
 				"navigationStyle": "custom",
 				"backgroundColor": "#E5E5E5"
 			}
-		}, {
-			"path": "pages/index_normal/index_normal",
+		},
+		{
+			"path": "pages/login/logininside",
+			"style": {
+				"navigationStyle": "custom",
+				"backgroundColor": "#E5E5E5"
+			}
+		}
+		],	
+		"subPackages": [
+		{
+			"root": "pages_index_normal",
+			"pages": [{
+			"path": "index_normal",
 			"style": {
 				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
 				"backgroundColor": "#ff0000"
 			}
 
-		}, {
-			"path": "pages/alertManagement/DaliyAlert",
+		},
+		{
+			"path": "index_feizhuanye",
 			"style": {
-				"navigationBarTitleText": "今日预警",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "汕头市地质灾害气象预警平台",
+				"backgroundColor": "#ff0000"
 			}
-
-		}, {
-			"path": "pages/alertManagement/SubmitDisaster",
-			"style": {
-				"navigationBarTitleText": "险情上报",
-				"enablePullDownRefresh": false
+		
+		}]
+		},
+		{
+				"root": "pages_alertManagement",
+				"pages": [
+					
+					{
+						"path": "DaliyAlert",
+						"style": {
+							"navigationBarTitleText": "今日预警",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "SubmitDisaster",
+						"style": {
+							"navigationBarTitleText": "险情上报",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "ProfessionDetect",
+						"style": {
+							"navigationBarTitleText": "专业检测",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "AroundPotential",
+						"style": {
+							"navigationBarTitleText": "周边隐患",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "AlertCreate",
+						"style": {
+							"navigationBarTitleText": "预警单创建",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "AlertCheck",
+						"style": {
+							"navigationBarTitleText": "预警单审批",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "AlertCreateDialog",
+						"style": {
+							"navigationBarTitleText": "预警单创建",
+							"enablePullDownRefresh": false
+						}
+					
+					}, {
+						"path": "AlertCheckDialog",
+						"style": {
+							"navigationBarTitleText": "预警单审批",
+							"enablePullDownRefresh": false
+						}
+					
+					}
+					,{
+					    "path" : "AlertUpdateDialog",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+				]
+			},
+			{
+				"root": "pages_DailyPatrol",
+				"pages": [
+					{
+					"path" : "DailyPatrolCount",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "巡查统计",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					
+					,{
+					    "path" : "DailyPatrol",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "开展巡查",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					
+					,{
+					    "path" : "DailyPatrolReportAdd",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "新增巡查任务",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					},
+					{
+					    "path" : "DailyPatrolUser",
+					    "style" : {
+					        "navigationBarTitleText" : "开展巡查",
+					        "backgroundColor" : "#ff0000"
+					    }
+					},
+					{
+					    "path" : "DailyPatrolPotential",
+					    "style" : {
+					        "navigationBarTitleText" : "开展巡查",
+					        "backgroundColor" : "#ff0000"
+					    }
+					},
+					{
+					    "path" : "DailyPatrolReportDialog",
+					    "style" : {
+					        "navigationBarTitleText" : "uni-app",
+							"navigationStyle" : "custom"
+					    }
+					},
+					{
+					    "path" : "DailyPatrolReport",
+					    "style" : {
+					        "navigationBarTitleText" : "uni-app",
+							"navigationStyle" : "custom"
+					    }
+					},
+					{
+					    "path" : "DailyPatrolReportCreate",
+					    "style" : {
+					        "navigationBarTitleText" : "新增巡查任务"
+					    }
+					},
+					{
+					    "path" : "DailyPatrolNote",
+					    "style" : {
+					        "navigationBarTitleText" : "巡查记录"
+					    }
+					}
+					
+				]
 			}
-
-		}, {
-			"path": "pages/alertManagement/ProfessionDetect",
-			"style": {
-				"navigationBarTitleText": "专业检测",
-				"enablePullDownRefresh": false
+			,{
+				"root": "pages_DisasterRecord",
+				"pages": [
+					{
+					    "path" : "DisasterDetails",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情详情",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterDetailsDialog",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "",
+					        "enablePullDownRefresh": false,
+							"navigationStyle":"custom"
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterCount",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情统计",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterFill",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情填报",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterFillchange",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情填报",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterFillHistory",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情填报-历史记录",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterFIllCheck",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情审核",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "DisasterCheck",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "灾情审核",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+					,{
+					    "path" : "map",
+					    "style" :                                                                                    
+					    {
+					        "navigationBarTitleText": "地图",
+					        "enablePullDownRefresh": false
+					    }
+					    
+					}
+				]	
+			},{
+				"root": "pages_patrolManagement",
+				"pages": [
+					{
+					    "path" : "PatrolResultApproval",
+					    "style" : {
+					        "navigationBarTitleText" : "数据审批",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+					{
+					    "path" : "Patrolfill",
+					    "style" : {
+					        "navigationBarTitleText" : "数据填报",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+					{
+					    "path" : "Patrolnew",
+					    "style" : {
+					        "navigationBarTitleText" : "新增巡排查",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+					{
+					    "path" : "Patrolnewdetails",
+					    "style" : {
+					        "navigationBarTitleText" : "",
+							"navigationStyle" : "custom",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+						
+					
+					{
+					    "path" : "PatrolStatics",
+					    "style" : {
+					        "navigationBarTitleText" : "巡排查统计",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+					{
+					    "path" : "Patrolfilldetails",
+					    "style" : {
+					        "navigationBarTitleText" : "详细报告",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+					{
+					    "path" : "Patrolquery",
+					    "style" : {
+					        "navigationBarTitleText" : "巡排查数据查询",
+					        "enablePullDownRefresh" : false
+					    }
+					},
+					{
+					    "path" : "PatrolResultApprovaldetails",
+					    "style" : {
+					        "navigationBarTitleText" : "巡排查数据审核",
+					        "enablePullDownRefresh" : false
+					    }
+					}
+				]
 			}
+			
+	], 
 
-		}, {
-			"path": "pages/alertManagement/AroundPotential",
-			"style": {
-				"navigationBarTitleText": "周边隐患",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/alertManagement/AlertCreate",
-			"style": {
-				"navigationBarTitleText": "预警单创建",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/alertManagement/AlertCheck",
-			"style": {
-				"navigationBarTitleText": "预警单审批",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/alertManagement/AlertCreateDialog",
-			"style": {
-				"navigationBarTitleText": "预警单创建",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/alertManagement/AlertCheckDialog",
-			"style": {
-				"navigationBarTitleText": "预警单审批",
-				"enablePullDownRefresh": false
-			}
-
-		}
-	    ,{
-            "path" : "pages/alertManagement/AlertUpdateDialog",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+		
+  //   ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "汕头市地质灾害气象预警平台",
 		"navigationBarBackgroundColor": "#2E9BFF",
 		"backgroundColor": "#ff0000"
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
 }

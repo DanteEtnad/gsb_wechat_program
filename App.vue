@@ -6,11 +6,11 @@
 	import {queryAll} from "./utils/global.js"
 	export default {
 		onLaunch: function() {
-			if(uni.getStorageSync('token')){
-				uni.redirectTo({
-					url:'/pages/index_normal/index_normal'
-				})
-			}
+			// if(uni.getStorageSync('token')){
+			// 	uni.redirectTo({
+			// 		url:'/pages_index_normal/index_normal'
+			// 	})
+			// }
 		},
 		onShow: function() {
 			console.log('App Show')
