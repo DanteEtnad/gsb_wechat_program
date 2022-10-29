@@ -42,7 +42,7 @@
 		props:['isAlert'],
 		data(){
 			return{
-				text:'加载中',
+				text:'今日暂无预警',
 				mapUrl:'',
 				alertData:'',
 				todayTime:'',
@@ -79,7 +79,6 @@
 				this.getAlertLocation(this.alertData.alertLevelFourthAdcode,3)
 				this.mapUrl = this.alertData.alertMapUrl
 				console.log(this.alertLevels);
-				this.text='今日暂无预警'
 			},
 			getAlertLocation(levelAdcode,index){
 				let alertLevelAdcode = levelAdcode.split(',').filter(item=>item.length===9)

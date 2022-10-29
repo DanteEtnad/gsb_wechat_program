@@ -83,7 +83,7 @@
 <script>
 	import {getAreaOptionsMixins,dataCodeTransformMixins} from "@/utils/mixins.js"
 	import {request} from "@/utils/request.js"
-	import Message from "@/pages_alertManagement/components/Message.vue"
+	import Message from "@/components/Message.vue"
 	export default {
 		mixins:[getAreaOptionsMixins,dataCodeTransformMixins],
 		components:{
@@ -171,28 +171,44 @@
 			},
 			submit(){
 				let createForm = {...this.alertForm}
-				createForm.alertStartTime = createForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
-				createForm.alertEndTime = createForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
-				createForm.alertDescription = ''
-				createForm.alertMapTitle = '汕头市地质灾害气象风险预警预报结果'
-				this.createData.forEach((item,index)=>{
-					if(item.location!==''){
-						createForm.alertDescription += `${this.text[index]}${item.location}；`
+					createForm.alertStartTime = createForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
+					createForm.alertEndTime = createForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
+					createForm.alertDescription = ''
+					createForm.alertMapTitle = '汕头市地质灾害气象风险预警预报结果'
+					this.createData.forEach((item,index)=>{
+						if(item.location!==''){
+							createForm.alertDescription += `${this.text[index]}${item.location}；`
+						}
+					})
+					console.log(createForm);
+					if(createForm.alertName===''||createForm.alertStartTime===''||createForm.alertEndTime===''){
+						uni.showModal({
+							title:'失败',
+							content:'请输入日期或名字',
+							showCancel:false
+						})
+					}else{
+						if(createForm.alertStartTime.length!==14||createForm.alertEndTime.length!==14){
+							uni.showModal({
+								title:'失败',
+								content:'请选择时间',
+								showCancel:false
+							})
+						}else{
+							request({
+								url:'alertManage/alertGenerate',
+								method:'post',
+								data:{
+									AlertGenerateReq:createForm
+								}
+							})
+							.then(res=>{
+								if(res.code===2000){
+									this.openMessageDialog()
+								}
+							})
+						}
 					}
-				})
-				console.log(createForm);
-				request({
-					url:'alertManage/alertGenerate',
-					method:'post',
-					data:{
-						AlertGenerateReq:createForm
-					}
-				})
-				.then(res=>{
-					if(res.code===2000){
-						this.openMessageDialog()
-					}
-				})
 			},
 			openMessageDialog(){
 				this.$refs.message.open('center')
@@ -211,6 +227,7 @@
 				})
 			},
 			imgGenerate(){
+				console.log(this.alertForm)
 				let areas = []
 				let mapForm = {
 					alertName:this.alertForm.alertName,
@@ -221,36 +238,52 @@
 					alertAreaLevel:[],
 					mode:0
 				}
+				
+				console.log(this.createData);
 				this.createData.forEach((item,index)=>{
-					let locations = item.location.split(',')
-					areas = [...areas,...locations.map(area=>{
-						return{
-							level:index+1,
-							areaName:area
-						}
-					})]
+					if(item.location.length!==0){
+						let locations = item.location.split(',')
+						areas = [...areas,...locations.map(area=>{
+							return{
+								level:index+1,
+								areaName:area
+							}
+						})]
+					}
 				})
 				mapForm.alertAreaLevel = areas
 				console.log(mapForm);
 				if(this.alertForm.alertName===''||this.alertForm.alertStartTime===''||this.alertForm.alertEndTime===''){
 					uni.showModal({
 						title:'失败',
-						content:'请输入时间或名字',
+						content:'请输入日期或名字',
 						showCancel:false
 					})
 				}else{
-					request({
-						url:'alertManage/generateAlertAreaMap',
-						method:'post',
-						data:{
-							AlertAreaMapReq:mapForm
-						}
-					})
-					.then(res=>{
-						if(res.code===2000){
-							this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
-						}
-					})
+					if(mapForm.effectiveStartTime.length!==14||mapForm.effectiveEndTime.length!==14){
+						uni.showModal({
+							title:'失败',
+							content:'请选择时间',
+							showCancel:false
+						})
+					}else{
+						uni.showLoading({
+							title: '加载中'
+						});
+						request({
+							url:'alertManage/generateAlertAreaMap',
+							method:'post',
+							data:{
+								AlertAreaMapReq:mapForm
+							}
+						})
+						.then(res=>{
+							if(res.code===2000){
+								this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
+								uni.hideLoading();
+							}
+						})
+					}
 				}
 			},
 			imgChange(){
