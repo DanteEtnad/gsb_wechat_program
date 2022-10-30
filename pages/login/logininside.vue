@@ -40,6 +40,7 @@
 									v-model="model1.code"
 									border="none"
 									placeholder="请填写密码"
+									type="password"
 									@input="inputpwd"
 								></u--input>
 						</u-form-item>			
