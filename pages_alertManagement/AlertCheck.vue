@@ -62,7 +62,7 @@
 							</text>
 						</uni-col>
 						<uni-col :span="14">
-							<text>当前进度：{{dataCodeTransform(item.alertPhase.toString(),'alertPhases')}}</text>
+							<text>当前进度：{{dataCodeTransform(item.alertSubphase.toString(),`alertSubphase${item.alertPhase}`)}}</text>
 						</uni-col>
 					</uni-row>
 				</view>
@@ -150,6 +150,10 @@
 			}
 		},
 		mounted() {
+			// this.getAlertData(true)
+		},
+		onShow(){
+			console.log('onShow');
 			this.getAlertData(true)
 		},
 		onReachBottom() {
@@ -196,6 +200,7 @@
 					if(res.code===2000){
 						this.alertData = [...this.alertData,...res.data.QueryAlertListRsp]
 						this.officePageInfo.dataAmount = res.data.QuerySummaryRsp.dataAmount
+						console.log(this.alertData);
 						uni.hideLoading();
 					}
 				})

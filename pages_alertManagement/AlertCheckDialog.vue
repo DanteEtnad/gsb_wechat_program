@@ -4,7 +4,8 @@
 			<uni-row>
 				<view class="check-status">
 					<text>当前进度：</text>
-					<text>{{dataCodeTransform(alert.alertPhase.toString(),'alertPhases')}}</text>
+					<text>{{transformAlertSubphase(dataCodeTransform(alert.alertSubphase.toString(),`alertSubphase${alert.alertPhase}`))}}</text>
+					<!-- <text>{{dataCodeTransform(alert.alertSubphase.toString(),`alertSubphase${alert.alertPhase}`)}}</text> -->
 				</view>
 			</uni-row>
 			<uni-row>
@@ -31,8 +32,9 @@
 				<view class="check-status">
 					<text>操作：</text>
 					<view class="check-status-button">
-						<button @click="alertCheck" v-if="alert.alertState!=='CKD'">通过</button>
-						<button @click="publish" v-else>发布</button>
+						<button @click="publish" v-if="alert.alertState==='CKD'">发布</button>
+						<button @click="alertHandle" v-else-if="alert.alertState==='ORG'||alert.alertState==='HDG'">通过</button>
+						<button @click="alertCheck" v-else>通过</button>
 						<button @click="openUpdateDialog">修改</button>
 						<button @click="alertDelete">终止</button>
 					</view>
@@ -55,16 +57,24 @@
 				</p>
 			</view>
 		</view>
+		<uni-popup ref="messagePopup" background-color="#fff">
+			<AlertMessage ref="message" @closeDialog="closeMessageDialog" @afterSendMessage="afterSendMessage"/>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import {requestAuthority,request} from "@/utils/request.js"
 	import {dataCodeTransformMixins,timeTransformMixins,getMemberOptionsMixins} from "@/utils/mixins.js"
+	import AlertMessage from "@/pages_alertManagement/components/AlertMessage.vue"
 	export default {
 		mixins:[dataCodeTransformMixins,timeTransformMixins,getMemberOptionsMixins],
+		components:{
+			AlertMessage
+		},
 		data() {
 			return {
+				AlertProcessMessageRsp:{},
 				alert:{},
 				officeData:[],
 				alertDescription:[],
@@ -88,6 +98,30 @@
 			this.gerMembers()
 		},
 		methods: {
+			alertHandle(){
+				request({
+					url:'alertManage/alertHandle',
+					method:'post',
+					data:{
+						AlertHandleReq:{
+							...this.queryForm,
+							operateProcedureResult:'Y'
+						}
+					}
+				})
+				.then(res=>{
+					if(res.code===2000){
+						this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
+						this.openMessageDialog(this.AlertProcessMessageRsp)
+					}else{
+						uni.showModal({
+							title:'失败',
+							content:res.message,
+							showCancel:false
+						})
+					}
+				})
+			},
 			alertCheck(){
 				request({
 					url:'alertManage/alertCheck',
@@ -101,15 +135,8 @@
 				})
 				.then(res=>{
 					if(res.code===2000){
-						uni.showModal({
-							title:'成功',
-							content:'审批成功,点击确定返回',
-							showCancel:false
-						}).then(res=>{
-							uni.redirectTo({
-								url:'/pages/alertManagement/AlertCheck',
-							})
-						})
+						this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
+						this.openMessageDialog(this.AlertProcessMessageRsp)
 					}else{
 						uni.showModal({
 							title:'失败',
@@ -208,15 +235,8 @@
 				})
 				.then(res=>{
 					if(res.code===2000){
-						uni.showModal({
-							title:'成功',
-							content:'发布成功,点击确定返回',
-							showCancel:false
-						}).then(res=>{
-							uni.redirectTo({
-								url:'/pages/alertManagement/AlertCheck',
-							})
-						})
+						this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
+						this.openMessageDialog(this.AlertProcessMessageRsp)
 					}else{
 						uni.showModal({
 							title:'失败',
@@ -224,6 +244,35 @@
 							showCancel:false
 						})
 					}
+				})
+			},
+			transformAlertSubphase(str){
+				switch(str){
+					case '生成':return '风险预警单创建';
+					case '会商':return '预警预报结果会商';
+					case '复核':return '预警技术负责人复核';
+					case '四级审批':return '预警中心和气象台领导审核';
+					case '三级审批':return '各局主管科室领导审核';
+					case '二级审批':return '各局主管领导签批';
+					case '一级审批':return '联合向市委和市政府汇报';
+					case '发布':return '已发布';
+				}
+			},
+			openMessageDialog(AlertProcessMessageRsp){
+				this.$refs.message.openMessageDialog(AlertProcessMessageRsp)
+				this.$refs.messagePopup.open('center')
+			},
+			closeMessageDialog(){
+				this.$refs.messagePopup.close()
+			},
+			afterSendMessage(){
+				this.closeMessageDialog()
+				uni.showModal({
+					title:'成功',
+					content:'发送成功,点击确定返回',
+					showCancel:false
+				}).then(res=>{
+					uni.navigateBack()
 				})
 			},
 		}
