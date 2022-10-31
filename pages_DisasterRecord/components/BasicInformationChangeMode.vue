@@ -490,9 +490,7 @@
 				this.latitudeText3=v3
 				this.emit()
 				
-				
-				// this.sendData.disasterLatitude=JSON.stringify(this.sendData.disasterLatitude)
-				// this.sendData.disasterLongitude=JSON.stringify(this.sendData.disasterLongitude)
+		
 				
 				for(var index=0;index<7;index++){
 					if(this.sendData.disasterRecordType==this.list[index].value){
@@ -733,40 +731,7 @@
 				})
 			},
 			
-			//获取成员id
-			// gerMembers1(){
-			// 	requestAuthority({
-			// 		url:'member/query',
-			// 		method:'post',
-			// 		data:{
-			// 			MemberQueryReq:{},
-			// 			QueryPagingParamsReq:{
-			// 				offset:0,
-			// 				queryCount:9999
-			// 			}
-			// 		}
-			// 	})
-			// 	.then(res=>{
-			// 		if(res.code===2000){
-			// 			this.members = res.data.MemberQueryRsp.map(item=>{
-			// 				return {
-			// 					value:item.memberId,
-			// 					text:item.memberName,
-			// 				}
-			// 			})
-			// 			let members = {}
-			// 			this.members.forEach(item=>{
-			// 				members[item.value] = item.text
-			// 			})
-			// 			for(var i=0;i<this.members.length;i++){
-			// 				if(this.disaster.id==this.members[i].value){
-			// 						this.disaster.name=this.members[i].text
-			// 				}
-			// 			}
-					
-			// 		}
-			// 	})
-			// },
+
 			//获取隐患点和地点
 			getPotentialIdData(){
 				request({

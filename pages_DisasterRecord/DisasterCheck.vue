@@ -222,20 +222,7 @@
 				this.disasterRecordForm.approvalStatus=e
 				console.log("this.disasterRecordForm.approvalStatus",this.disasterRecordForm.approvalStatus)
 				this.getDisasterRecordQueryData()
-				
-				// var flag=0
-				// // this.officePageInfo.currentPage = 1
-				// this.DisasterRecordQueryData = []
-				// this.ALLData.forEach((item,index)=>{
-				// 	if(item.approvalStatus==e){
-				// 		this.DisasterRecordQueryData[flag]=item
-				// 		flag=flag+1
-				// 	}else{
-				// 		console.log("null")
-				// 	}
-				// })
-				// this.getMemberData()
-				// console.log("DisasterRecordQueryData",this.DisasterRecordQueryData)
+			
 			},
 			
 			input(e) {

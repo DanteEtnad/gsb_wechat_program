@@ -43,7 +43,7 @@
 	export default {
 		name:"Message",
 		props: {
-			DisasterRecordForm: '',
+			checkForm: '',
 		},
 		data() {
 			return {
@@ -204,34 +204,31 @@
 						if(res.code===2000){
 							this.reset()
 							this.$emit('afterSendMessage')
-							
-							
 							this.changchenckstauts()
-							this.DisasterRecordUpdate()
-							console.log("表单提交成功")
 						}
 					})
 				}
 			},
-			//上传灾害信息
-			DisasterRecordUpdate(){
+			//修改审核状态
+			changchenckstauts(){
+				console.log("发送审核请求前=",this.checkForm)
 				request({
-					method:'POST',
-					url:'disasterRecord/update',
+					url:'disasterRecord/approval',
+					method:"post",
 					data:{
-						DisasterRecordUpdateReq :this.DisasterRecordForm,
+						DisasterRecordApprovalReq :this.checkForm
+					
 					}
 				})
 				.then(res=>{
 					if(res.code===2000){
-					console.log("修改里的短信DisasterRecordForm",this.DisasterRecordForm)
-					console.log("@res@",res)
-					console.log("更新成功")	
-					}else{
-						this.$message.error(res.message)
+						console.log("审核状态修改成功")
+						console.log("发送审核请求后=",this.checkForm)
 					}
 				})
 			},
+		
+			
 			reset(){
 				this.sendForm = {
 					messageTemplateId: "",

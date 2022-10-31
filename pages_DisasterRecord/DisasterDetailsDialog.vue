@@ -50,7 +50,7 @@
 						{{disasterLongitude}}&nbsp;{{disasterLatitude}}
 						</text> 
 						<!-- <uni-icons color="#2E98FF" type="upload" size=24 @click=""></uni-icons> -->
-						<image src="/static/Potential/back.svg" style="width:20px;height:20px;"></image>
+						<image src="/static/Potential/back.svg" style="width:20px;height:20px;" @click="toMapAPP"></image>
 					</u-row>
 					
 				</view>
@@ -150,6 +150,19 @@
 			
 		},
 		methods: {
+			toMapAPP(){
+				const latitude = Number(this.DisasterInfoQueryData.disasterLatitude)
+				const longitude = Number(this.DisasterInfoQueryData.disasterLongitude)
+					uni.openLocation({
+						latitude: latitude,
+						longitude: longitude,
+						name: this.DisasterInfoQueryData.disasterLocation,
+						scale: 12,
+						success(){
+						    console.log('success')
+						}
+					})
+			},
 			formatDegree(value) {
 				if(value != null && value != ''){
 				    ///<summary>将度转换成为度分秒</summary>  

@@ -30,7 +30,6 @@
 						<uni-data-picker
 						:localdata="options"
 						:placeholder=disaster.city
-						@change="areaChange" 
 						:readonly="true"
 						style="flex:6;background-color:  #F7F7F8;"
 						>
@@ -53,7 +52,6 @@
 						<uni-easyinput
 						placeholder="请输入地点" 
 						:disabled="true"
-						@change="locationText"
 						v-model="disaster.location"
 						>
 						</uni-easyinput>
@@ -72,7 +70,6 @@
 						<uni-data-picker 
 						:placeholder=disaster.potentialid
 						v-model="disaster.potentialid"
-						@change="potentionIdChange"
 						:readonly="true"
 						:localdata="potentionIdData" >
 						</uni-data-picker>
@@ -151,7 +148,7 @@
 							:placeholder="disaster.longit1" 
 							v-model="disaster.longit1"
 							:disabled="true"
-							@change="longitudetext1">
+							>
 							</uni-easyinput>
 						</view>
 						<view style="padding-right: 5px;">
@@ -159,7 +156,7 @@
 							:placeholder="disaster.latit1" 
 							:disabled="true"
 							v-model="disaster.latit1"
-							@change="latitudetext1">
+							>
 							</uni-easyinput>
 						</view>
 				</uni-col>
@@ -169,7 +166,7 @@
 							:placeholder="disaster.longit2" 
 							:disabled="true"
 							v-model="disaster.longit2"
-							@change="longitudetext2">
+							>
 							</uni-easyinput>
 						</view>
 						<view style="padding-right: 5px;">
@@ -177,7 +174,7 @@
 							:placeholder="disaster.latit2" 
 							:disabled="true"
 							v-model="disaster.latit2"
-							@change="latitudetext2">
+							>
 							</uni-easyinput>
 						</view>
 				</uni-col>
@@ -187,7 +184,7 @@
 							:placeholder="disaster.longit3" 
 							:disabled="true"
 							v-model="disaster.longit3"
-							@change="longitudetext3">
+						>
 							</uni-easyinput>
 						</view>
 						<view style="padding-right: 2px;">
@@ -195,7 +192,7 @@
 							:placeholder="disaster.latit3"
 							:disabled="true"
 							 v-model="disaster.latit3"
-							@change="latitudetext3">
+							>
 							</uni-easyinput>
 						</view>
 				</uni-col>
@@ -264,7 +261,7 @@
 					<view class="select-input">
 						<uni-data-select
 						v-model="disaster.factor" 
-						@change="factorPickerChange"
+					
 						:localdata="FactorsDisaster" 
 						:disabled="true"
 						>
@@ -316,7 +313,7 @@
 						<uni-easyinput
 						:placeholder="disaster.name" 
 						v-model="disaster.name"
-						@change="NameText"
+						
 						:disabled="true"
 						>
 						</uni-easyinput>
@@ -456,8 +453,6 @@
 			this.datamodel();
 			this.gerMembers();
 			console.log("aaaaaaaaaaaaaa",this.sendData)
-			
-			// console.log("aaaaaaaaaaaaaa",this.sendData)
 		},
 		methods: {
 			datamodel(){
@@ -481,16 +476,7 @@
 				this.disaster.longit3=v6
 				this.disaster.factor= this.sendData.disasterTrigger
 				this.disaster.potentialid= this.sendData.potentialPointId
-				
-				
-				
 				 //更新地图要用到
-				// this.longitudeText1=JSON.stringify(v4)
-				// this.longitudeText2=JSON.stringify(v5)
-				// this.longitudeText3=JSON.stringify(v6)
-				// this.latitudeText1=JSON.stringify(v1)
-				// this.latitudeText2=JSON.stringify(v2)
-				// this.latitudeText3=JSON.stringify(v3)
 				 this.longitudeText1=v4
 				 this.longitudeText2=v5
 				 this.longitudeText3=v6
@@ -498,10 +484,7 @@
 				 this.latitudeText2=v2
 				 this.latitudeText3=v3
 				 this.emit()
-				 
-				// for(var i=0;i<this.potentionIdData.length;i++){
-						
-				// }
+		
 				this.disaster.city=this.dataCodeAreaTransform(this.sendData.disasterAdcode,"disasterAdcode")
 				for(var index=0;index<7;index++){
 					if(this.sendData.disasterRecordType==this.list[index].value){
@@ -532,10 +515,8 @@
 				this.$emit("latitude3",this.latitudeText3)
 				
 			},
-			//市县选择
-			areaChange(e) {
-				this.$emit("getCity",e.detail.value[2].value)
-			},
+	
+			
 			//发灾时间
 			DateChange: function(e) {
 				
@@ -548,16 +529,7 @@
 				timeTransform = Date.slice(0, 4)  + Date.slice(5, 7) + Date.slice(8, 10);
 				return timeTransform;
 			},
-			//发灾地点获取
-			locationText(e) {
-				
-				this.$emit("getLocal",e)				
-			},
-			//关联隐患点Id获取
-			potentionIdChange(e){
-				this.$emit("getPotentialId",e)
-				
-			},
+		
 			//灾害类型获取
 			Typechoice(index) {
 				var value;
@@ -614,10 +586,7 @@
 			    }
 				this.$emit("getScale",value)
 			},
-			//引发因素获取
-			factorPickerChange(e) {
-				this.$emit("getFactors",e)
-			},
+		
 			// 灾害等级获取
 			Levelchoice(index) {
 				var value;
@@ -646,37 +615,9 @@
 			    }
 				this.$emit("getLevel",value)
 			},
-			//经度获取
-			longitudetext1(e) {
-				
-				this.longitudeText1=e
-				this.$emit("longitude1",e)
-			},
-			longitudetext2(e) {
-				this.longitudeText2=e
-				this.$emit("longitude2",e)
-			},
-			longitudetext3(e) {
-				this.longitudeText3=e
-				this.$emit("longitude3",e)
-			},
-			//纬度获取
-			latitudetext1(e) {
-				this.latitudeText1=e
-				this.$emit("latitude1",e)
-			},
-			latitudetext2(e) {
-				this.latitudeText2=e
-				this.$emit("latitude2",e)
-			},
-			latitudetext3(e) {
-				this.latitudeText3=e
-				this.$emit("latitude3",e)
-			},
-			//填报人获取
-			NameText(e) {
-				this.$emit("getName",e)				
-			},
+		
+			
+		
 			phonerules(e){
 				this.$emit("getPhone",e.detail.value)	//发送给父组件
 				
@@ -722,40 +663,7 @@
 					
 				})
 			},
-			//获取成员id
-			// gerMembers1(){
-			// 	requestAuthority({
-			// 		url:'member/query',
-			// 		method:'post',
-			// 		data:{
-			// 			MemberQueryReq:{},
-			// 			QueryPagingParamsReq:{
-			// 				offset:0,
-			// 				queryCount:9999
-			// 			}
-			// 		}
-			// 	})
-			// 	.then(res=>{
-			// 		if(res.code===2000){
-			// 			this.members = res.data.MemberQueryRsp.map(item=>{
-			// 				return {
-			// 					value:item.memberId,
-			// 					text:item.memberName,
-			// 				}
-			// 			})
-			// 			let members = {}
-			// 			this.members.forEach(item=>{
-			// 				members[item.value] = item.text
-			// 			})
-			// 			for(var i=0;i<this.members.length;i++){
-			// 				if(this.disaster.id==this.members[i].value){
-			// 						this.disaster.name=this.members[i].text
-			// 				}
-			// 			}
-					
-			// 		}
-			// 	})
-			// },
+			
 			getPotentialIdData(){
 				request({
 					method:'POST',

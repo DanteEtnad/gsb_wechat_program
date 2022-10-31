@@ -139,7 +139,7 @@
 		mixins: [dataCodeAreaTransformMixins,dataCodeTransformMixins,timeTransformMixins,getAreaOptionsMixins],
 		data() {
 			return {
-				placeholderStyle: "primaryColor:rgba(0,0,0,0)",
+		
 				style:"color:blue",
 				index:0,
 				area:[],

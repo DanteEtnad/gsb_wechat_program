@@ -636,12 +636,7 @@
 								text:item.memberName,
 							}
 						})
-						// this.members=res.data.MembersIdAndNameRsp
-						// for(var i=0;i<this.members.length;i++){
-						// 	if(this.DisasterInfoQueryData.memberId==this.members[i].memberId){
-						// 			this.DisasterInfoQueryData.memberId=this.members[i].memberName
-						// 	}
-						// }
+					
 						console.log("members",this.members)
 					}else{
 						this.$message.error(res.message)
@@ -649,35 +644,7 @@
 					
 				})
 			},
-			// gerMembers1(){
-			// 	requestAuthority({
-			// 		url:'member/query',
-			// 		method:'post',
-			// 		data:{
-			// 			MemberQueryReq:{},
-			// 			QueryPagingParamsReq:{
-			// 				offset:0,
-			// 				queryCount:9999
-			// 			}
-			// 		}
-			// 	})
-			// 	.then(res=>{
-			// 		if(res.code===2000){
-			// 			this.members = res.data.MemberQueryRsp.map(item=>{
-			// 				return {
-			// 					value:item.memberId,
-			// 					text:item.memberName,
-			// 				}
-			// 			})
-			// 			let members = {}
-			// 			this.members.forEach(item=>{
-			// 				members[item.value] = item.text
-			// 			})
-			// 			console.log("members",this.members)
-			// 		}
-			// 	})
-			// },
-			//获取隐患点和地点
+
 			getPotentialIdData(){
 				request({
 					method:'POST',
