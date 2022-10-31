@@ -265,7 +265,7 @@
 							url:'alertManage/alertModify',
 							method:'post',
 							data:{
-								AlertGenerateReq:{
+								AlertModifyReq:{
 									...updateForm
 								}
 							}
