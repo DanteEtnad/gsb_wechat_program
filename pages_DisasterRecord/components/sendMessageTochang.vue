@@ -204,9 +204,7 @@
 						if(res.code===2000){
 							this.reset()
 							this.$emit('afterSendMessage')
-							
-							
-							this.changchenckstauts()
+					
 							this.DisasterRecordUpdate()
 							console.log("表单提交成功")
 						}

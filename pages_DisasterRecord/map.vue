@@ -55,7 +55,7 @@
 						longitude:this.longitude,
 						latitude:this.latitude,
 						title:'位置',
-						iconPath:'../../static/Potential/locate.svg',
+						iconPath:'/static/Potential/locate.svg',
 						width:32,
 						height:32,
 				}]
