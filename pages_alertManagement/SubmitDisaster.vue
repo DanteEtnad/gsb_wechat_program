@@ -4,7 +4,7 @@
 			<view class="submit-content">
 				<view class="submit-input">
 					<uni-row>
-						<text>时间：{{submitForm.time}}</text>
+						<text>时间：{{submitForm.DangerReportTime}}</text>
 					</uni-row>
 				</view>
 				<view class="submit-input">
@@ -12,7 +12,7 @@
 						<text>标题：</text>
 					</uni-row>
 					<uni-row>
-						<textarea placeholder="请输入标题" v-model="submitForm.title"/>
+						<textarea placeholder="请输入标题" v-model="submitForm.DangerReportTitle"/>
 					</uni-row>
 				</view>
 				<view class="submit-input">
@@ -20,7 +20,7 @@
 						<text>地点：</text>
 					</uni-row>
 					<uni-row>
-						<textarea placeholder="请输入具体地点" v-model="submitForm.location"/>
+						<textarea placeholder="请输入具体地点" v-model="submitForm.DangerReportArea"/>
 					</uni-row>
 				</view>
 				<view class="submit-input">
@@ -28,36 +28,80 @@
 						<text>详情：</text>
 					</uni-row>
 					<uni-row>
-						<textarea placeholder="请输入上报的具体情况描述，原因和现状等" v-model="submitForm.infomation"/>
+						<textarea placeholder="请输入上报的具体情况描述，原因和现状等" v-model="submitForm.DangerReportDetails"/>
 					</uni-row>
 				</view>
-				<button class="form-button">拍照/录像</button>
-				<button class="submit-button">上报</button>
+				<button class="form-button" @click="takePhoto">拍照</button>
+				<view style="display: flex;justify-content: space-around;" v-if="picUrl.length>0">
+					<u--image :src="picUrl" mode="aspectFit"></u--image>
+				</view>
+				<button class="submit-button" @click="submit">上报</button>
 			</view>
 		</u-form>
 	</view>
 </template>
 
 <script>
+	import {request} from "@/utils/request.js"
+	import {REQUEST_BASEURL,token} from "@/utils/request.js"
 	export default {
 		data() {
 			return {
+				picUrl:'',
 				submitForm:{
-					time:'',
-					title:'',
-					location:'',
-					infomation:''
-				},
-				rules:[]
+					DangerReportTime:'',
+					DangerReportTitle:'',
+					DangerReportArea:'',
+					DangerReportDetails:''
+				}
 			}
 		},
 		created() {
-			this.submitForm.time = this.dayjs().format('YYYY-MM-DD HH:mm:ss')
-			console.log(this.submitForm.time)
+			this.submitForm.DangerReportTime = this.dayjs().format('YYYY-MM-DD HH:mm:ss')
+			// console.log(this.submitForm.DangerReportTime)
 		},
 		methods: {
-			test(){
-				console.log(this.submitForm)
+			async submit(){
+				const [err,res] = await uni.uploadFile({
+					url: `${REQUEST_BASEURL}/dangerReport/dangerCreate`, //仅为示例，非真实的接口地址
+					filePath: this.picUrl,
+					name: 'file',
+					formData: {
+						'DangerReportTime': this.submitForm.DangerReportTime,
+						'DangerReportTitle': this.submitForm.DangerReportTitle,
+						'DangerReportArea': this.submitForm.DangerReportArea,
+						'DangerReportDetails': this.submitForm.DangerReportDetails,
+					},
+					header:{
+						"gsb-Token": token
+					}
+				})
+				if(res){
+					const data = JSON.parse(res.data)
+					if(data.code===2000){
+						uni.showModal({
+							title:'成功',
+							content:'上报成功,点击确定返回',
+							showCancel:false
+						}).then(res=>{
+							uni.navigateBack({
+								delta:2
+							})
+						})
+					}
+				}
+				if(err){
+					// console.log(err);
+				}
+			},
+			async takePhoto(){
+				const [err,res] = await uni.chooseImage({
+					count:1,
+				})
+				if(res){
+					console.log(res)
+					this.picUrl = res.tempFilePaths[0]
+				}
 			}
 		}
 	}
@@ -97,6 +141,7 @@
 				@extend .button-base;
 				width: 160px;
 				height: 36px;
+				margin: 20px 0;
 				line-height: 36px;
 			}
 			.submit-button{
@@ -104,8 +149,7 @@
 				width: 343px;
 				height: 40px;
 				line-height: 40px;
-				position: absolute;
-				bottom: 20px;
+				margin: 20px 0;
 			}
 		}
 		
