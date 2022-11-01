@@ -85,7 +85,7 @@
 						<image v-else-if="item.disasterRecordType=='005'" src="/static/Potential/dimiantaxian.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
 						<image v-else-if="item.disasterRecordType=='006'" src="/static/Potential/dimianchenjiang.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
 						<image v-else="item.disasterRecordType=='007'" src="/static/Potential/buwending.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
-						<text style="margin-left: 10px;font-family: 'Microsoft YaHei'; font-weight: 700;">{{item.disasterLocation}}</text>
+						<text style="margin-left: 10px;font-family: 'Microsoft YaHei';">{{item.disasterLocation}}</text>
 						
 						<!-- 根据审核状态选择样式 -->
 						<span v-if="item.approvalStatus=='FCK'">
@@ -447,14 +447,12 @@
 	}
 	.select{
 		font-size: 12px; 
-		font-weight: 700;
 		color: #000000;
 		background-color: #CEE8FF;
 	}
 	
 	.unselect{
 		font-size: 12px;
-		font-weight: 700;
 		background-color: #F7F7F8;
 		color: #000000;
 	}

@@ -80,7 +80,7 @@
 							<image v-else-if="item.disasterRecordType=='005'" src="/static/Potential/dimiantaxian.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
 							<image v-else-if="item.disasterRecordType=='006'" src="/static/Potential/dimianchenjiang.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
 							<image v-else="item.disasterRecordType=='007'" src="/static/Potential/buwending.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
-							<text style="margin-left: 10px; font-weight: 700; font-size: 14px;">{{item.disasterLocation}}</text> 
+							<text style="margin-left: 10px; font-size: 14px;">{{item.disasterLocation}}</text> 
 						</view>
 						
 						<view>

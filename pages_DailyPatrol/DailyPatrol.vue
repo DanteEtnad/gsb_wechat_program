@@ -20,7 +20,7 @@
 					</uni-col>
 				</uni-row>
 				<uni-row>
-					<text style="font-weight: 700; line-height: 50px; font-size: 14px;">变形迹象</text>
+					<text style="line-height: 50px; font-size: 14px;">变形迹象</text>
 				</uni-row>
 				<view style="padding: 5px;">
 					<uni-row>
@@ -58,7 +58,7 @@
 				<view style="display: flex;justify-content: space-between;border-bottom: 1px dashed black;padding: 0 5px 5px" @click="openPatrolReportDialog(item)">
 					<view style="display: flex;">
 						<u--image class="logo" src="/static/document.svg" width="12px" height="18px" mode="aspectFit"></u--image>
-						<text style="margin-left: 10px;font-family: 'Microsoft YaHei'; font-weight: 700;">{{item.patrolTaskName}}</text>
+						<text style="margin-left: 10px;font-family: 'Microsoft YaHei';">{{item.patrolTaskName}}</text>
 					</view>
 					<view>
 						<uni-icons type="forward" size="16"></uni-icons>
@@ -389,14 +389,12 @@
 	}
 	.select{
 		font-size: 12px; 
-		font-weight: 700;
 		color: #000000;
 		background-color: #CEE8FF;
 	}
 	
 	.unselect{
 		font-size: 12px;
-		font-weight: 700;
 		background-color: #F7F7F8;
 		color: #000000;
 	}

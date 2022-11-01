@@ -4,8 +4,8 @@ export default{
            //设置默认的分享参数
            //如果页面不设置share，就触发这个默认的分享
             share:{
-                title:'share测试',
-                path:'/pages/index/index',
+                title:'欢迎登陆GSB数据处理',
+                path:'/pages/login/login',
                 imageUrl:'',
                 desc:'',
                 content:''

@@ -23,10 +23,10 @@
 						<u--image class="logo" src="/static/user.svg" width="12px" height="18px" mode="aspectFit"></u--image>
 						</uni-col>
 						<uni-col :span="9">
-						<text style="margin-left: 10px;font-family: 'Microsoft YaHei'; font-weight: 700;">{{item.memberName}}</text>
+						<text style="margin-left: 10px;font-family: 'Microsoft YaHei';">{{item.memberName}}</text>
 						</uni-col>
 						<uni-col :span="9">
-						<text style="margin-left: 10px;font-family: 'Microsoft YaHei'; font-weight: 700;">{{item.memberMobile}}</text>
+						<text style="margin-left: 10px;font-family: 'Microsoft YaHei';">{{item.memberMobile}}</text>
 						</uni-col>
 						<uni-col :span="2">
 						<u--image class="logo" src="/static/Mobile.svg" width="18px" height="20px" mode="aspectFit"></u--image>

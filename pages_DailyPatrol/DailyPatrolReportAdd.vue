@@ -5,7 +5,7 @@
 			<view style="margin-bottom: 10px; border-bottom: 1px dashed black;">
 			<view style="margin-bottom: 10px;">
 			<uni-row>
-				<text style="margin-left: 5%; font-weight: 700;">选择隐患点</text>
+				<text style="margin-left: 5%;">选择隐患点</text>
 			</uni-row>
 			</view>
 			</view>
@@ -63,7 +63,7 @@
 							<image v-else-if="item.potentialPointType=='005'" src="/static/Potential/dimiantaxian.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
 							<image v-else-if="item.potentialPointType=='006'" src="/static/Potential/dimianchenjiang.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
 							<image v-else="item.potentialPointType=='007'" src="/static/Potential/buwending.svg"  style="width: 18px; height: 24px;" mode="aspectFit"></image>
-							<text style="margin-left: 10px; font-weight: 700; font-size: 14px;">{{item.potentialPointName}}</text> 
+							<text style="margin-left: 10px; font-size: 14px;">{{item.potentialPointName}}</text> 
 						</view>
 						
 						<view>
