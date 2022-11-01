@@ -84,9 +84,7 @@
 							content:'上报成功,点击确定返回',
 							showCancel:false
 						}).then(res=>{
-							uni.navigateBack({
-								delta:2
-							})
+							uni.navigateBack()
 						})
 					}
 				}

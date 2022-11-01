@@ -1,29 +1,35 @@
-// const REQUEST_BASEURL = 'http://47.107.42.236:8082'
-// const REQUEST_AUTHORITY_BASEURL = 'http://47.107.42.236:8081'
-// const REQUEST_AUTHORITY_BASEURL1 = 'http://47.107.42.236:8084'
-const REQUEST_BASEURL = 'https://stdzpt.com:8082'
-const REQUEST_AUTHORITY_BASEURL = 'https://stdzpt.com:8081'
-const REQUEST_AUTHORITY_BASEURL1 = 'https://stdzpt.com:8084'
+const BASEURL = 'http://47.107.42.236'
+// const BASEURL = 'https://stdzpt.com'
+
+export const REQUEST_BASEURL = `${BASEURL}:8082`
+export const REQUEST_AUTHORITY_BASEURL = `${BASEURL}:8081`
+export const REQUEST_AUTHORITY_BASEURL1 = `${BASEURL}:8084`
+
+// 验证是否http或https开头的请求地址
 const HTTP_REG = /^https?:/
-const token = uni.getStorageSync('token')||" "
+
+// 获取并暴露token
+export const token = uni.getStorageSync('token')||" "
 
 export async function request(config){
+	// 若传入的url为http或https开头，则使用该url，否则使用REQUEST_BASEURL的接口
 	config.url = HTTP_REG.test(config.url)?config.url:`${REQUEST_BASEURL}/${config.url}`
 	config.header={
 		"Content-Type": "application/json;charset=utf-8",
-		"gsb-Token": token,
+		// 请求头设置token
+		"gsb-Token": uni.getStorageSync('token')||" ",
 		...config.header
 	}
 	console.log("request config", config);
-	const response = await uni.request(config)
-	console.log("response", response);
-	if(response[0]){
+	console.log("request config url", config.url);
+	// 向url发送请求 返回一个数组 第一个元素为错误对象 第二个元素为响应对象
+	const [err,res] = await uni.request(config)
+	console.log("res", res);
+	if(err){
 		console.log('出错了')
 	}
 	else{
-		const res = response[1].data
-		//console.log("request config", config);
-		return res
+		return res.data
 	}
 }
 
