@@ -27,8 +27,11 @@
 					@markertap="bindmarkertap"
 					:enable-satellite="enableSatellite"
 					:show-location="true">
-					<view class="back" @click="goPotential">
+					<view class="back" @click="toMapAPP">
 						<image src="/static/Potential/back.svg" style="width:20px;height:20px;"></image>
+					</view>
+					<view class="view" @click="goPotential">
+						<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
 					</view>
 					<view class="location" @click="getLocation">
 						<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
@@ -418,6 +421,19 @@
 			})
 		},
 		methods: {
+			toMapAPP(){
+				const latitude = Number(this.potentialPointResult.potentialPointLocationLatitude)
+				const longitude = Number(this.potentialPointResult.potentialPointLocationLongitude)
+					uni.openLocation({
+						latitude: latitude,
+						longitude: longitude,
+						name: this.potentialPointResult.potentialPointName,
+						scale: 12,
+						success(){
+						    console.log('success')
+						}
+					})
+			},
 			getMemberData(){
 				request({
 					method:'GET',
@@ -614,17 +630,21 @@
 		right: 10px;
 		border-radius: 4px;
 	}
-	.back{
+	.view{
 		@extend .icon-base;
 		bottom:150px;
+	}	
+	.back{
+		@extend .icon-base;
+		bottom:110px;
 	}
 	.location{
 		@extend .icon-base;
-		bottom:100px;
+		bottom:70px;
 	}
 	.more{
 		@extend .icon-base;
-		bottom:50px;
+		bottom:30px;
 	}
 	.potential-point-info-container{
 		background-color: #fff;

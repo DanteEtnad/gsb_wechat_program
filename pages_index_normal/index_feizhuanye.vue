@@ -5,7 +5,7 @@
 				<uni-col>
 					<view class="demo-layout bg-pure-write">
 						<view style="display: flex;">
-							<u--image class="logo" src="http://47.107.42.236:9000/index_normal/user.svg" width="17px" height="20px"></u--image>
+							<u--image class="logo" src="http://stdzpt.com:9000/index/user.svg" width="17px" height="20px"></u--image>
 							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{name}}</text>
 						</view>
 						<view>
@@ -34,14 +34,14 @@
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('pages_alertManagement/DaliyAlert')">
 									<view class="index-icon">
-										<u--image class="logo" src="http://47.107.42.236:9000/index_normal/jinriyujing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+										<u--image class="logo" src="http://stdzpt.com:9000/index/jinriyujing.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>
 							<uni-col :span="6">
 								<view class="index-icon-font" @click="toPages('pages_alertManagement/SubmitDisaster')">
 									<view class="index-icon">
-										<u--image src="http://47.107.42.236:9000/index_normal/xianqingshangbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
+										<u--image src="http://stdzpt.com:9000/index/xianqingshangbao.svg" width="48px" height="68px" mode="aspectFit"></u--image>
 									</view>
 								</view>
 							</uni-col>

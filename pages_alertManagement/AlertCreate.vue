@@ -23,13 +23,13 @@
 					<uni-col :span="12">
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">最高等级</text>
-							<uni-data-select v-model="queryForm.alertLevel" :localdata="alertLevels" style="flex:5"></uni-data-select>
+							<uni-data-select @change="getAlertData(true)" v-model="queryForm.alertLevel" :localdata="alertLevels" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 					<uni-col :span="12"> 
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">当前进度</text>
-							<uni-data-select v-model="queryForm.alertPhase" :localdata="alertPhases" style="flex:5"></uni-data-select>
+							<uni-data-select @change="getAlertData(true)" v-model="queryForm.alertPhase" :localdata="alertPhases" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 				</uni-row>
@@ -37,13 +37,13 @@
 					<uni-col :span="12">
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">状态</text>
-							<uni-data-select v-model="queryForm.alertState" :localdata="alertStates" style="flex:5"></uni-data-select>
+							<uni-data-select @change="getAlertData(true)" v-model="queryForm.alertState" :localdata="alertStates" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 					<uni-col :span="12">
 						<view class="query-select-input">
 							<text style="margin-right: 5px;flex:3">创建方式</text>
-							<uni-data-select v-model="queryForm.alertSourceType" :localdata="alertSourceTypes" style="flex:5"></uni-data-select>
+							<uni-data-select v-model="queryForm.alertSourceType" @change="getAlertData(true)" :localdata="alertSourceTypes" style="flex:5"></uni-data-select>
 						</view>
 					</uni-col>
 				</uni-row>

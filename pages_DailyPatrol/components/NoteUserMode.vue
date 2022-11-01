@@ -4,7 +4,7 @@
 			<uni-forms :model="queryForm" ref="queryForm">
 				<uni-row>
 					<uni-col :span="18">
-						<uni-easyinput placeholder="请输入关键字" @input="input" v-model="queryForm.key"></uni-easyinput>
+						<uni-easyinput placeholder="请输入用户名" @input="input" v-model="queryForm.key"></uni-easyinput>
 					</uni-col>
 					<uni-col :span="6">
 						<button style="margin-left: 5px;" @click="search()">

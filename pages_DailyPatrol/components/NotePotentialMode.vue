@@ -12,7 +12,7 @@
 			<uni-row>
 				<uni-col :span="17">
 					<uni-easyinput 
-					placeholder="请输入关键字" 
+					placeholder="请输入隐患点名" 
 					@input="input" 
 					>
 					</uni-easyinput>

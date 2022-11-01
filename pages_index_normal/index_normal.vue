@@ -5,7 +5,7 @@
 				<uni-col>
 					<view class="demo-layout bg-pure-write">
 						<view style="display: flex;">
-							<u--image class="logo" src="http://stdzpt.com:9000/minio/weather/202112201742.png" width="17px" height="20px"></u--image>
+							<u--image class="logo" src="http://stdzpt.com:9000/index/user.svg" width="17px" height="20px"></u--image>
 							<text style="font-family: Microsoft YaHei;font-size: 14px;font-weight: 400;line-height: 20px;letter-spacing: 0px;text-align: left;">{{memberName}}</text>
 						</view>
 						<view>
