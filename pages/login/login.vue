@@ -119,37 +119,50 @@ methods: {
 		console.log(e);
 	},
 			getVerifyCode(){
-				uni.showLoading({
-					title: '发送中'
-				});
-						requestAuthority1({
-							method:'POST',
-							url:'login/verifyCode',
-							data:{
-								LoginVerifyCodeReq:{
-									"userPhone":this.phoneNumber,
-								}
-							},
-						})
-						.then(res=>{if(res.code===2000){
-							uni.hideLoading();
-							uni.showToast({
-								title: `验证码发送成功`,
-								duration: 2000
-							});}
-							else{
+				let phoneReg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+				if(phoneReg.test(this.phoneNumber)){
+					uni.showLoading({
+						title: '发送中'
+					});
+							requestAuthority1({
+								method:'POST',
+								url:'login/verifyCode',
+								data:{
+									LoginVerifyCodeReq:{
+										"userPhone":this.phoneNumber,
+									}
+								},
+							})
+							.then(res=>{if(res.code===2000){
 								uni.hideLoading();
 								uni.showToast({
-									title: `验证码发送失败`,
+									title: `验证码发送成功`,
 									duration: 2000
 								});
-								console.log(error)
-							}
-							console.log("@res@",res)
-						})
-						.catch(error=>{
+								}
+								else{
+									uni.hideLoading();
+									uni.showToast({
+										title: res.message,
+										duration: 2000,
+										icon:'error'
+									});
+									console.log(error)
+								}
+								console.log("@res@",res)
+							})
+							.catch(error=>{
 							
-						})
+							})
+				}else{
+					uni.hideLoading();
+					uni.showToast({
+						title: `手机格式错误`,
+						duration: 2000,
+						icon:'error'
+					});
+				}
+
 					},
 				submit(){
 					requestAuthority1({

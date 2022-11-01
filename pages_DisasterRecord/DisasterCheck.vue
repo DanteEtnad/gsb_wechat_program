@@ -293,12 +293,8 @@
 								text:item.memberName,
 							}
 						})
-						this.members=res.data.MembersIdAndNameRsp
-						for(var i=0;i<this.members.length;i++){
-							if(this.DisasterInfoQueryData.memberId==this.members[i].memberId){
-									this.DisasterInfoQueryData.memberId=this.members[i].memberName
-							}
-						}
+						
+						
 						console.log("members",this.members)
 					}else{
 						this.$message.error(res.message)
