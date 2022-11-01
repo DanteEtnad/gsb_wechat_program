@@ -56,7 +56,7 @@
 				</view>
 				<view class="item-info">
 					<text class="item-info-text">直线距离：</text>
-					<text class=" item-info-text-right">{{DisasterInfoQueryData.distance}}km</text> 
+					<text class=" item-info-text-right">{{DisasterInfoQueryData.distance}}</text> 
 				</view>
 				<uni-row>
 					<view style="display: flex;padding: 10px 5px 10px;padding-bottom: 2px;">

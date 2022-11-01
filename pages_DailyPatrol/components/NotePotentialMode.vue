@@ -289,7 +289,7 @@
 			  }
 			  else {
 			  		uni.showToast({
-			  			title: `经纬度错误`,
+			  			title: `未开启定位或目标经纬度错误`,
 			  			duration: 2000,
 			  			icon: "error"
 			  		});			  
