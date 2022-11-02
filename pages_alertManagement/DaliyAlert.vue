@@ -47,14 +47,14 @@
 				let minute=this.addZero(date.getMinutes());
 				let second=this.addZero(date.getSeconds());
 				this.todayTime = `${year}${month}${day}${hour}${minute}${second}`
-				//this.todayTime = "20220919100000"
+				// this.todayTime = "20220927200000"
 				console.log('现在是：',this.todayTime);
 				request({
 					url:'alertManage/queryAlertList',
 					method:'post',
 					data:{
 						QueryAlertListReq:{
-							//alertId: "457042754011164",
+							// alertId: "457042754011164",
 							alertState:"FIN"
 						},
 						QueryPagingParamsReq:{

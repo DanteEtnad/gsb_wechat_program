@@ -34,12 +34,13 @@
 								<view :class="[colorLevels[item.level]]">{{item.level}}</view>
 							</template>
 							<view class="collapse-item-container">
-								<button  @click="editLocation(item)">编辑/添加</button>
 								<view class="collapse-item-main">
-									<text>
-										{{item.location}}
-									</text>
+									<view class="collapse-item-main-container" @click="deleteMember(item.level,textIndex)"
+												v-for="(text,textIndex) in item.location" :key="textIndex" v-show="item.location.length!==0">
+										{{text}}
+									</view>
 								</view>
+								<button  @click="editLocation(item)">编辑/添加</button>
 							</view>
 						</uni-collapse-item>
 					</uni-collapse>
@@ -65,7 +66,13 @@
 					<button @click="close">确定</button>
 				</view>
 				<view class="popup-main">
-					<text>{{popupData.location}}</text>
+					<view class="popup-main-container" @click="deleteLocation(textIndex)"
+								v-for="(text,textIndex) in popupData.location" :key="textIndex" v-show="popupData.location.length!==0">
+						{{text}}
+						<view class="popup-main-container-delete">
+							<uni-icons type="closeempty" size="16" color="#000"></uni-icons>
+						</view>
+					</view>
 				</view>
 				<view class="popup-add">
 					<uni-data-picker placeholder="请选择地区" popup-title="请选择地区" v-model="selectedLocation" :localdata="locationDataTree"/>
@@ -74,8 +81,8 @@
 			</view>
 		</uni-popup>
 		
-		<uni-popup ref="message" background-color="#fff">
-			<Message @closeDialog="closeMessageDialog" @afterSendMessage="afterSendMessage"/>
+		<uni-popup ref="messagePopup" background-color="#fff">
+			<AlertMessage ref="message" @closeDialog="closeMessageDialog" @afterSendMessage="afterSendMessage"/>
 		</uni-popup>
 	</view>
 </template>
@@ -83,14 +90,16 @@
 <script>
 	import {getAreaOptionsMixins,dataCodeTransformMixins} from "@/utils/mixins.js"
 	import {request} from "@/utils/request.js"
-	import Message from "@/pages_alertManagement/components/Message.vue"
+	import AlertMessage from "@/pages_alertManagement/components/AlertMessage.vue"
 	export default {
 		mixins:[getAreaOptionsMixins,dataCodeTransformMixins],
 		components:{
-			Message
+			AlertMessage
 		},
 		data() {
 			return {
+				AlertProcessMessageRsp:{},
+				locationMap:new Map(),
 				selectedLocation:"",
 				alertForm:{
 					alertName:'',
@@ -115,10 +124,10 @@
 				popupLevel:'',
 				popupData:{},
 				createData:[
-					{level:'一级',location:''},
-					{level:'二级',location:''},
-					{level:'三级',location:''},
-					{level:'四级',location:''}
+					{level:'一级',location:[]},
+					{level:'二级',location:[]},
+					{level:'三级',location:[]},
+					{level:'四级',location:[]}
 				],
 				colorLevels:{
 					'一级':'collapse-title-first',
@@ -142,9 +151,13 @@
 			}
 		},
 		mounted() {
-			this.locationDataTree = this.getAreaOptions()[0].children
+			this.locationDataTree = this.getAreaOptions()[0].children;
 		},
 		methods: {
+			deleteLocation(index){
+				const location = this.popupData.location.splice(index,1).join('')
+				this.locationMap.delete(location)
+			},
 			editLocation(data){
 				this.popupData = data
 				this.popupLevel = data.level
@@ -152,19 +165,24 @@
 			},
 			addLocation(){
 				const location = this.dataCodeTransform(this.selectedLocation,'potentialPointBelongTowns')
-				
-				if(this.popupData.location===""){
-					this.popupData.location = location
+				if(this.locationMap.get(location)){
+					let level = this.locationMap.get(location)
+					uni.showModal({
+						title:'失败',
+						content:`${level}已有该街道`,
+						showCancel:false
+					})
 				}else{
-					this.popupData.location += `,${location}`
+					this.locationMap.set(location,this.popupLevel)
+					this.popupData.location.push(location)
+					
+					if(this.alertForm[this.locationLevel[this.popupLevel]]===""){
+						this.alertForm[this.locationLevel[this.popupLevel]] = this.selectedLocation
+					}else{
+						this.alertForm[this.locationLevel[this.popupLevel]] += `,${this.selectedLocation}`
+					}
+					console.log(this.selectedLocation,location,this.alertForm);
 				}
-				
-				if(this.alertForm[this.locationLevel[this.popupLevel]]===""){
-					this.alertForm[this.locationLevel[this.popupLevel]] = this.selectedLocation
-				}else{
-					this.alertForm[this.locationLevel[this.popupLevel]] += `,${this.selectedLocation}`
-				}
-				console.log(this.selectedLocation,location,this.alertForm);
 			},
 			close(){
 				this.$refs.popup.close()
@@ -176,8 +194,9 @@
 					createForm.alertDescription = ''
 					createForm.alertMapTitle = '汕头市地质灾害气象风险预警预报结果'
 					this.createData.forEach((item,index)=>{
-						if(item.location!==''){
-							createForm.alertDescription += `${this.text[index]}${item.location}；`
+						let location = item.location.join(',')
+						if(location!==''){
+							createForm.alertDescription += `${this.text[index]}${location}；`
 						}
 					})
 					console.log(createForm);
@@ -204,17 +223,25 @@
 							})
 							.then(res=>{
 								if(res.code===2000){
-									this.openMessageDialog()
+									this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
+									this.openMessageDialog(this.AlertProcessMessageRsp)
+								}else{
+									uni.showModal({
+										title:'失败',
+										content:res.message,
+										showCancel:false
+									})
 								}
 							})
 						}
 					}
 			},
-			openMessageDialog(){
-				this.$refs.message.open('center')
+			openMessageDialog(AlertProcessMessageRsp){
+				this.$refs.message.openMessageDialog(AlertProcessMessageRsp)
+				this.$refs.messagePopup.open('center')
 			},
 			closeMessageDialog(){
-				this.$refs.message.close()
+				this.$refs.messagePopup.close()
 			},
 			afterSendMessage(){
 				this.closeMessageDialog()
@@ -239,11 +266,10 @@
 					mode:0
 				}
 				
-				console.log(this.createData);
+				console.log(this.createData)
 				this.createData.forEach((item,index)=>{
 					if(item.location.length!==0){
-						let locations = item.location.split(',')
-						areas = [...areas,...locations.map(area=>{
+						areas = [...areas,...item.location.map(area=>{
 							return{
 								level:index+1,
 								areaName:area
@@ -318,7 +344,7 @@
 			width: 343px;
 			height: 40px;
 			line-height: 40px;
-			margin: 10px 0;
+			margin: 10px auto;
 		}
 		.create-input-container{
 			margin: 5px 0;
@@ -340,9 +366,19 @@
 						width: 81px;
 						height: 36px;
 						line-height: 36px;
+						margin: 5px 0;
 					}
 					.collapse-item-main{
 						margin: 5px 0;
+						display: grid;
+						grid-template-columns: 20vw 20vw 20vw 20vw;
+						text-align: center;
+						.collapse-item-main-container{
+							margin: 5px 5px 0 0;
+							padding: 5px;
+							background-color: #c8c7c6;
+							border-radius: 6px;
+						}
 					}
 				}
 			}
@@ -382,8 +418,8 @@
 		}
 		.popup-main{
 			padding: 10px 0;
-			display: flex;
-			flex-direction: column;
+			display: grid;
+			grid-template-columns: 28vw 28vw 28vw;
 			// align-items: flex-end;
 			border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 			button{
@@ -392,6 +428,24 @@
 				width: 81px;
 				height: 36px;
 				line-height: 36px;
+			}
+			.popup-main-container{
+				margin: 5px 5px 0 0;
+				padding: 5px;
+				background-color: #c8c7c6;
+				border-radius: 6px;
+				display:flex;
+				justify-content:space-between;
+				align-items: center;
+				.popup-main-container-delete{
+					background-color:#fff;
+					border-radius:50%;
+					width: 20px;
+					height: 20px;
+					display: flex;
+					justify-content: space-around;
+					align-items: center;
+				}
 			}
 		}
 		.popup-add{
