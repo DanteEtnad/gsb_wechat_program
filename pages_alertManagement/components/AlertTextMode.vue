@@ -81,7 +81,7 @@
 				console.log(this.alertLevels);
 			},
 			getAlertLocation(levelAdcode,index){
-				let alertLevelAdcode = levelAdcode.split(',').filter(item=>item.length===9)
+				let alertLevelAdcode = levelAdcode.split(',').filter(item=>item.length===9&&item!=='undefined')
 				let m = new Map()
 				alertLevelAdcode.forEach(item=>{
 					if(!m.get(item.slice(0,6))){

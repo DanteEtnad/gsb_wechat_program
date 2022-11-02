@@ -73,7 +73,7 @@
 						'DangerReportDetails': this.submitForm.DangerReportDetails,
 					},
 					header:{
-						"gsb-Token": token
+						"gsb-Token": uni.getStorageSync('token')
 					}
 				})
 				if(res){

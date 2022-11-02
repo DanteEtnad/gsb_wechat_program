@@ -9,7 +9,6 @@
 			:enable-satellite="enableSatellite"
 			:markers="markers"
 			:show-location="true"
-			v-if="isAlert"
 		>
 			<view :class="classObj">
 				<view class="cover-alert-img">
@@ -86,16 +85,13 @@
 			<view :class="locationClass" @click="getLocation">
 				<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
 			</view>
-			<view :class="fullClass">
+			<view :class="fullClass" @click="showMap">
 				<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
 			</view>
 			<view :class="moreClass" @click="switchMap">
 				<image src="/static/Potential/more.svg" style="width:20px;height:20px;"></image>
 			</view>
 		</map>
-		<view style="text-align: center;padding: 20px 0;" v-else>
-			<h1>今日暂无预警</h1>
-		</view>
 	</view>
 </template>
 
@@ -193,7 +189,9 @@
 						}).filter(item=>typeof item!=='undefined')
 						this.markers = [...list]
 						console.log(this.markers);
-						this.addAlertMap()
+						if(this.isAlert){
+							this.addAlertMap()
+						}
 					}
 				})
 			},
@@ -214,12 +212,12 @@
 					src:this.mapUrl,
 					bounds:{
 						southwest:{
-							longitude:116.0952,
-							latitude:22.950
+							longitude:116.1,
+							latitude:22.95
 						},
 						northeast:{
-							longitude:117.2082,
-							latitude:23.693
+							longitude:117.3,
+							latitude:23.8
 						}
 					}
 				})
@@ -227,6 +225,13 @@
 					console.log(res);
 				})
 			},
+			showMap(){
+				uni.createMapContext("map",this).moveToLocation({
+					longitude:113.75,
+					latitude:22.6,
+				})
+				this.scale = 6;
+			}
 		},	
 	}
 </script>
@@ -240,6 +245,7 @@
 	.icon-base{
 		position: absolute;
 		padding: 3px;
+		height: 20px;
 		background-color: rgba(255,255,255,.75);
 		right: 10px;
 		border-radius: 4px;

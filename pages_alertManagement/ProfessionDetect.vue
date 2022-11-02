@@ -27,7 +27,7 @@
 			<view :class="locationClass" @click="getLocation">
 				<image src="/static/Potential/locate.svg" style="width:20px;height:20px;"></image>
 			</view>
-			<view :class="fullClass">
+			<view :class="fullClass" @click="showMap">
 				<image src="/static/Potential/view.svg" style="width:20px;height:20px;"></image>
 			</view>
 			<view :class="moreClass" @click="switchMap">
@@ -162,6 +162,13 @@
 					console.log("位置",res)
 				})
 			},
+			showMap(){
+				uni.createMapContext("map",this).moveToLocation({
+					longitude:113.75,
+					latitude:22.6,
+				})
+				this.scale = 6;
+			}
 		}
 	}
 </script>
@@ -176,6 +183,7 @@
 	.icon-base{
 		position: absolute;
 		padding: 3px;
+		height: 20px;
 		background-color: rgba(255,255,255,.75);
 		right: 10px;
 		border-radius: 4px;
