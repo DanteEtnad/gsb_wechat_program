@@ -35,7 +35,7 @@
 			<view>设备{{index+1}}:</view>
 			<view class="info-main-device-row">
 				<view>编号：{{device.deviceId}}</view>
-				<view>隐患点：{{selectedPotentialPoint.potentialPointName}}</view>
+				<view>隐患点：{{selectedPotentialPoint.potentialPointId}}</view>
 			</view>
 			<view class="info-main-device-row">
 				<view>设备制造：{{dataCodeTransform(device.deviceManufacturersType,'deviceManufacturersTypes')}}</view>
@@ -74,7 +74,7 @@
 		mounted() {
 			const id = this.selectedPotentialPoint.potentialPointId
 			this.getMembersOptions()
-			this.getDeviceData(id)
+			this.getDeviceData(id);
 		},
 		methods:{
 			getDeviceData(id){
