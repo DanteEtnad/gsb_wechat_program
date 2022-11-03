@@ -59,7 +59,7 @@
 					}, {
 						"path": "ProfessionDetect",
 						"style": {
-							"navigationBarTitleText": "专业检测",
+							"navigationBarTitleText": "专业监测",
 							"enablePullDownRefresh": false
 						}
 					

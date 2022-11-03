@@ -56,11 +56,14 @@
 				<view style="flex:12">
 					<text>出动巡排查<text style="color: red;">*</text></text>
 				</view>
-				<view style="flex:12">
+				<view style="flex:11">
 					<uni-easyinput
 					@input="number"
-					>
+					>次
 					</uni-easyinput>
+				</view>	
+				<view style="flex:1">
+					<view style="padding-top: 7px;">次</view>
 				</view>	
 			</view>
 
@@ -68,11 +71,14 @@
 				<view style="flex:12">
 					<text>巡排查隐患<text style="color: red;">*</text></text>
 				</view>
-				<view style="flex:12">
+				<view style="flex:11">
 					<uni-easyinput
 					@input="pointnumber"
 					>
 					</uni-easyinput>
+				</view>	
+				<view style="flex:1">
+					<view style="padding-top: 7px;">处</view>
 				</view>	
 			</view>
 			
