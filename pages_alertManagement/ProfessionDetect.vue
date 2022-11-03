@@ -37,9 +37,9 @@
 				<view style="width: 100%;position: sticky;top: 0;background-color: #fff;">
 					<u-tabs :list="list" :scrollable="false" @click="swtichComponent"/>
 				</view>
-				<DetectData :selectedPotentialPoint="selectedPotentialPoint" v-if="showComponent===0"/>
-				<DetectInfo :selectedPotentialPoint="selectedPotentialPoint" v-if="showComponent===1"/>
-				<DetectPicture :selectedPotentialPoint="selectedPotentialPoint" v-if="showComponent===2"/>
+				<DetectData :selectedPotentialPoint="selectedMonitorDevice" v-if="showComponent===0"/>
+				<DetectInfo :selectedPotentialPoint="selectedMonitorDevice" v-if="showComponent===1"/>
+				<DetectPicture :selectedPotentialPoint="selectedMonitorDevice" v-if="showComponent===2"/>
 			</scroll-view>
 		</map>
 	</view>
@@ -70,8 +70,10 @@
 				moreClass:['more'],
 				showComponent:0,
 				potentialPointData:[],
+				monitorDeviceData:[],
 				isDataVisible:false,
 				selectedPotentialPoint:{},
+				selectedMonitorDevice:{},
 				markers:[],
 				enableSatellite:false
 			}
@@ -79,7 +81,7 @@
 		async mounted(){
 			this.mapContext = uni.createMapContext("map",this)
 			console.log('地图')
-			await this.getPotentialPointData()
+			await this.getMonitorDeviceData()
 		},
 		methods:{
 			showImage(location,full,more){
@@ -90,18 +92,20 @@
 				this.moreClass.pop()
 				this.moreClass.push(more)
 			},
-			getPotentialPointData(){
+			getMonitorDeviceData(){
 				uni.showLoading({
 					title: '加载中'
 				});
 				request({
-					url:"potentialPointInfo/queryList",
+					url:"monitorDevice/query",
 					method:"post",
 					data:{
-						PotentialPointInfoQueryListReq:{},
-						QueryPagingParamsReq:{
+						MonitorDeviceQueryReq:{
+							monitorDeviceManufacturersType:""
+						},
+						QueryOffsetReq:{
 							"offset": 0,
-							"queryCount": 9999
+							"queryCount": 99999
 						}
 					}
 				})
@@ -112,16 +116,16 @@
 							title: `加载完成`,
 							duration: 2000
 						});
-						this.potentialPointData = res.data.PotentialPointInfoQueryListRsp
-						let list = this.potentialPointData.map((potentialPoint,index)=>{
-							if(potentialPoint.potentialPointLocationLatitude <= 90 && potentialPoint.potentialPointLocationLatitude >= -90 &&
-								 potentialPoint.potentialPointLocationLongitude <= 180 && potentialPoint.potentialPointLocationLongitude >= -180){
+						this.monitorDeviceData = res.data.MonitorDeviceQueryRsp
+						let list = this.monitorDeviceData.map((monitorDevice,index)=>{
+							if(monitorDevice.latitude <= 90 && monitorDevice.latitude >= -90 &&
+								 monitorDevice.longitude <= 180 && monitorDevice.longitude >= -180){
 									 return{
 									 	id:index,
-									 	longitude:potentialPoint.potentialPointLocationLongitude,
-									 	latitude:potentialPoint.potentialPointLocationLatitude,
-									 	title:potentialPoint.potentialPointName,
-									 	iconPath:potentialPoint.ifMonitorPoint==="Y"?"/static/Potential/online.png":"/static/Potential/outline.png",
+									 	longitude:monitorDevice.longitude,
+									 	latitude:monitorDevice.latitude,
+									 	title:monitorDevice.deviceName,
+									 	iconPath:monitorDevice.deviceStatus==="1"?"/static/Potential/online.png":"/static/Potential/outline.png",
 									 	width:16,
 									 	height:16
 									 }
@@ -147,9 +151,9 @@
 				this.showImage('location-active','full-active','more-active')
 				const id = e.detail.markerId
 				console.log(e.detail.markerId);
-				this.selectedPotentialPoint = this.potentialPointData[id]
+				this.selectedMonitorDevice = this.monitorDeviceData[id]
 				this.isDataVisible = true
-				console.log(this.selectedPotentialPoint);
+				console.log(this.selectedMonitorDevice);
 			},
 			swtichComponent(item){
 				this.showComponent = item.index
