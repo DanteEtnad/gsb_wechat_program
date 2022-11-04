@@ -242,8 +242,8 @@
 				this.$refs.popup.close()
 			},
 			openMessageDialog(AlertProcessMessageRsp){
-				this.$refs.message.openMessageDialog(AlertProcessMessageRsp)
 				this.$refs.messagePopup.open('center')
+				this.$refs.message.openMessageDialog(AlertProcessMessageRsp)
 			},
 			closeMessageDialog(){
 				this.$refs.messagePopup.close()
@@ -337,11 +337,10 @@
 					mode:0
 				}
 				
-				console.log(this.createData);
+				console.log(this.createData)
 				this.createData.forEach((item,index)=>{
 					if(item.location.length!==0){
-						let locations = item.location.split(',')
-						areas = [...areas,...locations.map(area=>{
+						areas = [...areas,...item.location.map(area=>{
 							return{
 								level:index+1,
 								areaName:area
