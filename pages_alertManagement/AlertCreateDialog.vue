@@ -224,6 +224,7 @@
 							.then(res=>{
 								if(res.code===2000){
 									this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
+									console.log(this.AlertProcessMessageRsp)
 									this.openMessageDialog(this.AlertProcessMessageRsp)
 								}else{
 									uni.showModal({
@@ -237,8 +238,8 @@
 					}
 			},
 			openMessageDialog(AlertProcessMessageRsp){
-				this.$refs.message.openMessageDialog(AlertProcessMessageRsp)
 				this.$refs.messagePopup.open('center')
+				this.$refs.message.openMessageDialog(AlertProcessMessageRsp)
 			},
 			closeMessageDialog(){
 				this.$refs.messagePopup.close()
