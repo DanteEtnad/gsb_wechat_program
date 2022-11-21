@@ -34,6 +34,7 @@
 				<image src="/static/Potential/more.svg" style="width:20px;height:20px;"></image>
 			</view>
 			<scroll-view class="pop-container" v-if="isDataVisible" scroll-y="true">
+        <button @click="cloesPop">关闭窗口</button>
 				<view style="width: 100%;position: sticky;top: 0;background-color: #fff;">
 					<u-tabs :list="list" :scrollable="false" @click="swtichComponent"/>
 				</view>
@@ -172,7 +173,10 @@
 					latitude:22.6,
 				})
 				this.scale = 6;
-			}
+			},
+      cloesPop(){
+        this.isDataVisible = false
+      }
 		}
 	}
 </script>

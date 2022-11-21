@@ -221,7 +221,7 @@
 						DescriptionJson: []
 					}
 					try{
-						const description = JSON.parse(item.monitorIndexItemList[0].monitorDescriptionJson)
+            const description = item.monitorIndexItemList[0].monitorDescriptionJson===''?{}:JSON.parse(item.monitorIndexItemList[0].monitorDescriptionJson);
 						Object.keys(description).map(des=>{
 							treeRoot.DescriptionJson.push({
 								id: des, // 如【rain】
