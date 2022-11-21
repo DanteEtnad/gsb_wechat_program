@@ -86,10 +86,20 @@
 						}).then(res=>{
 							uni.navigateBack()
 						})
-					}
+					}else{
+            uni.showModal({
+              title:'失败',
+              content:`${data.message}`,
+              showCancel:false
+            })
+          }
 				}
 				if(err){
-					// console.log(err);
+          uni.showModal({
+            title:'失败',
+            content:`上传失败`,
+            showCancel:false
+          })
 				}
 			},
 			async takePhoto(){
