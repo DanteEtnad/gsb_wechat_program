@@ -17,11 +17,12 @@
 							<view class="drawer-device-title">
 								<view>{{device.deviceName}}</view>
 							</view>
-							<view class="drawer-device-select">
+							<view class="drawer-device-select" v-if="device.DescriptionJson.length>0">
 								<button class="drawer-device-select-button" v-for="(des,index) in device.DescriptionJson" :key="index" @click="getDeviceData(des.id,des.monitorIndexId,des.name)">
 									<text>{{des.name}}</text>
 								</button>
 							</view>
+              <view v-else>暂无数据</view>
 						</view>
 					</scroll-view>
 				</uni-drawer>

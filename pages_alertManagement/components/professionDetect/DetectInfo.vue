@@ -1,12 +1,12 @@
 <template>
 	<view class="info-container">
 		<view class="info-main-row">
-			<view>统一编号：</view>
-			<view class="info-main-text">{{selectedPotentialPoint.potentialPointId}}</view>
+			<view>监测设备编号：</view>
+			<view class="info-main-text">{{selectedPotentialPoint.deviceId}}</view>
 		</view>
 		<view class="info-main-row">
 			<view>监测点名称：</view>
-			<view class="info-main-text">{{selectedPotentialPoint.potentialPointName}}</view>
+			<view class="info-main-text">{{selectedPotentialPoint.deviceName}}</view>
 		</view>
 		<view class="info-main-row">
 			<view>地理位置：</view>
@@ -66,13 +66,13 @@
 			selectedPotentialPoint:{
 				deep:true,
 				handler(newValue,oldValue){
-					const id = newValue.potentialPointId
+					const id = newValue.deviceId
 					this.getDeviceData(id)
 				}
 			}
 		},
 		mounted() {
-			const id = this.selectedPotentialPoint.potentialPointId
+			const id = this.selectedPotentialPoint.deviceId
 			this.getMembersOptions()
 			this.getDeviceData(id);
 		},
@@ -83,7 +83,7 @@
 					method:'post',
 					data:{
 						MonitorDeviceQueryReq:{
-							potentialPointId:id
+              monitorDeviceId:id
 						},
 						QueryOffsetReq: {
 							queryCount: 9999,

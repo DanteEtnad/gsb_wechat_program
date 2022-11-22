@@ -175,6 +175,7 @@
 				this.scale = 6;
 			},
       cloesPop(){
+        this.showPoint = true
         this.isDataVisible = false
       }
 		}
