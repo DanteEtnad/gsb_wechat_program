@@ -212,12 +212,12 @@
 					src:this.mapUrl,
 					bounds:{
 						southwest:{
-							longitude:116.1,
-							latitude:22.95
+							longitude:116.10,
+							latitude:23.0
 						},
 						northeast:{
-							longitude:117.3,
-							latitude:23.8
+							longitude:117.25,
+							latitude:23.7
 						}
 					}
 				})
