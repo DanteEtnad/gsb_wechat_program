@@ -213,10 +213,10 @@
 					bounds:{
 						southwest:{
 							longitude:116.10,
-							latitude:23.0
+							latitude:22.95
 						},
 						northeast:{
-							longitude:117.25,
+							longitude:117.15,
 							latitude:23.7
 						}
 					}
