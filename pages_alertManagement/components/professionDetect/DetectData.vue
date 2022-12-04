@@ -2,7 +2,7 @@
 	<view>
 		<view class="data-container">
 			<view class="data-header">
-				<uni-datetime-picker v-model="dataTime" type="daterange" />
+				<uni-datetime-picker v-model="dataTime" type="daterange"/>
 				<view class="data-header-select">
 					<uni-data-checkbox mode="tag" v-model="selectTimeType" :localdata="timeType" selectedColor="#2E9BFF"/>
 					<button @click="open">要素</button>
@@ -98,7 +98,13 @@
 						text: '本月',
 						value: '2'
 					},
-				]
+				],
+				selectedDes:{
+					id:"",
+					monitorIndexId:"",
+					name:"",
+					status:false
+				}
 			}
 		},
 		watch:{
@@ -133,6 +139,7 @@
 					}
 					console.log(this.queryForm);
 					console.log(this.dataTime);
+					this.changeDeviceData()
 				}
 			}
 		},
@@ -262,6 +269,10 @@
 				})
 			},
 			getDeviceData(id,monitorIndexId,name){
+				this.selectedDes.id = id
+				this.selectedDes.monitorIndexId = monitorIndexId
+				this.selectedDes.name = name
+				this.selectedDes.status = true
 				let deviceData = []
 				let deviceTime = []
 				this.close()
@@ -288,7 +299,6 @@
 						console.log(this.deviceTime);
 						this.dataOption.dataset.source[1] = this.deviceData
 						this.dataOption.dataset.source[0] = this.deviceTime
-						//this.dataOption.legend.data[0] = name
 						setTimeout(()=>{
 							console.log(this.dataOption);
 							this.$refs.chart.hideLoading()
@@ -298,6 +308,11 @@
 					}
 				})
 			},
+			changeDeviceData(){
+				if(this.selectedDes.status){
+					this.getDeviceData(this.selectedDes.id,this.selectedDes.monitorIndexId,this.selectedDes.name)
+				}
+			}
 		}
 	}
 </script>

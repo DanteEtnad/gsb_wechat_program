@@ -27,7 +27,7 @@
 			</view>
 			<view class="create-location-input-container">
 				<text>预警地区<text style="color: red;">*</text></text>
-				<view class="create-collapse-container">
+				<view class="create-collapse-container" ref="collapse">
 					<uni-collapse accordion>
 						<uni-collapse-item title="手风琴效果" v-for="(item,index) in createData" :key="index">
 							<template v-slot:title>
@@ -240,6 +240,9 @@
 			},
 			close(){
 				this.$refs.popup.close()
+				this.$nextTick(() => {
+					this.$refs.collapse.resize()
+				})
 			},
 			openMessageDialog(AlertProcessMessageRsp){
 				this.$refs.messagePopup.open('center')
@@ -261,126 +264,141 @@
 				})
 			},
 			submit(){
-				let updateForm = {
-					alertId:this.alertForm.alertId,
-					alertName:this.alertForm.alertName,
-					alertDescription:this.alertForm.alertDescription,
-					alertLevel:this.alertForm.alertLevel,
-					alertMapTitle:this.alertForm.alertMapTitle,
-					alertStartTime:this.alertForm.alertStartTime,
-					alertEndTime:this.alertForm.alertEndTime,
-					alertLevelFirstAdcode:this.alertForm.alertLevelFirstAdcode,
-					alertLevelSecondAdcode:this.alertForm.alertLevelSecondAdcode,
-					alertLevelThirdAdcode:this.alertForm.alertLevelThirdAdcode,
-					alertLevelFourthAdcode:this.alertForm.alertLevelFourthAdcode,
-					alertSourceType:this.alertForm.alertSourceType,
-					alertMapUrl:this.alertForm.alertMapUrl
-				}
-				updateForm.alertStartTime = updateForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
-				updateForm.alertEndTime = updateForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
-				updateForm.alertDescription = ''
-				this.createData.forEach((item,index)=>{
-					let location = item.location.join(',')
-					if(location!==''){
-						updateForm.alertDescription += `${this.text[index]}${location}；`
+				try{
+					let updateForm = {
+						alertId:this.alertForm.alertId,
+						alertName:this.alertForm.alertName,
+						alertDescription:this.alertForm.alertDescription,
+						alertLevel:this.alertForm.alertLevel,
+						alertMapTitle:this.alertForm.alertMapTitle,
+						alertStartTime:this.alertForm.alertStartTime,
+						alertEndTime:this.alertForm.alertEndTime,
+						alertLevelFirstAdcode:this.alertForm.alertLevelFirstAdcode,
+						alertLevelSecondAdcode:this.alertForm.alertLevelSecondAdcode,
+						alertLevelThirdAdcode:this.alertForm.alertLevelThirdAdcode,
+						alertLevelFourthAdcode:this.alertForm.alertLevelFourthAdcode,
+						alertSourceType:this.alertForm.alertSourceType,
+						alertMapUrl:this.alertForm.alertMapUrl
 					}
-				})
-				console.log(updateForm)
-				if(updateForm.alertName===''||updateForm.alertStartTime===''||updateForm.alertEndTime===''){
-					uni.showModal({
-						title:'失败',
-						content:'请输入日期或名字',
-						showCancel:false
+					if(updateForm.alertStartTime>updateForm.alertEndTime){
+						throw new Error('时间范围异常')
+					}
+					updateForm.alertStartTime = updateForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join('')
+					updateForm.alertEndTime = updateForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join('')
+					updateForm.alertDescription = ''
+					this.createData.forEach((item,index)=>{
+						let location = item.location.join(',')
+						if(location!==''){
+							updateForm.alertDescription += `${this.text[index]}${location}；`
+						}
 					})
-				}else{
-					if(updateForm.alertStartTime.length!==14||updateForm.alertEndTime.length!==14){
-						uni.showModal({
-							title:'失败',
-							content:'请选择时间',
-							showCancel:false
-						})
-					}else{
-						request({
-							url:'alertManage/alertModify',
-							method:'post',
-							data:{
-								AlertModifyReq:{
-									...updateForm
-								}
-							}
-						})
-						.then(res=>{
-							if(res.code===2000){
-								this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
-								this.openMessageDialog(this.AlertProcessMessageRsp)
-							}else{
-									uni.showModal({
-										title:'失败',
-										content:res.message,
-										showCancel:false
-									})
-								}
-						})
+					console.log(updateForm)
+					if(updateForm.alertName===''||updateForm.alertStartTime===''||updateForm.alertEndTime===''){
+						throw new Error('请输入日期或名字')
 					}
+					if(updateForm.alertStartTime.length!==14||updateForm.alertEndTime.length!==14){
+						throw new Error('请选择时间')
+					}
+					request({
+						url:'alertManage/alertModify',
+						method:'post',
+						data:{
+							AlertModifyReq:{
+								...updateForm
+							}
+						}
+					})
+					.then(res=>{
+						if(res.code===2000){
+							this.AlertProcessMessageRsp = res.data.AlertProcessMessageRsp
+							this.openMessageDialog(this.AlertProcessMessageRsp)
+						}
+						else{
+							throw new Error(res.message)
+						}
+					})
+					.catch(e=>{
+						uni.showModal({
+							title: '失败',
+							content: `${e.message}`,
+							showCancel: false
+						})
+					})
+				}catch(e){
+					uni.showModal({
+						title: '失败',
+						content: `${e.message}`,
+						showCancel: false
+					})
 				}
 			},
 			imgGenerate(){
-				console.log(this.alertForm)
-				let areas = []
-				let mapForm = {
-					alertName:this.alertForm.alertName,
-					name:this.alertForm.alertName,
-					imgTitle:'汕头市地质灾害气象风险预警预报结果',
-					effectiveStartTime:this.alertForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join(''),
-					effectiveEndTime:this.alertForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join(''),
-					alertAreaLevel:[],
-					mode:0
-				}
-				
-				console.log(this.createData)
-				this.createData.forEach((item,index)=>{
-					if(item.location.length!==0){
-						areas = [...areas,...item.location.map(area=>{
-							return{
-								level:index+1,
-								areaName:area
-							}
-						})]
+				try{
+					console.log(this.alertForm)
+					if(this.alertForm.alertStartTime>this.alertForm.alertEndTime){
+						throw new Error('时间范围异常')
 					}
-				})
-				mapForm.alertAreaLevel = areas
-				console.log(mapForm);
-				if(this.alertForm.alertName===''||this.alertForm.alertStartTime===''||this.alertForm.alertEndTime===''){
-					uni.showModal({
-						title:'失败',
-						content:'请输入日期或名字',
-						showCancel:false
+					let areas = []
+					let mapForm = {
+						alertName:this.alertForm.alertName,
+						name:this.alertForm.alertName,
+						imgTitle:'汕头市地质灾害气象风险预警预报结果',
+						effectiveStartTime:this.alertForm.alertStartTime.split('-').join('').split(':').join('').split(' ').join(''),
+						effectiveEndTime:this.alertForm.alertEndTime.split('-').join('').split(':').join('').split(' ').join(''),
+						alertAreaLevel:[],
+						mode:0
+					}
+					
+					console.log(this.createData)
+					this.createData.forEach((item,index)=>{
+						if(item.location.length!==0){
+							areas = [...areas,...item.location.map(area=>{
+								return{
+									level:index+1,
+									areaName:area
+								}
+							})]
+						}
 					})
-				}else{
-					if(mapForm.effectiveStartTime.length!==14||mapForm.effectiveEndTime.length!==14){
-						uni.showModal({
-							title:'失败',
-							content:'请选择时间',
-							showCancel:false
-						})
-					}else{
-						uni.showLoading({
-							title: '加载中'
-						});
-						request({
-							url:'alertManage/generateAlertAreaMap',
-							method:'post',
-							data:{
-								AlertAreaMapReq:mapForm
-							}
-						})
-						.then(res=>{
-							if(res.code===2000){
-								this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
-								uni.hideLoading();
-							}
-						})
+					mapForm.alertAreaLevel = areas
+					console.log(mapForm);
+					if(this.alertForm.alertName===''||this.alertForm.alertStartTime===''||this.alertForm.alertEndTime===''){
+						throw new Error('请输入日期或名字')
 					}
+					if(mapForm.effectiveStartTime.length!==14||mapForm.effectiveEndTime.length!==14){
+						throw new Error('请选择时间')
+					}
+					uni.showLoading({
+						title: '加载中'
+					});
+					request({
+						url:'alertManage/generateAlertAreaMap',
+						method:'post',
+						data:{
+							AlertAreaMapReq:mapForm
+						}
+					})
+					.then(res=>{
+						uni.hideLoading();
+						if(res.code===2000){
+							this.alertForm.alertMapUrl = res.data.AlertAreaMapUrl
+						}else {
+							throw new Error(res.message)
+						}
+					})
+					.catch(e=>{
+						uni.showModal({
+							title: '失败',
+							content: `${e.message}`,
+							showCancel: false
+						})
+					})
+				}catch(e){
+					uni.showModal({
+						title: '失败',
+						content: `${e.message}`,
+						showCancel: false
+					})
 				}
 			},
 			imgChange(){
