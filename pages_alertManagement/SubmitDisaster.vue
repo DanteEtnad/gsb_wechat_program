@@ -62,6 +62,42 @@
 		},
 		methods: {
 			async submit(){
+        console.log('this.picUrl-------------------',this.picUrl)
+        // if(!this.picUrl){
+        //   let formData = new FormData()
+        //   formData.append('DangerReportTime',this.submitForm.DangerReportTime)
+        //   formData.append('DangerReportTitle',this.submitForm.DangerReportTitle)
+        //   formData.append('DangerReportArea',this.submitForm.DangerReportArea)
+        //   formData.append('DangerReportDetails',this.submitForm.DangerReportDetails)
+        //   const [err,res] = await request({
+        //     url:'dangerReport/dangerCreate',
+        //     method:'post',
+        //     data:formData,
+        //     headers: { "Content-Type": "multipart/form-data" }
+        //   })
+        //   if(res&&res.code===2000){
+        //     uni.showModal({
+        //       title:'成功',
+        //       content:'上报成功,点击确定返回',
+        //       showCancel:false
+        //     }).then(res=>{
+        //       uni.navigateBack()
+        //     })
+        //   }else{
+        //     uni.showModal({
+        //       title:'失败',
+        //       content:`${data.message}`,
+        //       showCancel:false
+        //     })
+        //   }
+        //   if(err){
+        //     uni.showModal({
+        //       title:'失败',
+        //       content:`上传失败`,
+        //       showCancel:false
+        //     })
+        //   }
+        // }
 				const [err,res] = await uni.uploadFile({
 					url: `${REQUEST_BASEURL}/dangerReport/dangerCreate`, //仅为示例，非真实的接口地址
 					filePath: this.picUrl,
@@ -110,6 +146,13 @@
 					console.log(res)
 					this.picUrl = res.tempFilePaths[0]
 				}
+        if(err){
+          uni.showModal({
+            title:'失败',
+            content:`图片上传失败`,
+            showCancel:false
+          })
+        }
 			}
 		}
 	}

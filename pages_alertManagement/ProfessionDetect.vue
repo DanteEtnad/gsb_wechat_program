@@ -177,6 +177,7 @@
       cloesPop(){
         this.showPoint = true
         this.isDataVisible = false
+				this.showImage('location','full','more')
       }
 		}
 	}
