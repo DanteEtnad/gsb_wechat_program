@@ -117,6 +117,7 @@
 		},
 		mounted() {
 			this.changedata()
+			this.getdisasterSubmitDate()
 			
 		},
 		onLoad: function(option) {
@@ -158,6 +159,18 @@
 			},
 			mapShow(){
 				this.mapshow=!this.mapshow
+			},
+			getdisasterSubmitDate(){
+				const date = new Date();
+				var submitDate='';
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+				month = month > 9 ? month : '0' + month;
+				day = day > 9 ? day : '0' + day;
+				submitDate=`${year}-${month}-${day}`;
+				this.DisasterRecordForm.disasterSubmitDate=this.timeTypeChange(submitDate);
+				console.log("this.DisasterRecordForm.disasterSubmitDate",this.DisasterRecordForm.disasterSubmitDate)
 			},
 			getDate(e){
 				this.DisasterRecordForm.disasterRecordDate=this.timeTypeChange(e)
