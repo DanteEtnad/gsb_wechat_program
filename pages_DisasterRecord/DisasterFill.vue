@@ -113,12 +113,25 @@
 			}
 		},
 		onLoad() {
-			
+			this.getdisasterSubmitDate();
 		},
 		
 		methods: {
 			mapShow(){
 				this.mapshow=!this.mapshow
+			},
+			getdisasterSubmitDate(){
+				const date = new Date();
+				var submitDate='';
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+				month = month > 9 ? month : '0' + month;
+				day = day > 9 ? day : '0' + day;
+				submitDate=`${year}-${month}-${day}`;
+				this.DisasterRecordForm.disasterSubmitDate=this.timeTypeChange(submitDate);//登记时间默认今天
+				this.DisasterRecordForm.disasterRecordDate=this.timeTypeChange(submitDate);//提交时间进行默认赋值，默认今天
+				console.log("this.DisasterRecordForm.disasterSubmitDate",this.DisasterRecordForm.disasterSubmitDate)
 			},
 			getDate(e){
 				this.DisasterRecordForm.disasterRecordDate=this.timeTypeChange(e)
