@@ -171,7 +171,11 @@
 			}
 		},
 		mounted() {
-			this.locationDataTree = this.getAreaOptions()[0].children;
+				setTimeout(()=>{
+					const city = this.getAreaOptions()
+					console.log(city);
+					this.locationDataTree = city[0].children;
+				},0)
 		},
 		methods: {
 			deleteLocation(index) {
