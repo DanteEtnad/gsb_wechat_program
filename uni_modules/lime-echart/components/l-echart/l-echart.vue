@@ -147,8 +147,9 @@ export default {
 			this.isPc = true
 			document.addEventListener('mousewheel', (e) => {
 				if(this.chart) {
+					const touch = this.getTouch(e)
 					const handler = this.chart.getZr().handler;
-					dispatch.call(handler, 'mousewheel', e)
+					dispatch.call(handler, 'mousewheel', touch)
 				}
 			})
 		}
@@ -220,10 +221,10 @@ export default {
 		showLoading() {
 			if(this.chart) {
 				// #ifndef APP-NVUE
-				this.chart.showLoading()
+				this.chart.showLoading(...arguments)
 				// #endif
 				// #ifdef APP-NVUE
-				this.$refs.webview.evalJs(`showLoading()`);
+				this.$refs.webview.evalJs(`showLoading(${JSON.stringify(arguments)})`);
 				// #endif
 			}
 		},
@@ -423,11 +424,11 @@ export default {
 							// #ifdef MP-TOUTIAO
 							dpr = !this.isPC ? devicePixelRatio : 1// 1.25
 							// #endif
-							// #ifdef MP-ALIPAY
-							dpr = devicePixelRatio
-							// #endif
 							// #ifndef MP-ALIPAY || MP-TOUTIAO
 							dpr = this.isPC ? devicePixelRatio : 1
+							// #endif
+							// #ifdef MP-ALIPAY || MP-LARK
+							dpr = devicePixelRatio
 							// #endif
 							this.rect = res[0]
 							this.nodeWidth = width * dpr;
@@ -442,24 +443,28 @@ export default {
 		},
 		// #ifndef APP-NVUE
 		getRelative(e) {
-			return {x: e.pageX - this.rect.left, y: e.pageY - this.rect.top}
+			return {x: e.pageX - this.rect.left, y: e.pageY - this.rect.top, wheelDelta: e.wheelDelta}
 		},
 		getTouch(e) {
-			return e.touches[0] && e.touches[0].x ? e.touches[0] : this.getRelative(e);
+			return e.touches && e.touches[0] && e.touches[0].x ? e.touches[0] : this.getRelative(e);
 		},
 		touchStart(e) {
 			this.isDown = true
-			if (this.chart && (e.touches.length > 0 && e.type != 'mousemove' || e.type == 'mousedown')) {
+			if (this.chart && ((e.touches.length > 0 || e.touches['0'])  && e.type != 'mousemove' || e.type == 'mousedown')) {
 				const touch = this.getTouch(e)
+				this.startX = touch.x
+				this.startY = touch.y
+				this.startT = new Date()
 				const handler = this.chart.getZr().handler;
 				dispatch.call(handler, 'mousedown', touch)
 				dispatch.call(handler, 'mousemove', touch)
 				handler.processGesture(wrapTouch(e), 'start');
+				clearTimeout(this.endTimer);
 			}
 		},
 		touchMove(e) {
 			if(this.isPc && this.enableHover && !this.isDown) {this.isDown = true}
-			if (this.chart && (e.touches.length > 0 && e.type != 'mousemove' || e.type == 'mousemove' && this.isDown)) {
+			if (this.chart && ((e.touches.length > 0 || e.touches['0']) && e.type != 'mousemove' || e.type == 'mousemove' && this.isDown)) {
 				const handler = this.chart.getZr().handler;
 				dispatch.call(handler, 'mousemove', this.getTouch(e))
 				handler.processGesture(wrapTouch(e), 'change');
@@ -471,15 +476,17 @@ export default {
 				const {x} = e.changedTouches && e.changedTouches[0] || {}
 				const touch = (x ? e.changedTouches[0] : this.getRelative(e)) || {};
 				const handler = this.chart.getZr().handler;
+				const isClick = Math.abs(touch.x - this.startX) < 10 && new Date() - this.startT < 200;
 				dispatch.call(handler, 'mouseup', touch)
-				if(this.isClickable) {
-					dispatch.call(handler, 'click', touch)
-				}
 				handler.processGesture(wrapTouch(e), 'end');
-				setTimeout(() => {
-					dispatch.call(handler, 'mousemove', {x: -1,y: -1})
-					dispatch.call(handler, 'mouseup', {x: -1,y: -1})
-				},500)
+				if(isClick) {
+					dispatch.call(handler, 'click', touch)
+				} else {
+					this.endTimer = setTimeout(() => {
+						dispatch.call(handler, 'mousemove', {x: 999999999,y: 999999999});
+						dispatch.call(handler, 'mouseup', {x: 999999999,y: 999999999});
+					},50)
+				}
 			}
 		}
 		// #endif

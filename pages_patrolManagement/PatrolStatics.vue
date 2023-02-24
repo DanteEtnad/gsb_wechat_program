@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="year">
+		<!-- <view class="year">
 			<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
 				 <view class="data">2022-07-07</view>
 			</picker>
@@ -8,7 +8,17 @@
 			<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
 				 <view class="data">{{ date }}</view>
 			</picker>
+		</view> -->
+		<view class="year">
+			<picker mode="date" :value="startDate" fields="month" @change="bindDateChangeStart">
+				<view class="data">{{ startDate }}</view>
+			</picker>
+			<view><text decode>{{mySpace}}~{{mySpace}}</text></view>
+			<picker mode="date" :value="endDate" fields="month" @change="bindDateChangeEnd">
+				<view class="data">{{ endDate }}</view>
+			</picker>
 		</view>
+		
 		<view>
 			<uni-col :span="18">
 				<view class="situation">今年巡查概况</view>
@@ -110,76 +120,73 @@
 	import {request} from '@/utils/request.js'
 	// import {getClassList} from '@/servies/class.js'
 	function getDate(type) {
-	const date = new Date();
- 
-	let year = date.getFullYear();
-	let month = date.getMonth() + 1;
-	let day = date.getDate();
- 
-	if (type === 'start') {
-		year = year - 10;
-	} else if (type === 'end') {
-		year = year + 10;
+		const date = new Date();
+	 
+		let year = date.getFullYear();
+		let month = date.getMonth() + 1;
+		let day = date.getDate();
+	 
+		if (type === 'start') {
+			// year = year - 10;
+			month = 1;
+		} else if (type === 'end') {
+			// year = year + 10;
+		}
+		month = month > 9 ? month : '0' + month;
+		day = day > 9 ? day : '0' + day;
+			 
+		// return `${year}-${month}-${day}`;
+		return `${year}-${month}`;
 	}
-	month = month > 9 ? month : '0' + month;
-	day = day > 9 ? day : '0' + day;
- 
-	return `${year}-${month}-${day}`;
-}
 	export default {
 		data() {
 			return {
+				mySpace:'&ensp;',
 				testInfo:null,	
 				date: getDate({
-			  				format: true
-			  			}),
-			  			startDate: getDate('start'),
-			  			endDate: getDate('end'),
-						count: 0, 
-						time: 0,
-						people: 0,
-						officeData:[],
-						
+					format: true
+				}),
+				startDate: getDate('start'),
+				endDate: getDate('end'),
+				count: 0, 
+				time: 0,
+				people: 0,
+				officeData:[],
+				PatrolResultStatisticsByAreaReq:{
+					startTime:'',
+					endTime:'',
+				}
 			}
 			
 		},
 		onLoad(){
+			this.PatrolResultStatisticsByAreaReq.startTime=this.startDate
+			this.PatrolResultStatisticsByAreaReq.endTime=this.endDate
 			this.getInfo()
 		},
 
 		methods: {
-			// 请求数据
-			// async __init(){
-			// 	const data={
-			// 		number:this.number,
-					
-			// 	}
-			// 	const res =await getClassList(data)
-			// 	console.log(res)
-			// 	this.testInfo=res
-			// },
-			
 			getInfo(){
+				uni.showLoading({
+					title: '加载中'
+				});
 				request({
 					method:'POST',
 					url:'patrolManage/patrolResultStatisticsByArea',
 					data:{
-						PatrolResultStatisticsByAreaReq:{
-							startTime:'',
-							endTime:'',
-						}
-						
+						"PatrolResultStatisticsByAreaReq":this.PatrolResultStatisticsByAreaReq,
 					}
 				})
 				.then(res=>{
 					if(res.code===2000){
-					uni.hideLoading();
-					uni.showToast({
-						title: `加载完成`,
-						duration: 2000
-					});
-					this.officeData=res.data.PatrolResultStatisticsByAreaRsp
-					console.log("结果为",res)}
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载完成`,
+							duration: 2000
+						});
+						this.officeData=res.data.PatrolResultStatisticsByAreaRsp
+						console.log("结果为",res)
+					}
 					else{
 						uni.hideLoading();
 						uni.showToast({
@@ -189,6 +196,7 @@
 						this.$message.error(res.message)
 					}
 					console.log("@res@",res)
+					this.count = 0
 					for (let i = 0; i < this.officeData.length; i++) {
 					   this.count += Number(this.officeData[i].dataCount);
 					}
@@ -197,9 +205,22 @@
 					console.log(error)
 				})
 			},
-			
+			bindDateChangeStart: function(e) {
+				this.startDate = e.detail.value;
+				this.PatrolResultStatisticsByAreaReq.startTime=this.startDate;
+				this.getInfo();
+				console.log("日期",this.date)
+				console.log("开始日期",this.startDate)
+			},
+			bindDateChangeEnd: function(e) {
+				this.endDate = e.detail.value;
+				this.PatrolResultStatisticsByAreaReq.endTime=this.endDate;
+				this.getInfo();
+				console.log("日期",this.date)
+				console.log("开始日期",this.startDate)
+			},
 			bindDateChange: function(e) {
-			this.date = e.detail.value;
+				this.date = e.detail.value;
 			}
 			
 		}

@@ -95,8 +95,8 @@
 			function setOption(data) {
 				if (chart) chart.setOption(data[0], data[1])
 			}
-			function showLoading() {
-				if (chart) chart.showLoading()
+			function showLoading(data) {
+				if (chart) chart.showLoading(data[0], data[1])
 			}
 			
 			function hideLoading() {

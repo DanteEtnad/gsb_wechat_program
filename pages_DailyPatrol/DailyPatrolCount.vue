@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<view class="year">
-			<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
-				 <view class="data">2022-01-01</view>
+			<picker mode="date" :value="startDate" fields="month" @change="bindDateChangeStart">
+				<view class="data">{{ startDate }}</view>
 			</picker>
-			<view>--</view>
-			<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
-				 <view class="data">{{ date }}</view>
+			<view><text decode>{{mySpace}}~{{mySpace}}</text></view>
+			<picker mode="date" :value="endDate" fields="month" @change="bindDateChangeEnd">
+				<view class="data">{{ endDate }}</view>
 			</picker>
 		</view>
 		<view>
@@ -112,29 +112,32 @@
 	 import {request} from '@/utils/request.js'
 
 	function getDate(type) {
-	const date = new Date();
- 
-	let year = date.getFullYear();
-	let month = date.getMonth() + 1;
-	let day = date.getDate();
- 
-	if (type === 'start') {
-		year = year - 10;
-	} else if (type === 'end') {
-		year = year + 10;
+		const date = new Date();
+	 
+		let year = date.getFullYear();
+		let month = date.getMonth() + 1;
+		let day = date.getDate();
+	 
+		if (type === 'start') {
+			// year = year - 10;
+			month = 1;
+		} else if (type === 'end') {
+			// year = year + 10;
+		}
+		month = month > 9 ? month : '0' + month;
+		day = day > 9 ? day : '0' + day;
+	 
+		// return `${year}-${month}-${day}`;
+		return `${year}-${month}`;
 	}
-	month = month > 9 ? month : '0' + month;
-	day = day > 9 ? day : '0' + day;
- 
-	return `${year}-${month}-${day}`;
-}
 	export default {
 		data() {
 			return {
+				mySpace:'&ensp;',
 				testInfo:null,	
 				date: getDate({
-			  				format: true
-			  			}),
+					format: true
+				}),
 			  	startDate: getDate('start'),
 			  	endDate: getDate('end'),
 				count: 0,
@@ -165,6 +168,7 @@
 					}
 				})
 				.then(res=>{
+					console.log('===179===',res.code)
 					if(res.code===2000){
 						uni.hideLoading();
 						uni.showToast({
@@ -173,8 +177,14 @@
 						});
 						this.officeData=res.data.DailyPatrolStatisticsByAreaRsp  
 					}else{
+						uni.hideLoading();
+						uni.showToast({
+							title: `加载失败`,
+							duration: 2000
+						});
 						this.$message.error(res.message)
 					}
+					this.count = 0
 					for (let i = 0; i < this.officeData.length; i++) {
 					   this.count += Number(this.officeData[i].dataCount);
 					}
@@ -183,10 +193,24 @@
 				
 			},
 			
+			bindDateChangeStart: function(e) {
+				this.startDate = e.detail.value;
+				this.DailyPatrolStatisticsByAreaReq.monthBegin=this.startDate;
+				this.getOfficeData();
+				console.log("日期",this.date)
+				console.log("开始日期",this.startDate)
+			},
+			bindDateChangeEnd: function(e) {
+				this.endDate = e.detail.value;
+				this.DailyPatrolStatisticsByAreaReq.monthEnd=this.endDate;
+				this.getOfficeData();
+				console.log("日期",this.date)
+				console.log("开始日期",this.startDate)
+			},
 			bindDateChange: function(e) {
-			this.date = e.detail.value;
-			console.log("日期",this.date)
-			console.log("开始日期",this.startDate)
+				this.date = e.detail.value;
+				console.log("日期",this.date)
+				console.log("开始日期",this.startDate)
 			}
 			
 		}

@@ -209,8 +209,9 @@ this.$refs.chart.resize({width: 375, height: 375})
 ## 常见问题
 - 微信小程序 `2d` 只支持 真机调试2.0
 - 微信开发工具会出现canvas不跟随页面的情况，真机不影响
-- `toolbox` 不支持
+- toolbox 不支持 `saveImage`
 - echarts 5.3.0 的 lines 不支持 trailLength，故需设置为 `0`
+- dataZoom H5不要设置 `showDetail` 
 
 
 ## Props
@@ -219,9 +220,7 @@ this.$refs.chart.resize({width: 375, height: 375})
 | ---------------  | --------                                                        | -------         | ------------ | ----- 	|
 | custom-style     | 自定义样式                                                      |   `string`       | -            | -     	|
 | type             | 指定 canvas 类型                                				 |    `string`      | `2d`         |   	    |
-| is-clickable     | 是否派发点击事件                                                 |    `boolean`     | `true`     |   	    |
 | is-disable-scroll | 触摸图表时是否禁止页面滚动                                       |    `boolean`     | `false`     |   	    |
-| is-clickable     | 是否派发点击事件                                                 |    `boolean`     | `true`     |   	    |
 | beforeDelay       |  延迟初始化 (毫秒)                       						|    `number`     | `30`     |   	    |
 | enableHover       |  PC端使用鼠标悬浮                       						|    `boolean`     | `false`     |   	    |
 

@@ -1,5 +1,6 @@
-// const BASEURL = 'http://47.107.42.236'
-const BASEURL = 'https://stdzpt.com'
+// const BASEURL = 'https://47.107.42.236'
+const BASEURL = 'https://192.158.1.198'
+// const BASEURL = 'https://stdzpt.com'
 
 export const REQUEST_BASEURL = `${BASEURL}:8082`
 export const REQUEST_AUTHORITY_BASEURL = `${BASEURL}:8081`

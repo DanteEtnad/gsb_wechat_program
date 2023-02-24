@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-
+// window.wx = {}
 Vue.config.productionTip = false
 
 import share from '@/common/share.js'

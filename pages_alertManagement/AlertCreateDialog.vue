@@ -70,7 +70,7 @@
 				<view class="popup-main">
 					<view class="popup-main-container" @click="deleteLocation(textIndex)"
 						v-for="(text,textIndex) in popupData.location" :key="textIndex"
-						v-show="popupData.location.length!==0">
+						v-show="popupData.location">
 						{{text}}
 						<view class="popup-main-container-delete">
 							<uni-icons type="closeempty" size="16" color="#000"></uni-icons>
